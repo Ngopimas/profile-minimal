@@ -1,16 +1,16 @@
+html {
+  background: url(../images/bg.jpg) no-repeat center fixed;
+  background-size: cover;
+}
 body {
-  background: #4b6cb7;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #4b6cb7, #182848);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #4b6cb7, #182848); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   font-family: 'Cormorant Garamond', serif;
-  font-weight: 300;
-  color: #222222;
+  color: white;
 }
 h1, h2 {
   font-size: 54px;
   line-height: 58px;
   letter-spacing: 1.7px;
-  text-shadow: 0 0 1px rgba(255, 255, 255, .1)
+  font-weight: 400;
 }
 a {
   text-decoration: none;
@@ -33,7 +33,7 @@ a:hover {
 }
 .list-inline li {
   display: inline;
-  padding: 10px;
+  padding: 8px;
 }
 .list-inline a {
   font-family: 'Open Sans', sans-serif;
@@ -41,30 +41,34 @@ a:hover {
   font-size: 12px;
   line-height: 17px;
   font-weight: 700;
+  color: white;
 }
-
+.list-inline a:hover {
+  color: #FFD300;
+}
 .img-circle {
   width: 80px;
   border-radius: 50%;
   position: absolute;
   border: solid 2px white;
 }
-
 .img-circle:hover {
   border: 2px solid #FFD300;
 }
-
 .navbar {
+  margin-top: 40px;
   display: flex;
   justify-content: space-between;
 }
-
 .navbar-logo {
   padding-left: 40px;
 }
-
 .navbar li a {
+  color: white;
   padding-right: 40px;
   font-size: 48px;
   text-shadow: 0 0 2px rgba(33, 33, 33, .2)
+}
+.navbar li a:hover {
+  color: #FFD300;
 }
