@@ -1,5 +1,7 @@
 body {
-  background-image: radial-gradient(circle, #accbee, #bbd4f2, #caddf6, #d9e7f9, #e7f0fd);
+  background: #4b6cb7;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #182848, #4b6cb7);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #182848, #4b6cb7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   font-family: 'Cormorant Garamond', serif;
   font-weight: 300;
   color: #222222;
@@ -8,6 +10,7 @@ h1, h2 {
   font-size: 54px;
   line-height: 58px;
   letter-spacing: 1.7px;
+  text-shadow: 0 0 1px rgba(255, 255, 255, .1)
 }
 a {
   text-decoration: none;
@@ -63,5 +66,5 @@ a:hover {
 .navbar li a {
   padding-right: 40px;
   font-size: 48px;
-  text-shadow: 0 0 2 rgba(33, 33, 33, .2)
+  text-shadow: 0 0 2px rgba(33, 33, 33, .2)
 }
