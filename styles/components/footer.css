@@ -1,0 +1,12 @@
+.footer ul {
+  padding: 0;
+}
+
+.footer li {
+  list-style-type: none;
+}
+
+.footer h3 {
+  line-height: 2;
+  text-decoration: underline;
+}

@@ -1,0 +1,65 @@
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap');
+
+/* Custom designs */
+@import url(components/navbar.css);
+@import url(components/buttons.css);
+@import url(components/footer.css);
+
+/* Utilities */
+html, body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #09000d;
+  color: #fff;
+  min-height: 100vh;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1 0 auto;
+}
+
+a {
+  text-decoration: none;
+  color: #fff;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #FFD300;
+}
+
+h1 {
+    font-size: calc(4vw + 1rem);
+}
+
+h2 {
+    font-size: calc(2vw + 1rem);
+    line-height: 1.5;
+}
+
+p {
+  max-width: 50em;
+  line-height: 1.8;
+}
+
+.hero {
+  padding-top: 30vh;
+}
+
+.portofolio, .testimony {
+  background-color: #fff;
+  color: #09000d;
+}
+
+.portofolio, .featured, .testimony, .catch-phrase {
+  padding: 8rem 0;
+}
+
+
+
