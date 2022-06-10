@@ -176,6 +176,7 @@ document.addEventListener("keydown", function (event) {
 });
 
 document.addEventListener("mousedown", function (event) {
+  event.preventDefault();
   play();
 });
 
@@ -184,6 +185,7 @@ document.addEventListener("mouseup", function (event) {
 });
 
 document.addEventListener("touchstart", function (event) {
+  event.preventDefault();
   play();
 });
 
