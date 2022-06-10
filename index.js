@@ -309,7 +309,7 @@ function animate(timestamp) {
       const maxHeroY =
         platformHeight + 100 + (window.innerHeight - canvasHeight) / 2;
       if (heroY > maxHeroY) {
-        restartButton.style.display = "block";
+        restartButton.style.display = "grid";
         return;
       }
       break;
