@@ -56,8 +56,7 @@ body {
   height: 120px;
   position: absolute;
   display: grid;
-  justify-items: center;
-  align-items: center;
+  place-items: center;
   border-radius: 50%;
   color: white;
   background-color: red;
@@ -153,14 +152,9 @@ body {
   text-decoration: none;
   transform: scale(0.8);
   transition: transform 0.5s;
-}
-
-#mail:before {
-  content: "✉️";
   font-size: 40px;
-  position: relative;
-  top: 10px;
-  left: 10px;
+  display: grid;
+  place-items: center;
 }
 
 #mail:hover,
