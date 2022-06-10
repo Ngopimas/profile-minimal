@@ -1,5 +1,5 @@
 /**
- * from Hunor Marton Borbely:
+ * From Hunor Marton Borbely:
  * https://codepen.io/HunorMarton/pen/xxOMQKg
  * If you want to know how this game was made, check out his video:
  * https://youtu.be/eue3UdFvwPo
@@ -15,6 +15,7 @@ Math.sinus = function (degree) {
   return Math.sin((degree / 180) * Math.PI);
 };
 
+// Game status constants for the game phase
 const gameStatus = {
   waiting: "waiting",
   stretching: "stretching",
@@ -164,7 +165,7 @@ function generatePlatform() {
 resetGame();
 
 // If space was pressed restart the game
-window.addEventListener("keydown", function (event) {
+document.addEventListener("keydown", function (event) {
   if (event.key == " ") {
     event.preventDefault();
     resetGame();
@@ -172,19 +173,20 @@ window.addEventListener("keydown", function (event) {
   }
 });
 
-window.addEventListener("mousedown", function (event) {
-  if (phase == gameStatus.waiting) {
-    lastTimestamp = undefined;
-    introductionElement.style.opacity = 0;
-    phase = "stretching";
-    window.requestAnimationFrame(animate);
-  }
+document.addEventListener("mousedown", function (event) {
+  play();
 });
 
-window.addEventListener("mouseup", function (event) {
-  if (phase == gameStatus.stretching) {
-    phase = gameStatus.turning;
-  }
+document.addEventListener("mouseup", function (event) {
+  stop();
+});
+
+document.addEventListener("touchstart", function (event) {
+  play();
+});
+
+document.addEventListener("touchend", function (event) {
+  stop();
 });
 
 window.addEventListener("resize", function (event) {
@@ -194,6 +196,21 @@ window.addEventListener("resize", function (event) {
 });
 
 window.requestAnimationFrame(animate);
+
+function play() {
+  if (phase == gameStatus.waiting) {
+    lastTimestamp = undefined;
+    introductionElement.style.opacity = 0;
+    phase = "stretching";
+    window.requestAnimationFrame(animate);
+  }
+}
+
+function stop() {
+  if (phase == gameStatus.stretching) {
+    phase = gameStatus.turning;
+  }
+}
 
 // The main game loop
 function animate(timestamp) {
