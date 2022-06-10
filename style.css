@@ -18,11 +18,19 @@ body {
   height: 100%;
 }
 
-#score {
+#best-score {
   position: absolute;
   top: 30px;
-  right: 30px;
-  font-size: 2em;
+  left: 30px;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+#current-score {
+  position: absolute;
+  top: 60px;
+  left: 30px;
+  font-size: 24px;
   font-weight: 900;
 }
 

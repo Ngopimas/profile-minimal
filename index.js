@@ -37,8 +37,7 @@ let platforms = [];
 let sticks = [];
 let trees = [];
 
-// Todo: Save high score to localStorage (?)
-
+let record = +localStorage.getItem("record") || 0;
 let score = 0;
 
 // Configuration
@@ -77,6 +76,8 @@ const ctx = canvas.getContext("2d");
 const introductionElement = document.getElementById("introduction");
 const perfectElement = document.getElementById("perfect");
 const restartButton = document.getElementById("restart");
+const recordeElement = document.getElementById("record");
+const bestElement = document.getElementById("best-score");
 const scoreElement = document.getElementById("score");
 
 // Initialize layout
@@ -93,6 +94,7 @@ function resetGame() {
   introductionElement.style.opacity = 1;
   perfectElement.style.opacity = 0;
   restartButton.style.display = "none";
+  recordeElement.innerText = record;
   scoreElement.innerText = score;
 
   // The first platform is always the same
@@ -238,6 +240,12 @@ function animate(timestamp) {
           // Increase score
           score += perfectHit ? 2 : 1;
           scoreElement.innerText = score;
+
+          if (score > record) {
+            localStorage.setItem("record", score);
+            record = score;
+            recordeElement.innerText = score;
+          }
 
           if (perfectHit) {
             perfectElement.style.opacity = 1;
