@@ -1,0 +1,152 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  cursor: pointer;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+#score {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  font-size: 2em;
+  font-weight: 900;
+}
+
+#introduction {
+  width: 200px;
+  height: 150px;
+  position: absolute;
+  font-weight: 600;
+  font-size: 0.8em;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+  transition: opacity 2s;
+}
+
+#restart {
+  width: 120px;
+  height: 120px;
+  position: absolute;
+  border-radius: 50%;
+  color: white;
+  background-color: red;
+  border: none;
+  font-weight: 700;
+  font-size: 1.2em;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  display: none;
+  cursor: pointer;
+}
+
+#perfect {
+  position: absolute;
+  opacity: 0;
+  transition: opacity 2s;
+}
+
+#linkedin-card,
+#mail-card {
+  display: none;
+}
+
+#linkedin:hover + #linkedin-card {
+  z-index: 3;
+  display: block;
+  position: absolute;
+  bottom: 12px;
+  left: 10px;
+  padding: 25px 25px 25px 100px;
+  background-color: white;
+}
+
+#linkedin {
+  z-index: 4;
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: #0072b1;
+  border-radius: 10px;
+  text-decoration: none;
+  transform: scale(0.8);
+  transition: transform 0.5s;
+}
+
+#linkedin:before {
+  content: "in";
+  font-size: 60px;
+  font-family: "Myriad Pro", "Myriad", "DejaVu Sans Condensed",
+    "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+  font-weight: bold;
+  color: #fff;
+  position: relative;
+  top: 2px;
+  left: 6px;
+}
+
+#linkedin:hover,
+#linkedin:focus {
+  transform: scale(0.9);
+}
+
+.link-span {
+  font-size: 0;
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+#mail:hover + #mail-card {
+  display: grid;
+  align-content: center;
+  position: absolute;
+  bottom: 12px;
+  left: 110px;
+  padding: 25px 25px 25px 100px;
+  background-color: white;
+  height: 36px;
+}
+
+#mail {
+  z-index: 2;
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  bottom: 20px;
+  left: 120px;
+  background: lightgoldenrodyellow;
+  border-radius: 10px;
+  text-decoration: none;
+  transform: scale(0.8);
+  transition: transform 0.5s;
+}
+
+#mail:before {
+  content: "✉️";
+  font-size: 40px;
+  position: relative;
+  top: 10px;
+  left: 10px;
+}
+
+#mail:hover,
+#mail:focus {
+  transform: scale(0.9);
+}
