@@ -186,12 +186,10 @@ document.addEventListener("mouseup", function (event) {
 
 document.addEventListener("touchstart", function (event) {
   event.preventDefault();
-  document.body.style.userSelect = "none";
   play();
 });
 
 document.addEventListener("touchend", function (event) {
-  document.body.style.userSelect = null;
   stop();
 });
 
