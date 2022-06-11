@@ -58,14 +58,47 @@ body {
   display: grid;
   place-items: center;
   border-radius: 50%;
-  color: white;
-  background-color: red;
+  color: black;
+  background-color: gold;
   border: none;
   font-weight: 700;
   font-size: 1.2em;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   display: none;
   cursor: pointer;
+}
+
+#restart::before {
+  --s: 12px; /* length */
+  --o: 8px; /* offset */
+  --c: orange; /* color */
+  --w: 8px; /* thickness*/
+  --grad: transparent calc(50% - var(--w) / 2),
+    var(--c) calc(50% - var(--w) / 2 + 1px) calc(50% + var(--w) / 2 - 1px),
+    transparent calc(50% + var(--w) / 2);
+
+  content: "";
+  position: absolute;
+  top: calc(-1 * var(--s) - var(--o));
+  bottom: calc(-1 * var(--s) - var(--o));
+  left: calc(-1 * var(--s) - var(--o));
+  right: calc(-1 * var(--s) - var(--o));
+  border-radius: inherit;
+  background:
+    /* 8 rays */ linear-gradient(0deg, var(--grad)),
+    linear-gradient(45deg, var(--grad)), linear-gradient(-45deg, var(--grad)),
+    linear-gradient(90deg, var(--grad));
+  /* */
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - var(--s)),
+    #fff calc(100% - var(--s))
+  );
+  mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - var(--s)),
+    #fff calc(100% - var(--s))
+  );
 }
 
 #perfect {
@@ -87,8 +120,8 @@ body {
   height: 70px;
   transform: scale(0.8);
   transition: transform 0.5s;
-  filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(6deg)
-    brightness(112%) contrast(101%);
+  filter: invert(92%) sepia(66%) saturate(272%) hue-rotate(330deg)
+    brightness(111%) contrast(96%);
 }
 
 .footer-icon:hover,
