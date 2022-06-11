@@ -385,7 +385,7 @@ function drawPlatforms() {
 
     // Draw perfect area only if hero did not yet reach the platform
     if (sticks.last().x < x) {
-      ctx.fillStyle = "red";
+      ctx.fillStyle = "tomato";
       ctx.fillRect(
         x + w / 2 - perfectAreaSize / 2,
         canvasHeight - platformHeight,
@@ -429,7 +429,7 @@ function drawHero() {
   ctx.fill();
 
   // Band
-  ctx.fillStyle = "red";
+  ctx.fillStyle = "tomato";
   ctx.fillRect(-heroWidth / 2 - 1, -12, heroWidth + 2, 4.5);
   ctx.beginPath();
   ctx.moveTo(-9, -14.5);
