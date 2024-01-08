@@ -100,24 +100,12 @@ function resetGame() {
   // The first platform is always the same
   // x + w has to match paddingX
   platforms = [{ x: 50, w: 50 }];
-  generatePlatform();
-  generatePlatform();
-  generatePlatform();
-  generatePlatform();
+  Array.from({length: 6}, () => generatePlatform());
 
   sticks = [{ x: platforms[0].x + platforms[0].w, length: 0, rotation: 0 }];
 
   trees = [];
-  generateTree();
-  generateTree();
-  generateTree();
-  generateTree();
-  generateTree();
-  generateTree();
-  generateTree();
-  generateTree();
-  generateTree();
-  generateTree();
+  Array.from({length: 10}, () => generateTree());
 
   heroX = platforms[0].x + platforms[0].w - heroDistanceFromEdge;
   heroY = 0;
