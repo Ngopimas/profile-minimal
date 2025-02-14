@@ -18,15 +18,13 @@ A minimal, responsive and SEO-friendly Astro blog theme. This theme follows best
 - ✅ RSS feed
 - ✅ Sitemap & robots.txt
 
-## ✅ Lighthouse Score
+## 💡 Lighthouse Score
 
 <p align="center">
   <a href="https://pagespeed.web.dev/report?url=https%3A%2F%2Fastro-paper.pages.dev%2F&form_factor=desktop">
     <img width="710" alt="AstroPaper Lighthouse Score" src="AstroPaper-lighthouse-score.svg">
   <a>
 </p>
-
-## 🚀 Getting Started
 
 ## 🚀 Project Structure
 
@@ -64,6 +62,8 @@ Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page
 Any static assets, like images, can be placed in the `public/` directory.
 
 All blog posts are stored in `src/content/blog` directory.
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
