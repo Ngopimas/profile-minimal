@@ -2,6 +2,14 @@
 
 A minimal, responsive and SEO-friendly Astro blog theme. This theme follows best practices and provides accessibility out of the box. Light and dark mode support.
 
+## 💡 Lighthouse Score
+
+<p align="center">
+  <a href="https://pagespeed.web.dev/report?url=https%3A%2F%2Fastro-paper.pages.dev%2F&form_factor=desktop">
+    <img width="710" alt="AstroPaper Lighthouse Score" src="AstroPaper-lighthouse-score.svg">
+  <a>
+</p>
+
 ## 🔥 Features
 
 - ✅ Minimal and modern design
@@ -17,14 +25,6 @@ A minimal, responsive and SEO-friendly Astro blog theme. This theme follows best
 - ✅ Syntax highlighting
 - ✅ RSS feed
 - ✅ Sitemap & robots.txt
-
-## 💡 Lighthouse Score
-
-<p align="center">
-  <a href="https://pagespeed.web.dev/report?url=https%3A%2F%2Fastro-paper.pages.dev%2F&form_factor=desktop">
-    <img width="710" alt="AstroPaper Lighthouse Score" src="AstroPaper-lighthouse-score.svg">
-  <a>
-</p>
 
 ## 🚀 Project Structure
 
