@@ -4,11 +4,7 @@ pubDatetime: 2024-02-19T13:00:00Z
 title: "Introduction to Web Workers API"
 featured: false
 draft: false
-tags:
-  - javascript
-  - web-workers
-  - performance
-  - concurrency
+tags: ["javascript", "web-workers", "performance", "concurrency"]
 description: "How to use the Web Workers API to run JavaScript in the background"
 ---
 
@@ -41,7 +37,7 @@ Create a file named `worker.js` with the following code:
 
 ```javascript
 // filepath: /src/workers/worker.js
-self.addEventListener("message", (event) => {
+self.addEventListener("message", event => {
   const data = event.data;
   const result = data.num1 + data.num2; // Example computation
   self.postMessage(result);
@@ -56,7 +52,7 @@ In your main script, create a `Worker` instance and communicate with it using `p
 // filepath: /src/main.js
 const worker = new Worker("worker.js");
 
-worker.onmessage = (event) => {
+worker.onmessage = event => {
   console.log("Result from worker:", event.data);
 };
 
@@ -69,7 +65,7 @@ You can handle errors in the worker by listening to the `onerror` event.
 
 ```javascript
 // filepath: /src/main.js
-worker.onerror = (error) => {
+worker.onerror = error => {
   console.error("Worker error:", error.message);
 };
 ```
@@ -93,7 +89,7 @@ Create a file named `primeWorker.js` with the following code:
 
 ```javascript
 // filepath: /src/workers/primeWorker.js
-self.addEventListener("message", (event) => {
+self.addEventListener("message", event => {
   const limit = event.data;
   const primes = [];
 
@@ -122,7 +118,7 @@ In your main script, create a `Worker` instance and communicate with it to calcu
 // filepath: /src/main.js
 const primeWorker = new Worker("primeWorker.js");
 
-primeWorker.onmessage = (event) => {
+primeWorker.onmessage = event => {
   console.log("Prime numbers:", event.data);
 };
 

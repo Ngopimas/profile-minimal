@@ -5,12 +5,7 @@ title: "Async LocalStorage in TypeScript"
 slug: async-localstorage
 featured: false
 draft: false
-tags:
-  - typescript
-  - localStorage
-  - async
-  - react
-  - hooks
+tags: ["typescript", "localStorage", "async", "react", "hooks"]
 description: "How to handle localStorage asynchronously in TypeScript and React"
 ---
 

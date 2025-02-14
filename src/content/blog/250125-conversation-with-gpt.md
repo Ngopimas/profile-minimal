@@ -5,9 +5,7 @@ title: "What My Conversations with GPT Taught Me About Myself"
 slug: conversation-with-gpt
 featured: false
 draft: false
-tags:
-  - ai
-  - career
+tags: ["ai", "career"]
 description: "Reflecting on the insights gained from a conversation with an AI model"
 ---
 

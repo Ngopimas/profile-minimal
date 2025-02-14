@@ -4,12 +4,7 @@ pubDatetime: 2024-01-03T13:00:00Z
 title: "Building a Real-Time Chat Application with WebSockets and Node.js"
 featured: false
 draft: false
-tags:
-  - nodejs
-  - websockets
-  - real-time
-  - chat
-  - javascript
+tags: ["nodejs", "websockets", "real-time", "chat", "javascript"]
 description: "How to create a real-time chat application using WebSockets and Node.js"
 ---
 
@@ -63,12 +58,12 @@ const wss = new WebSocket.Server({ server });
 
 app.use(express.static("public"));
 
-wss.on("connection", (ws) => {
+wss.on("connection", ws => {
   console.log("New client connected");
 
-  ws.on("message", (message) => {
+  ws.on("message", message => {
     console.log(`Received: ${message}`);
-    wss.clients.forEach((client) => {
+    wss.clients.forEach(client => {
       if (client !== ws && client.readyState === WebSocket.OPEN) {
         client.send(message);
       }
@@ -91,7 +86,7 @@ Create a `public` directory and add an `index.html` file for the client-side cod
 
 ```html
 <!-- filepath: /real-time-chat/public/index.html -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -141,7 +136,7 @@ Create a `public` directory and add an `index.html` file for the client-side cod
     <script>
       const ws = new WebSocket("ws://localhost:3000");
 
-      ws.onmessage = (event) => {
+      ws.onmessage = event => {
         const messages = document.getElementById("messages");
         const message = document.createElement("li");
         message.textContent = event.data;
@@ -150,7 +145,7 @@ Create a `public` directory and add an `index.html` file for the client-side cod
 
       document
         .getElementById("message-form")
-        .addEventListener("submit", (event) => {
+        .addEventListener("submit", event => {
           event.preventDefault();
           const input = document.getElementById("message-input");
           ws.send(input.value);

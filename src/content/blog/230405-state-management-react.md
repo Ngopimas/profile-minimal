@@ -4,12 +4,7 @@ pubDatetime: 2023-04-05T13:00:00Z
 title: "State Management in React: Context API vs. Redux"
 featured: false
 draft: false
-tags:
-  - react
-  - state-management
-  - context-api
-  - redux
-  - javascript
+tags: ["react", "state-management", "context-api", "redux", "javascript"]
 description: "State management in React using Context API and Redux"
 ---
 
@@ -42,7 +37,7 @@ export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState("light");
 
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+    setTheme(prevTheme => (prevTheme === "light" ? "dark" : "light"));
   };
 
   return (
@@ -139,7 +134,7 @@ import { Provider, useSelector, useDispatch } from "react-redux";
 import store from "../store/store";
 
 const ThemedComponent = () => {
-  const theme = useSelector((state) => state.theme);
+  const theme = useSelector(state => state.theme);
   const dispatch = useDispatch();
 
   const toggleTheme = () => {

@@ -5,11 +5,7 @@ title: "Optimizing React Applications for Performance"
 slug: optimizing-react-performance
 featured: false
 draft: false
-tags:
-  - react
-  - performance
-  - optimization
-  - javascript
+tags: ["react", "performance", "optimization", "javascript"]
 description: "How to optimize your React applications for better performance"
 ---
 

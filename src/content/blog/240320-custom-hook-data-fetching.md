@@ -4,11 +4,7 @@ pubDatetime: 2024-03-20T13:00:00Z
 title: "Creating a Custom Hook for Data Fetching in React"
 featured: false
 draft: false
-tags:
-  - react
-  - hooks
-  - data-fetching
-  - javascript
+tags: ["react", "hooks", "data-fetching", "javascript"]
 description: "How to create a custom hook for data fetching in React"
 ---
 

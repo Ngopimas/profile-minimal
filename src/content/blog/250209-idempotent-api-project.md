@@ -5,12 +5,7 @@ title: "Building an Idempotent API with TypeScript, Express, and Redis"
 slug: idempotent-api-project
 featured: true
 draft: false
-tags:
-  - typescript
-  - express
-  - redis
-  - api
-  - idempotency
+tags: ["typescript", "express", "redis", "api", "idempotency"]
 description: "A comprehensive guide to implementing idempotent APIs using TypeScript, Express, and Redis"
 ---
 

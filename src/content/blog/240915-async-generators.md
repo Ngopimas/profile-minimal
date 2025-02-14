@@ -5,12 +5,7 @@ title: "Async Generators in JavaScript: Taming the Data Flood"
 slug: async-generators
 featured: false
 draft: false
-tags:
-  - javascript
-  - async
-  - generators
-  - streams
-  - performance
+tags: ["javascript", "async", "generators", "streams", "performance"]
 description: "A deep dive into using async generators for handling large data streams efficiently"
 ---
 
@@ -26,7 +21,7 @@ At their core, async generators are a fusion of two powerful JavaScript features
 async function* numberStream() {
   for (let i = 0; i < 1000; i++) {
     // Simulate async operation
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 100));
     yield i;
   }
 }
@@ -79,7 +74,7 @@ async function* readFileByChunks(file) {
 }
 
 // Process file chunks
-const file = await fetch("large-file.txt").then((r) => r.blob());
+const file = await fetch("large-file.txt").then(r => r.blob());
 for await (const chunk of readFileByChunks(file)) {
   await processChunk(chunk);
 }
@@ -94,8 +89,8 @@ async function* webSocketStream(url) {
   try {
     while (true) {
       const message = await new Promise((resolve, reject) => {
-        ws.onmessage = (e) => resolve(e.data);
-        ws.onerror = (e) => reject(e);
+        ws.onmessage = e => resolve(e.data);
+        ws.onerror = e => reject(e);
       });
       yield JSON.parse(message);
     }

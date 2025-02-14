@@ -5,12 +5,7 @@ title: "Building a Serverless Application with AWS Lambda and API Gateway"
 slug: serverless-application-aws
 featured: false
 draft: false
-tags:
-  - aws
-  - serverless
-  - lambda
-  - api-gateway
-  - cloud
+tags: ["aws", "serverless", "lambda", "api-gateway", "cloud"]
 description: "How to build a serverless application using AWS Lambda and API Gateway"
 ---
 
@@ -53,7 +48,7 @@ Create a file named `index.js` and add the following code:
 
 ```javascript
 // filepath: /serverless-app/index.js
-exports.handler = async (event) => {
+exports.handler = async event => {
   const name = event.queryStringParameters.name || "World";
   const response = {
     statusCode: 200,

@@ -4,11 +4,7 @@ pubDatetime: 2023-12-10T13:00:00Z
 title: "Building a Progressive Web App (PWA) with React"
 featured: false
 draft: false
-tags:
-  - react
-  - pwa
-  - progressive-web-app
-  - javascript
+tags: ["react", "pwa", "progressive-web-app", "javascript"]
 description: "How to build a Progressive Web App (PWA) using React"
 ---
 
@@ -124,9 +120,9 @@ Create a file named `custom-service-worker.js` and add custom caching logic.
 
 ```javascript
 // filepath: pwa-react/src/custom-service-worker.js
-self.addEventListener("install", (event) => {
+self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open("pwa-react-cache").then((cache) => {
+    caches.open("pwa-react-cache").then(cache => {
       return cache.addAll([
         "/",
         "/index.html",
@@ -141,9 +137,9 @@ self.addEventListener("install", (event) => {
   );
 });
 
-self.addEventListener("fetch", (event) => {
+self.addEventListener("fetch", event => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
+    caches.match(event.request).then(response => {
       return response || fetch(event.request);
     })
   );
@@ -171,7 +167,7 @@ ReactDOM.render(
 );
 
 serviceWorkerRegistration.register({
-  onUpdate: (registration) => {
+  onUpdate: registration => {
     if (registration && registration.waiting) {
       registration.waiting.postMessage({ type: "SKIP_WAITING" });
       window.location.reload();

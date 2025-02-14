@@ -4,11 +4,7 @@ pubDatetime: 2023-04-17T13:00:00Z
 title: "Building a CI/CD Pipeline with GitHub Actions"
 featured: false
 draft: false
-tags:
-  - github
-  - ci-cd
-  - devops
-  - automation
+tags: ["github", "ci-cd", "devops", "automation"]
 description: "How to set up a CI/CD pipeline using GitHub Actions"
 ---
 
@@ -72,7 +68,7 @@ app.get("/", (req, res) => {
 });
 
 describe("GET /", () => {
-  it("should return Hello, World!", (done) => {
+  it("should return Hello, World!", done => {
     request(app).get("/").expect("Hello, World!", done);
   });
 });

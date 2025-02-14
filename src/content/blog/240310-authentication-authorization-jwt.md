@@ -4,12 +4,7 @@ pubDatetime: 2024-03-10T13:00:00Z
 title: "Implementing Authentication and Authorization in Node.js with JWT"
 featured: false
 draft: false
-tags:
-  - nodejs
-  - jwt
-  - authentication
-  - authorization
-  - api
+tags: ["nodejs", "jwt", "authentication", "authorization", "api"]
 description: "How to implement authentication and authorization in a RESTful API using JWT"
 ---
 
@@ -73,7 +68,7 @@ app.post("/register", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
-  const user = users.find((u) => u.username === username);
+  const user = users.find(u => u.username === username);
   if (!user || !(await bcrypt.compare(password, user.password))) {
     return res.status(401).json({ message: "Invalid credentials" });
   }
