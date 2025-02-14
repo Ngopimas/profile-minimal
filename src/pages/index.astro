@@ -1,0 +1,131 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@layouts/Layout.astro";
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
+import LinkButton from "@components/LinkButton.astro";
+import Hr from "@components/Hr.astro";
+import Card from "@components/Card";
+import Socials from "@components/Socials.astro";
+import getSortedPosts from "@utils/getSortedPosts";
+import { SITE, SOCIALS } from "@config";
+
+const posts = await getCollection("blog");
+
+const sortedPosts = getSortedPosts(posts);
+// const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
+// const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+
+const socialCount = SOCIALS.filter(social => social.active).length;
+---
+
+<Layout>
+  <Header />
+  <main id="main-content">
+    <section id="hero">
+
+        <h1 >Hi there! I'm Romain 👋
+        </h1>
+
+      <p>
+        Software engineer @<LinkButton
+        href="https://deeplime.io/"
+        className="underline underline-offset-4 hover:text-skin-accent"
+        >DeepLime</LinkButton
+      >, with a passion for creating nice and functional web
+      applications. I love working with modern technologies and am always
+      eager to learn new things.
+      </p>
+      <p>
+        <a
+        target="_blank"
+        href="/rss.xml"
+        class="rss-link"
+        aria-label="rss feed"
+        title="RSS Feed"
+      >
+        <span class="sr-only">RSS Feed</span>
+        <span class="underline underline-offset-4 hover:text-skin-accent">Follow along</span>
+      </a>
+        as I continue to explore web development, AI,
+        cloud architecture, and interactive data visualizations.
+      </p>
+
+      {
+        socialCount > 0 && (
+          <div class="social-wrapper">
+            <div class="social-links">Contact me:</div>
+            <Socials />
+          </div>
+        )
+      }
+    </section>
+
+    <Hr />
+
+    {
+      sortedPosts.length > 0 && (
+        <section id="recent-posts">
+          <h2>Writing</h2>
+          <ul>
+            {sortedPosts.map(
+              ({ data, slug }, index) =>
+                index < SITE.postPerIndex && (
+                  <Card
+                    href={`/posts/${slug}/`}
+                    frontmatter={data}
+                    secHeading={false}
+                  />
+                )
+            )}
+          </ul>
+        </section>
+      )
+    }
+
+    <div class="all-posts-btn-wrapper">
+      <LinkButton href="/posts/">
+        All Posts
+        <svg xmlns="http://www.w3.org/2000/svg"
+          ><path
+            d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"
+          ></path>
+        </svg>
+      </LinkButton>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  /* ===== Hero Section ===== */
+  #hero {
+    @apply pb-6 pt-8;
+  }
+  #hero h1 {
+    @apply my-4 inline-block text-3xl font-bold sm:my-8 sm:text-5xl;
+  }
+  #hero p {
+    @apply my-2;
+  }
+  .social-wrapper {
+    @apply mt-4 flex flex-col sm:flex-row sm:items-center;
+  }
+  .social-links {
+    @apply mb-1 mr-2 whitespace-nowrap sm:mb-0;
+  }
+
+  /* ===== Featured & Recent Posts Sections ===== */
+  #featured,
+  #recent-posts {
+    @apply pb-6 pt-12;
+  }
+  #featured h2,
+  #recent-posts h2 {
+    @apply text-2xl font-semibold tracking-wide;
+  }
+  .all-posts-btn-wrapper {
+    @apply my-8 text-center;
+  }
+</style>
