@@ -33,9 +33,9 @@ export const LOGO_IMAGE = {
 
 export const SOCIALS: SocialObjects = [
   {
-    name: "Github",
-    href: "https://github.com/Ngopimas/",
-    linkTitle: ` ${SITE.title} on Github`,
+    name: "Mail",
+    href: "mailto:contact@romaincoupey.com",
+    linkTitle: `Send an email to ${SITE.title}`,
     active: true,
   },
   {
@@ -45,9 +45,9 @@ export const SOCIALS: SocialObjects = [
     active: true,
   },
   {
-    name: "Mail",
-    href: "mailto:contact@romaincoupey.com",
-    linkTitle: `Send an email to ${SITE.title}`,
+    name: "Github",
+    href: "https://github.com/Ngopimas/",
+    linkTitle: ` ${SITE.title} on Github`,
     active: true,
   },
   {
