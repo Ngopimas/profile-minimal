@@ -17,7 +17,7 @@ By leveraging modern web technologies and focusing on performance, I made this m
 - **Responsive Design**: Created a fully responsive layout that provides seamless experience across all devices
 - **Performance Excellence**: Optimized the site to achieve 90+ Lighthouse scores across all metrics
 
-  ![Lighthouse Score](/src/assets/images/lighthouse-score.svg)
+  ![Lighthouse Score](../../assets/images/lighthouse-score.svg)
 
 ## Technical Implementation
 
