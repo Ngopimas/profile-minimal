@@ -7,7 +7,7 @@ featured: true
 url: "https://deeplime.io/products#geoportal"
 ---
 
-As a Developer at DeepLime, I spearheaded the development of GeoPortal, a sophisticated cloud-based platform that revolutionizes how geoscientists interact with and analyze geological data.
+As a Developer at DeepLime, I played a crucial role in the development of GeoPortal, a sophisticated cloud-based platform that revolutionizes how geoscientists interact with and analyze geological data.
 
 ![GeoPortal](../../assets/images/geoportal.jpg)
 
@@ -75,7 +75,7 @@ As a Developer at DeepLime, I spearheaded the development of GeoPortal, a sophis
 
 ## Role & Responsibilities
 
-- Led the core developments of the platform
+- Contributed significantly to the core developments of the platform
 - Collaborated with stakeholders to define product roadmap
 - Mentored team members and established development standards
 
