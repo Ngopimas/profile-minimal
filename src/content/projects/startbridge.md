@@ -4,7 +4,7 @@ description: "Contributed to building a trusted marketplace platform connecting 
 pubDatetime: 2022-07-01T09:00:00Z
 tags: ["react", "reactquery", "material-ui"]
 featured: false
-url: "https://startbridge.com"
+url: "https://startbridge.io"
 ---
 
 As a contractor for StartBridge, I contributed to building a trusted marketplace platform that facilitates connections between innovators and stakeholders in the innovation ecosystem.
