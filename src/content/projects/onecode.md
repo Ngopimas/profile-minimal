@@ -46,7 +46,7 @@ As a lead developer in this project, I was responsible for:
 
 ## Technologies Used
 
-- **Next.js**: For server-side rendering and optimal performance.
+- **Next.js**: For a modern web architecture and optimal performance.
 - **TypeScript**: For type safety and code reliability.
 - **AWS Lambda**: For serverless computing and cost-effective scaling.
 - **AWS Cognito**: For secure user authentication and authorization.
