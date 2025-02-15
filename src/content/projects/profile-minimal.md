@@ -12,10 +12,12 @@ By leveraging modern web technologies and focusing on performance, I made this m
 
 ## Personal Achievements
 
-- **Performance Excellence**: Optimized the site to achieve 90+ Lighthouse scores across all metrics
-- **Responsive Design**: Created a fully responsive layout that provides seamless experience across all devices
 - **Modern Development**: Implemented best practices in modern web development, from SEO to accessibility
 - **Clean Architecture**: Designed a maintainable and scalable codebase that showcases my coding standards
+- **Responsive Design**: Created a fully responsive layout that provides seamless experience across all devices
+- **Performance Excellence**: Optimized the site to achieve 90+ Lighthouse scores across all metrics
+
+  ![Lighthouse Score](/src/assets/images/lighthouse-score.svg)
 
 ## Technical Implementation
 
@@ -48,13 +50,13 @@ I focused on creating a clean, maintainable architecture with:
 
 ```bash
 # Install dependencies
-pnpm install
+npm install
 
 # Start development server
-pnpm dev
+npm run dev
 
 # Build for production
-pnpm build
+npm run build
 ```
 
 ### Deployment
@@ -66,7 +68,6 @@ Deployed on GitHub Pages using GitHub Actions for CI/CD. The site is hosted on a
 I plan to continue improving this portfolio with:
 
 - Enhanced analytics for visitor insights
-- Automated image optimization
 - Testing suite
 - Additional interactive features
 - Redesign for a more modern look and feel

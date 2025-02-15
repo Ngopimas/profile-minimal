@@ -13,7 +13,9 @@ I developed a web-based 3D visualization platform for the EMILI lithium mining p
 
 [Public debate details](https://www.debatpublic.fr/mine-de-lithium-allier/le-dossier-du-maitre-douvrage-5411)
 
-## Proof of Concept Video
+[Visit the current EMILI 3D platform](https://emili3d.imerys.com)
+
+## 1st POC Video
 
 <video controls>
   <source src="/assets/video/emili.mp4" type="video/mp4">
@@ -53,7 +55,7 @@ All components are geolocated and positioned on the actual site topography, over
 
 - **Three.js**: Utilized for 3D rendering and scene management
 - **Mapbox**: Integrated for GIS data visualization
-- **React**: Implemented for the user interface and state management
+- **Vite**: Used for fast development and bundling
 
 ### Key Features
 
