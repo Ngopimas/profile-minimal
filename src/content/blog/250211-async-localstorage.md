@@ -140,7 +140,7 @@ export default App;
 
 ## Summary
 
-By creating async functions for localStorage and a custom React hook, you can easily manage localStorage operations asynchronously. This approach not only prepares your code for future enhancements but also keeps your components clean and easy to maintain. Happy coding!
+By creating async functions for localStorage and a custom React hook, you can easily manage localStorage operations asynchronously. This approach not only prepares your code for future enhancements but also keeps your components clean and easy to maintain.
 
 ## Further Reading
 
