@@ -11,7 +11,7 @@ description: "How to handle localStorage asynchronously in TypeScript and React"
 
 ## Introduction
 
-LocalStorage is a simple and convenient way to store data in the browser. However, as applications grow, you might need to handle these operations asynchronously, especially if you plan to replace localStorage with other storage solutions with HTTP API calls in the future. Let's explore how to create async functions for localStorage and a custom React hook to manage these operations.
+While localStorage provides a straightforward way to store data in the browser, it's nature can become limiting as your application grows. What if you need to switch to an API-based storage in the future? By implementing an asynchronous wrapper around localStorage, you can future-proof your code and make it more flexible without sacrificing simplicity.
 
 ## Prerequisites
 
@@ -21,11 +21,7 @@ To follow along, you should have a basic understanding of:
 - React and React Hooks
 - Promises and async/await syntax
 
-## Why Async LocalStorage?
-
-While localStorage operations are synchronous by nature, making them asynchronous can help in scenarios where you might want to replace localStorage with an asynchronous storage solution without changing the rest of your codebase. This approach also keeps your codebase future-proof and more flexible.
-
-## Benefits of Async LocalStorage
+### Benefits of Async LocalStorage
 
 1. **Future-Proofing**: Easily switch to other storage solutions without changing the core logic.
 2. **Improved Performance**: Non-blocking operations can lead to a smoother user experience.
