@@ -230,7 +230,7 @@ This implementation serves as a foundation, but there are many ways to enhance i
 - **Cache Layer**: Add an in-memory cache to reduce reads from localStorage
 - **Expiration**: Implement TTL (Time-To-Live) for stored items
 
-These are just examples - the possibilities for enhancement are endless depending on your specific needs and use cases.
+These are just examples - the possibilities for enhancement are endless depending on the specific needs and use cases.
 
 ## Summary
 
