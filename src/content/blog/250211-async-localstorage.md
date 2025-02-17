@@ -11,7 +11,7 @@ description: "How to handle localStorage asynchronously in TypeScript and React"
 
 ## Introduction
 
-LocalStorage is a simple and convenient way to store data in the browser. However, as applications grow, you might need to handle this operations asynchronously, especially if you plan to replace localStorage with other storage solutions with HTTP API calls in the future. Let's explore how to create async functions for localStorage and a custom React hook to manage these operations.
+LocalStorage is a simple and convenient way to store data in the browser. However, as applications grow, you might need to handle these operations asynchronously, especially if you plan to replace localStorage with other storage solutions with HTTP API calls in the future. Let's explore how to create async functions for localStorage and a custom React hook to manage these operations.
 
 ## Prerequisites
 
@@ -24,6 +24,19 @@ To follow along, you should have a basic understanding of:
 ## Why Async LocalStorage?
 
 While localStorage operations are synchronous by nature, making them asynchronous can help in scenarios where you might want to replace localStorage with an asynchronous storage solution without changing the rest of your codebase. This approach also keeps your codebase future-proof and more flexible.
+
+## Benefits of Async LocalStorage
+
+1. **Future-Proofing**: Easily switch to other storage solutions without changing the core logic.
+2. **Improved Performance**: Non-blocking operations can lead to a smoother user experience.
+3. **Better Error Handling**: Handle errors more gracefully with async/await syntax.
+
+## Potential Use Cases
+
+- **Quiz Applications**: Store user's selected answers asynchronously.
+- **User Preferences**: Store multiple choice settings like theme selection.
+- **Survey Forms**: Save user responses with the ability to resume later.
+- **Offline Support**: Cache user selections for later synchronization.
 
 ## Creating Async LocalStorage Functions
 
@@ -59,9 +72,41 @@ export const asyncGetItem = async (key: string): Promise<string | null> => {
 };
 ```
 
+## Error Handling in Async Functions
+
+To make your async localStorage functions more robust, you can add error handling using try-catch blocks. This will help you gracefully handle any errors that might occur during the read/write operations.
+
+```typescript
+// filepath: /src/utils/asyncLocalStorage.ts
+export const asyncSetItem = async (
+  key: string,
+  value: string
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    try {
+      localStorage.setItem(key, value);
+      resolve();
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const asyncGetItem = async (key: string): Promise<string | null> => {
+  return new Promise((resolve, reject) => {
+    try {
+      const value = localStorage.getItem(key);
+      resolve(value);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+```
+
 ## Creating a Custom React Hook
 
-Next, we'll create a custom React hook that uses these async functions to manage localStorage. This hook will provide a way to read and write data asynchronously within a React component.
+Next, we'll create a custom React hook that uses these async functions to manage localStorage. This hook will help us store and retrieve a selected value from a set of options.
 
 ```typescript
 // filepath: /src/hooks/useAsyncLocalStorage.ts
@@ -72,16 +117,22 @@ import { asyncSetItem, asyncGetItem } from "../utils/asyncLocalStorage";
  * Custom hook to manage async localStorage operations.
  * @param key - The key under which the value is stored.
  * @param initialValue - The initial value to use if the key does not exist.
- * @returns A tuple containing the stored value and a function to update it.
+ * @returns A tuple containing the stored value, setter function, and loading state.
  */
 const useAsyncLocalStorage = (key: string, initialValue: string) => {
   const [storedValue, setStoredValue] = useState<string>(initialValue);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchValue = async () => {
-      const item = await asyncGetItem(key);
-      if (item !== null) {
-        setStoredValue(item);
+      setLoading(true);
+      try {
+        const item = await asyncGetItem(key);
+        if (item !== null) {
+          setStoredValue(item);
+        }
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -89,11 +140,16 @@ const useAsyncLocalStorage = (key: string, initialValue: string) => {
   }, [key]);
 
   const setValue = async (value: string) => {
-    await asyncSetItem(key, value);
-    setStoredValue(value);
+    setLoading(true);
+    try {
+      await asyncSetItem(key, value);
+      setStoredValue(value);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  return [storedValue, setValue] as const;
+  return [storedValue, setValue, loading] as const;
 };
 
 export default useAsyncLocalStorage;
@@ -109,16 +165,27 @@ import React from "react";
 import useAsyncLocalStorage from "../hooks/useAsyncLocalStorage";
 
 const App = () => {
-  const [name, setName] = useAsyncLocalStorage("name", "Guest");
+  const [selectedValue, setSelectedValue, loading] = useAsyncLocalStorage("selectedValue", "A");
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
+  const handleClick = (value: string) => {
+    setSelectedValue(value);
   };
 
   return (
     <div>
-      <h1>Hello, {name}!</h1>
-      <input type="text" value={name} onChange={handleChange} />
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <h1>Selected Value: {selectedValue}</h1>
+          <div>
+            <button onClick={() => handleClick("A")}>A</button>
+            <button onClick={() => handleClick("B")}>B</button>
+            <button onClick={() => handleClick("C")}>C</button>
+            <button onClick={() => handleClick("D")}>D</button>
+          </div>
+        </>
+      )}
     </div>
   );
 };
@@ -126,17 +193,33 @@ const App = () => {
 export default App;
 ```
 
-## Benefits of Async LocalStorage
+## Testing the Custom Hook
 
-1. **Future-Proofing**: Easily switch to other storage solutions without changing the core logic.
-2. **Improved Performance**: Non-blocking operations can lead to a smoother user experience.
-3. **Better Error Handling**: Handle errors more gracefully with async/await syntax.
+To ensure our custom hook works correctly, we can write tests using a testing library like React Testing Library and Jest.
 
-## Potential Use Cases
+```typescript
+// filepath: /src/hooks/useAsyncLocalStorage.test.ts
+import { renderHook, act } from "@testing-library/react-hooks";
+import useAsyncLocalStorage from "./useAsyncLocalStorage";
 
-- **User Preferences**: Store and retrieve user settings asynchronously.
-- **Session Management**: Manage session data without blocking the main thread.
-- **Offline Support**: Sync data with a remote server when the user is back online.
+describe("useAsyncLocalStorage", () => {
+  it("should retrieve and update the value in localStorage", async () => {
+    const { result, waitForNextUpdate } = renderHook(() =>
+      useAsyncLocalStorage("testKey", "initialValue")
+    );
+
+    expect(result.current[0]).toBe("initialValue");
+
+    act(() => {
+      result.current[1]("newValue");
+    });
+
+    await waitForNextUpdate();
+
+    expect(result.current[0]).toBe("newValue");
+  });
+});
+```
 
 ## Summary
 
