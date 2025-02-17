@@ -117,7 +117,7 @@ import { asyncSetItem, asyncGetItem } from "../utils/asyncLocalStorage";
  * Custom hook to manage async localStorage operations.
  * @param key - The key under which the value is stored.
  * @param initialValue - The initial value to use if the key does not exist.
- * @returns A tuple containing the stored value, setter function, and loading state.
+ * @returns An array containing the stored value, setter function, and loading state.
  */
 const useAsyncLocalStorage = (key: string, initialValue: string) => {
   const [storedValue, setStoredValue] = useState<string>(initialValue);
