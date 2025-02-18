@@ -156,5 +156,5 @@ Remember: The key to handling large data streams isn't just about processing eve
 ## Further Reading
 
 - [MDN Web Docs: Web Streams API](https://developer.mozilla.org/en-US/docs/Web/API/Streams_API)
-- [MDN Web Docs: Async Iterators and Generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of)
+- [MDN Web Docs: Async Iterators and Generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of#iterating_over_async_generators)
 - [Node.js Streams and Async Generators](https://nodejs.org/api/stream.html#streams-compatibility-with-async-generators-and-async-iterators)
