@@ -189,5 +189,3 @@ Deploy the `build` directory to a static hosting service such as Netlify, Vercel
 ## Conclusion
 
 We built a simple Progressive Web App (PWA) using React. We used the PWA template provided by Create React App, customized the web app manifest, and added a custom service worker. PWAs provide a native app-like experience on the web, offering features such as offline support and push notifications.
-
-Happy coding!

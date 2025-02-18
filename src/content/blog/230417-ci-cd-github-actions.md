@@ -161,5 +161,3 @@ For more information on GitHub Actions and CI/CD practices, check out the follow
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
 - [Continuous Integration (CI) Best Practices](https://martinfowler.com/articles/continuousIntegration.html)
 - [Node.js Testing Best Practices](https://github.com/goldbergyoni/nodebestpractices#testing-and-overall-quality)
-
-Happy coding!

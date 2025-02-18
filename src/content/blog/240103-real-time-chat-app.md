@@ -169,5 +169,3 @@ Open your browser and navigate to `http://localhost:3000`. You should see the ch
 ## Conclusion
 
 We built a simple real-time chat application using WebSockets and Node.js. This example can be extended to include more features such as user authentication, message persistence, and more. WebSockets provide a powerful way to achieve real-time communication in web applications, and Node.js makes it easy to set up a server to handle WebSocket connections.
-
-Happy coding!

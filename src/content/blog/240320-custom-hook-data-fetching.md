@@ -94,7 +94,7 @@ export default App;
 
 ## Summary
 
-By creating a custom hook for data fetching, you can easily manage data fetching logic in your React applications. This approach not only promotes reusability but also keeps your components clean and maintainable. Happy coding!
+By creating a custom hook for data fetching, you can easily manage data fetching logic in your React applications. This approach not only promotes reusability but also keeps your components clean and maintainable.
 
 ## Further Reading
 

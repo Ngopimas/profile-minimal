@@ -112,5 +112,3 @@ You should see a JSON response with a greeting message.
 ## Conclusion
 
 We just built a simple serverless application using AWS Lambda and API Gateway. This example can be extended to include more complex logic, integrate with other AWS services, and handle different HTTP methods. Serverless architecture provides a scalable and cost-effective way to build and run applications without managing servers.
-
-Happy coding!

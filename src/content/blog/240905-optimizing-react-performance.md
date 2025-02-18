@@ -116,5 +116,3 @@ const App = () => (
 ## Summary
 
 Optimizing React applications involves identifying performance bottlenecks and applying techniques such as memoization, lazy loading, and profiling. By following these best practices, we can improve the performance of our React applications and provide a better user experience.
-
-Happy coding!

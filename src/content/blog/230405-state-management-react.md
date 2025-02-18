@@ -180,5 +180,3 @@ export default App;
 ## Conclusion
 
 Both Context API and Redux are powerful tools for managing state in React applications. The choice between them depends on the complexity of your state management needs and the size of your application. By understanding the strengths and use cases of each, you can make an informed decision on which solution to use.
-
-Happy coding!

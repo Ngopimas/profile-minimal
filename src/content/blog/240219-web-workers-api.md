@@ -141,8 +141,6 @@ primeWorker.postMessage(100); // Calculate primes up to 100
 
 The Web Workers API provides a powerful way to run JavaScript code in the background, improving performance and responsiveness. By offloading heavy computations and tasks to background threads, you can create more efficient and user-friendly web applications. Experiment with Web Workers to see how they can benefit your projects.
 
-Happy coding!
-
 ## Further Reading
 
 - [MDN Web Docs: Web Workers API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API)

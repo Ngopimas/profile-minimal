@@ -132,5 +132,3 @@ Send a GET request to `http://localhost:3000/protected` with the `Authorization`
 ## Conclusion
 
 We just implemented basic authentication and authorization in a Node.js RESTful API using JWT. This example can be extended to include more features such as role-based access control, token refresh, and more.
-
-Happy coding!

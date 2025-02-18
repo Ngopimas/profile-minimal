@@ -9,8 +9,6 @@ tags: ["javascript", "async", "generators", "streams", "performance"]
 description: "A deep dive into using async generators for handling large data streams efficiently"
 ---
 
-## The Data Deluge
-
 In the world of modern web development, we often find ourselves dealing with large amounts of data. Whether it's streaming API responses, processing large files, or handling real-time updates, managing data flow efficiently is crucial. Enter async generators - a powerful feature that combines the best of async programming and iterative processing.
 
 ## Understanding Async Generators
@@ -154,3 +152,9 @@ Async generators represent a paradigm shift in how we handle data streams in Jav
 As we move towards more data-intensive applications, understanding and effectively using async generators becomes increasingly important. They're not just a feature - they're a fundamental tool in the modern developer's arsenal.
 
 Remember: The key to handling large data streams isn't just about processing everything at once, but about maintaining a steady, controlled flow of data. Async generators give us exactly that - a way to tame the data flood, one yield at a time.
+
+## Further Reading
+
+- [MDN Web Docs: Web Streams API](https://developer.mozilla.org/en-US/docs/Web/API/Streams_API)
+- [MDN Web Docs: Async Iterators and Generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of)
+- [Node.js Streams and Async Generators](https://nodejs.org/api/stream.html#streams-compatibility-with-async-generators-and-async-iterators)

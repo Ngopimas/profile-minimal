@@ -266,5 +266,3 @@ Different payloads with the same idempotency key can cause inconsistencies. Impl
 ## Conclusion
 
 By following these steps, you can ensure that your API operations are idempotent, providing a more robust and user-friendly experience. This project illustrates how to implement idempotency using Redis as a storage mechanism, handle idempotency keys in API requests, and follow best practices for ensuring exactly-once semantics in API operations.
-
-Happy coding!
