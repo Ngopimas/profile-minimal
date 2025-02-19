@@ -13,7 +13,15 @@ As a contractor for StartBridge, I contributed to building a trusted marketplace
 
 The StartBridge platform addresses friction and inefficiency in innovation promotion and evaluation by enabling symmetry and collaboration. It allows innovators to create commercial offers or project calls ("Bridges") and gather feedback from their professional network before launching on the marketplace. This significantly reduces time-to-market and improves the quality of innovations.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/v4jvRmYv5R0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 8px;">
+  <iframe
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    src="https://www.youtube.com/embed/v4jvRmYv5R0"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen
+  ></iframe>
+</div>
 
 ## Problem-Solving Approach and Key Challenges Overcome
 
