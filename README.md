@@ -5,7 +5,7 @@ A minimal, responsive and SEO-friendly Astro blog theme. This theme follows best
 ## 💡 Lighthouse Score
 
 <p align="center">
-  <a href="https://pagespeed.web.dev/report?url=https%3A%2F%2Fastro-paper.pages.dev%2F&form_factor=desktop">
+  <a href="https://pagespeed.web.dev/analysis/https-romaincoupey-com/58htn4d2yw?form_factor=desktop">
     <img width="710" alt="AstroPaper Lighthouse Score" src="AstroPaper-lighthouse-score.svg">
   <a>
 </p>
@@ -28,7 +28,7 @@ A minimal, responsive and SEO-friendly Astro blog theme. This theme follows best
 
 ## 🚀 Project Structure
 
-Inside of AstroPaper, you'll see the following folders and files:
+Inside this project, you'll see the following folders and files:
 
 ```bash
 /
@@ -149,10 +149,10 @@ All commands are run from the root of the project, from a terminal:
 | `npm run format`                     | Format codes with Prettier                                                                                                       |
 | `npm run sync`                       | Generates TypeScript types for all Astro modules. [Learn more](https://docs.astro.build/en/reference/cli-reference/#astro-sync). |
 | `npm run lint`                       | Lint with ESLint                                                                                                                 |
-| `docker compose up -d`               | Run AstroPaper on docker, You can access with the same hostname and port informed on `dev` command.                              |
+| `docker compose up -d`               | Run Astro on docker, You can access with the same hostname and port informed on `dev` command.                                   |
 | `docker compose run app npm install` | You can run any command above into the docker container.                                                                         |
-| `docker build -t astropaper .`       | Build Docker image for AstroPaper.                                                                                               |
-| `docker run -p 4321:80 astropaper`   | Run AstroPaper on Docker. The website will be accessible at `http://localhost:4321`.                                             |
+| `docker build -t astropaper .`       | Build Docker image for Astro.                                                                                                    |
+| `docker run -p 4321:80 astropaper`   | Run Astro on Docker. The website will be accessible at `http://localhost:4321`.                                                  |
 
 > **_Warning!_** Windows PowerShell users may need to install the [concurrently package](https://www.npmjs.com/package/concurrently) if they want to [run diagnostics](https://docs.astro.build/en/reference/cli-reference/#astro-check) during development (`astro check --watch & astro dev`). For more info, see [this issue](https://github.com/satnaing/astro-paper/issues/113).
 
