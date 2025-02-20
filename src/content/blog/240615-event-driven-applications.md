@@ -156,7 +156,7 @@ The future of event-driven systems lies in:
 
 Building successful event-driven systems requires more than just understanding the theory. It's about making practical decisions that balance complexity with maintainability, and scalability with reliability.
 
-## Resources I Actually Use
+## Additional Resources
 
 - [OpenTelemetry for event tracing](https://opentelemetry.io/)
 - [CloudEvents spec](https://cloudevents.io/)
