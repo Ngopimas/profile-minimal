@@ -10,7 +10,7 @@ url: "https://ngopimas.github.io/POC_BM_3D/"
 
 I developed a 3D visualization tool that transforms complex mining block model data into interactive, web-based 3D visualizations. This project bridges the gap between raw geological data and actionable insights, enabling mining professionals to make more informed decisions about resource estimation and mine planning.
 
-![Block Model Visualization](../../assets/bm.png)
+![Block Model Visualization](../../assets/images/bm.png)
 
 ## Business Impact
 
