@@ -160,12 +160,8 @@ All commands are run from the root of the project, from a terminal:
 
 Contributions are welcome! Feel free to open an issue or submit a pull request.
 
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## 🙏 Acknowledgments
 
 - Built with [Astro](https://astro.build)
 - Styled with [Tailwind CSS](https://tailwindcss.com)
-- Thanks to [Sat Naing](https://satnaing.dev) 🤍 and [contributors](https://github.com/satnaing/astro-paper/graphs/contributors) 👨🏻‍💻.
+- Thanks to [Sat Naing](https://satnaing.dev) 🤍 and [contributors](https://github.com/satnaing/astro-paper/graphs/contributors) 👨🏻‍💻
