@@ -3,7 +3,7 @@ title: "Block Model Visualization"
 description: "Transforming Easily Mining Data into Interactive Insights"
 pubDatetime: 2022-07-11T15:30:00Z
 tags: ["threejs", "react", "typescript"]
-featured: true
+featured: false
 url: "https://ngopimas.github.io/POC_BM_3D/"
 # repository: "https://github.com/Ngopimas/POC_BM_3D"
 ---
