@@ -5,7 +5,7 @@ title: "React Debugging with VSCode and Chrome DevTools"
 slug: debugging-react-vscode
 featured: false
 draft: false
-tags: ["react", "debugging", "vscode", "chrome-devtools", "troubleshooting"]
+tags: ["react", "debugging", "vscode", "chrome-devtools"]
 description: "Practical examples to debug React applications using VSCode and Chrome DevTools."
 ---
 
@@ -116,11 +116,7 @@ function ProfilingWrapper({ children }) {
     }
   };
 
-  return (
-    <Profiler id="MainApp" onRender={onRender}>
-      {children}
-    </Profiler>
-  );
+  return <Profiler onRender={onRender}>{children}</Profiler>;
 }
 ```
 
