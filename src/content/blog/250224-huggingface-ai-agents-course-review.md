@@ -1,6 +1,6 @@
 ---
 author: Romain C.
-pubDatetime: 2025-02-24T12:18:00Z
+pubDatetime: 2025-02-24T12:30:00Z
 title: "Hugging Face's AI Agents Course"
 slug: huggingface-ai-agents-course-fundamentals
 featured: false
