@@ -3,7 +3,7 @@ author: Romain C.
 pubDatetime: 2024-12-15T10:00:00Z
 title: "Design Patterns in TypeScript"
 slug: typescript-design-patterns
-featured: true
+featured: false
 draft: false
 tags: ["typescript", "design-patterns", "software-engineering"]
 description: "A quick guide to essential design patterns in TypeScript"

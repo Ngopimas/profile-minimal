@@ -3,7 +3,7 @@ author: Romain C.
 pubDatetime: 2025-02-09T12:00:00Z
 title: "Building an Idempotent API with TypeScript, Express, and Redis"
 slug: idempotent-api-project
-featured: true
+featured: false
 draft: false
 tags: ["typescript", "express", "redis", "api", "idempotency"]
 description: "A comprehensive guide to implementing idempotent APIs using TypeScript, Express, and Redis"

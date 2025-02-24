@@ -3,7 +3,7 @@ author: Romain C.
 pubDatetime: 2024-04-05T09:15:00Z
 title: "Edge Computing: The Future of Web Performance"
 slug: edge-computing-web
-featured: true
+featured: false
 draft: false
 tags:
   [

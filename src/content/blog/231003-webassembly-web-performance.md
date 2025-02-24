@@ -3,7 +3,7 @@ author: Romain C.
 pubDatetime: 2023-10-03T10:30:00Z
 title: "WebAssembly: Supercharging Web Performance"
 slug: webassembly-web-performance
-featured: true
+featured: false
 draft: false
 tags:
   [
