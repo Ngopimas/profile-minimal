@@ -9,8 +9,6 @@ import Socials from "@components/Socials.astro";
 import getSortedPosts from "@utils/getSortedPosts";
 import { SITE, SOCIALS } from "@config";
 import ProjectCard from "@components/ProjectCard";
-import Image from "astro/components/Image.astro";
-import image from "@assets/images/romain.jpeg";
 
 const posts = await getCollection("blog");
 const projects = await getCollection("projects");
@@ -20,60 +18,57 @@ const sortedProjects = getSortedPosts(projects);
 const featuredProjects = sortedProjects.filter(({ data }) => data.featured);
 
 const socialCount = SOCIALS.filter(social => social.active).length;
-
-
 ---
 
 <Layout>
   <Header />
   <main id="main-content" class="">
-    <section id="hero" class="mx-auto max-w-3xl">
-      <h1 class="heading text-4xl md:text-5xl">Hi there! I'm Romain 👋</h1>
+    <section id="hero" class="mx-auto max-w-4xl">
       <div class="hero-container">
         <div class="hero-content">
-          <p>
-            Software engineer @<LinkButton
+          <div class="mb-6">
+            <span class="greeting">Hi there! I'm</span>
+            <h1 class="heading text-4xl md:text-6xl font-bold">Romain</h1>
+            <div class="hero-tag">
+              <span class="tag-line">Software Engineer</span>
+            </div>
+          </div>
+          
+          <p class="hero-description">
+            Building web applications at <LinkButton
               href="https://deeplime.io/"
-              className="text-skin-accent hover:opacity-80 underline underline-offset-4"
-            >DeepLime</LinkButton>, with a passion for creating nice and functional web
-            I love working with modern technologies and am always eager to learn new things.
-            applications. 
+              className="text-skin-accent font-medium hover:opacity-80"
+            >DeepLime</LinkButton>. I specialize in creating functional and elegant web experiences using modern technologies.
           </p>
-          <p>
-            <a
-              target="_blank"
-              href="/rss.xml"
-              class="text-skin-accent hover:opacity-80 underline underline-offset-4"
-              aria-label="rss feed"
-              title="RSS Feed"
-            >
-              Follow along
+
+          <div class="cta-section">
+            <a href="/resume.pdf" class="primary-cta">
+              <span>View Resume</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-1"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
             </a>
-            as I continue to explore web development, AI, cloud architecture, and interactive data visualizations.
-          </p>
+            
+            <a target="_blank" href="/rss.xml" class="secondary-cta" aria-label="rss feed" title="RSS Feed">
+              <span>Follow along</span>
+            </a>
+          </div>
+
           {
             socialCount > 0 && (
-              <div class="flex items-center gap-2">
-                <span class="text-sm text-skin-base/70">Contact me:</span>
+              <div class="social-container">
+                <span class="social-text">Find me on</span>
                 <Socials />
               </div>
             )
           }
         </div>
-
-      <div class="hero-image">
-        <div class="image-container">
-          <!-- <img src="/assets/images/romain.jpeg" alt="Romain" class="profile-image" /> -->
-          <Image src={image} alt="Romain" class="profile-image" />
-          <div class="image-bg-decoration"></div>
+        <div class="hero-image">
+          <div class="image-container">
+            <img src="/assets/profile-pic.jpg" alt="Romain" class="profile-image" />
+            <div class="image-bg-decoration"></div>
+          </div>
         </div>
       </div>
-
-
-    </div>
-
     </section>
-
 
     {
       featuredProjects.length > 0 && (
@@ -142,33 +137,79 @@ const socialCount = SOCIALS.filter(social => social.active).length;
 
   /* ===== Hero Section ===== */
   #hero {
-    @apply pb-6 pt-8;
+    @apply pb-12 pt-16;
+    position: relative;
+    overflow: hidden;
   }
-
+  
   .hero-container {
-    @apply flex flex-col md:flex-row-reverse justify-between items-center gap-8;
+    @apply flex flex-col md:flex-row justify-between items-center gap-8;
     position: relative;
     z-index: 2;
   }
   
-
-  #hero h1 {
-    @apply my-4 inline-block text-3xl font-bold sm:my-8 sm:text-5xl;
-  }
-
   .hero-content {
-    @apply flex-1 ;
+    @apply flex-1;
   }
-  #hero p {
-    @apply my-2;
+  
+  .greeting {
+    @apply text-xl text-skin-base/80 font-medium;
+    display: block;
+    margin-bottom: 0.5rem;
   }
-  .social-wrapper {
-    @apply mt-4 flex flex-col sm:flex-row sm:items-center;
+  
+  #hero h1 {
+    @apply text-5xl md:text-6xl font-bold tracking-tight;
+    background: linear-gradient(to right, var(--color-text-base), var(--color-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
   }
-  .social-links {
-    @apply mb-1 mr-2 whitespace-nowrap sm:mb-0;
+  
+  .hero-tag {
+    @apply my-4;
   }
-
+  
+  .tag-line {
+    @apply text-xl md:text-2xl font-medium px-4 py-1 rounded-full;
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+    display: inline-block;
+  }
+  
+  .hero-description {
+    @apply text-lg text-skin-base/80 my-6 max-w-xl;
+    line-height: 1.6;
+  }
+  
+  .cta-section {
+    @apply flex flex-wrap gap-4 mt-8;
+  }
+  
+  .primary-cta {
+    @apply px-6 py-3 rounded-lg bg-skin-accent text-skin-inverted font-medium flex items-center transition-all;
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+  }
+  
+  .secondary-cta {
+    @apply px-6 py-3 rounded-lg bg-skin-card text-skin-base font-medium border border-skin-accent/20 transition-all;
+    &:hover {
+      border-color: var(--color-accent);
+      background-color: var(--color-accent/10);
+    }
+  }
+  
+  .social-container {
+    @apply mt-12 flex items-center gap-3;
+  }
+  
+  .social-text {
+    @apply text-sm text-skin-base/70 font-medium;
+  }
+  
   .hero-image {
     @apply flex-shrink-0;
   }

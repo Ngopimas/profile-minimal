@@ -5,20 +5,20 @@
 @layer base {
   :root,
   html[data-theme="light"] {
-    --color-fill: 251, 254, 251;
-    --color-text-base: 40, 39, 40;
-    --color-accent: 0, 108, 172;
-    --color-card: 230, 230, 230;
-    --color-card-muted: 205, 205, 205;
-    --color-border: 236, 233, 233;
+    --color-fill: 250, 250, 250;
+    --color-text-base: 38, 38, 38;
+    --color-accent: 0, 0, 0;
+    --color-card: 255, 255, 255;
+    --color-card-muted: 248, 248, 248;
+    --color-border: 236, 236, 236;
   }
   html[data-theme="dark"] {
-    --color-fill: 33, 39, 55;
-    --color-text-base: 234, 237, 243;
-    --color-accent: 34, 197, 94;
-    --color-card: 52, 63, 96;
-    --color-card-muted: 21, 128, 61;
-    --color-border: 22, 163, 74;
+    --color-fill: 18, 18, 18;
+    --color-text-base: 236, 236, 236;
+    --color-accent: 255, 255, 255;
+    --color-card: 28, 28, 28;
+    --color-card-muted: 32, 32, 32;
+    --color-border: 38, 38, 38;
   }
   #sun-svg,
   html[data-theme="dark"] #moon-svg {
@@ -29,23 +29,23 @@
     display: block;
   }
   body {
-    @apply flex min-h-[100svh] flex-col bg-skin-fill font-mono text-skin-base selection:bg-skin-accent/70 selection:text-skin-inverted;
+    @apply flex min-h-[100svh] flex-col bg-skin-fill font-sans text-skin-base selection:bg-skin-accent/5 selection:text-skin-base;
   }
   section,
   footer {
     @apply mx-auto max-w-3xl px-4;
   }
   a {
-    @apply outline-2 outline-offset-1 outline-skin-fill focus-visible:no-underline focus-visible:outline-dashed;
+    @apply outline-2 outline-offset-1 outline-skin-fill transition-all duration-300 focus-visible:no-underline focus-visible:outline-dashed;
   }
   svg {
-    @apply inline-block h-6 w-6 fill-skin-base group-hover:fill-skin-accent;
+    @apply inline-block h-5 w-5 fill-skin-base transition-colors duration-200;
   }
   svg.icon-tabler {
     @apply inline-block h-6 w-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110;
   }
   .prose {
-    @apply prose-headings:!mb-3 prose-headings:!text-skin-base prose-h3:italic prose-p:!text-skin-base prose-a:!text-skin-base prose-a:underline-offset-8 hover:prose-a:text-skin-accent prose-blockquote:!border-l-skin-accent/50 prose-blockquote:opacity-80 prose-figcaption:!text-skin-base prose-figcaption:opacity-70 prose-strong:!text-skin-base prose-code:rounded prose-code:bg-skin-card/75 prose-code:p-1 prose-code:before:!content-none prose-code:after:!content-none prose-ol:!text-skin-base prose-ul:overflow-x-clip prose-ul:!text-skin-base prose-li:marker:!text-skin-accent prose-table:text-skin-base prose-th:border prose-th:border-skin-line prose-td:border prose-td:border-skin-line prose-img:!my-2 prose-img:mx-auto prose-img:border-2 prose-img:border-skin-line prose-hr:!border-skin-line;
+    @apply prose-headings:!mb-4 prose-headings:!font-medium prose-headings:!text-skin-base prose-p:!text-skin-base prose-a:!text-skin-base prose-a:!no-underline hover:prose-a:!text-skin-accent prose-blockquote:!rounded-sm prose-blockquote:!border-l-skin-accent prose-blockquote:!bg-skin-card prose-blockquote:!px-4 prose-blockquote:!py-2 prose-strong:!text-skin-base prose-code:!rounded-sm prose-code:!bg-skin-card prose-code:!px-1 prose-code:!py-0.5 prose-code:!text-sm prose-code:before:!content-none prose-code:after:!content-none prose-ol:!text-skin-base prose-ul:!text-skin-base prose-li:marker:!text-skin-accent prose-table:!text-skin-base prose-th:!border prose-th:!border-skin-line prose-td:!border prose-td:!border-skin-line prose-img:!rounded-md prose-img:!border-0;
   }
   .prose a {
     @apply break-words hover:!text-skin-accent;
@@ -137,5 +137,194 @@
   }
   .focus-outline {
     @apply outline-2 outline-offset-1 outline-skin-fill focus-visible:no-underline focus-visible:outline-dashed;
+  }
+  .card {
+    @apply list-none rounded-sm border-0 bg-skin-card p-6 transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg;
+  }
+  .heading {
+    @apply text-4xl font-light tracking-tight text-skin-base;
+  }
+  .subheading {
+    @apply mb-6 text-base font-light text-skin-base/70;
+  }
+  .diagonal-pattern {
+    position: absolute;
+    pointer-events: none;
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(0, 0, 0, 0.025) 0px,
+      rgba(0, 0, 0, 0.025) 1px,
+      transparent 1px,
+      transparent 10px
+    );
+  }
+  html[data-theme="dark"] .diagonal-pattern {
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.025) 0px,
+      rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px,
+      transparent 10px
+    );
+  }
+  .geometric-shape {
+    @apply pointer-events-none absolute;
+    transition: opacity 0.8s ease;
+  }
+  .geometric-shape::before {
+    content: "";
+    @apply absolute inset-0;
+    background-color: rgb(var(--color-accent));
+    opacity: 0.05; /* Slightly reduced opacity for larger shapes */
+  }
+  .geometric-shape.dark::before {
+    opacity: 0.07;
+  }
+
+  /* Striped pattern - slightly bolder for larger shapes */
+  .geometric-shape.striped::before {
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgb(var(--color-accent)) 0px,
+      rgb(var(--color-accent)) 2.5px,
+      transparent 2.5px,
+      transparent 10px
+    );
+    background-color: transparent;
+  }
+
+  /* Dotted pattern - slightly larger dots for bigger shapes */
+  .geometric-shape.dotted::before {
+    background-image: radial-gradient(
+      rgb(var(--color-accent)) 1.5px,
+      transparent 1.5px
+    );
+    background-size: 12px 12px;
+    background-color: transparent;
+  }
+
+  .geometric-box {
+    @apply geometric-shape before:rounded-sm;
+  }
+  .geometric-circle {
+    @apply geometric-shape before:rounded-full;
+  }
+  .geometric-triangle {
+    @apply geometric-shape;
+  }
+  .geometric-triangle::before {
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  }
+  .geometric-parallelogram {
+    @apply geometric-shape;
+  }
+  .geometric-parallelogram::before {
+    clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
+  }
+  .geometric-diamond {
+    @apply geometric-shape;
+  }
+  .geometric-diamond::before {
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  }
+  .geometric-hexagon {
+    @apply geometric-shape;
+  }
+  .geometric-hexagon::before {
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  }
+  .geometric-star {
+    @apply geometric-shape;
+  }
+  .geometric-star::before {
+    clip-path: polygon(
+      50% 0%,
+      61% 35%,
+      98% 35%,
+      68% 57%,
+      79% 91%,
+      50% 70%,
+      21% 91%,
+      32% 57%,
+      2% 35%,
+      39% 35%
+    );
+  }
+
+  /* Custom animations for geometric shapes */
+  .animate-float-slow {
+    animation: float 15s ease-in-out infinite;
+  }
+  .animate-float-medium {
+    animation: float 10s ease-in-out infinite;
+  }
+  .animate-float-fast {
+    animation: float 7s ease-in-out infinite;
+  }
+
+  .animate-spin-very-slow {
+    animation: spin 100s linear infinite;
+  }
+  .animate-spin-slow {
+    animation: spin 60s linear infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 10s ease-in-out infinite;
+  }
+  .animate-pulse-medium {
+    animation: pulse 7s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes pulse {
+    0% {
+      opacity: 0.6;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.6;
+    }
+  }
+
+  .hover-lift {
+    @apply transition-transform duration-300 hover:translate-y-[-2px];
+  }
+
+  .fade-up {
+    @apply animate-[fadeUp_0.5s_ease-out];
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
