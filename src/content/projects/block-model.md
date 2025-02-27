@@ -62,3 +62,5 @@ Developed an intuitive cross-sectioning system that allows users to:
 ## Conclusion
 
 This project demonstrates the successful application of modern web technologies to solve complex visualization challenges in the mining industry. By combining powerful 3D rendering capabilities with intuitive user interfaces, I've created a tool that makes geological data more accessible and actionable for mining professionals.
+
+<iframe src="https://ngopimas.github.io/POC_BM_3D/" title="Block Model Visualization" width="100%" height="400"></iframe>
