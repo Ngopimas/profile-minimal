@@ -80,7 +80,7 @@ const nextPost =
       {title}
     </h1>
 
-    <ul class="my-4 flex flex-wrap gap-4 text-sm">
+    <ul class="my-4 flex flex-wrap gap-4 text-sm text-skin-base/80">
       {tags.map(tag => (
         <li>
           #<span>{tag}</span>
@@ -88,7 +88,7 @@ const nextPost =
       ))}
     </ul>
 
-    <div class="my-2 grid gap-2 text-sm text-skin-base/80">
+    <div class="my-2 grid gap-2 text-sm">
       {url && (
         <a
           title={url}
