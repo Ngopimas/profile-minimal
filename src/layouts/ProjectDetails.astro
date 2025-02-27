@@ -23,6 +23,8 @@ const {
   pubDatetime,
   modDatetime,
   tags,
+  repository,
+  url
 } = post.data;
 
 const { Content } = await post.render();
@@ -85,6 +87,28 @@ const nextPost =
         </li>
       ))}
     </ul>
+
+    <div class="my-2 grid gap-2 text-sm text-skin-base/80">
+      {url && (
+        <a
+          title={url}
+          class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-skin-accent hover:opacity-75"
+          href={url}
+        >
+          <span class="underline underline-offset-4">Live</span>: {url}
+        </a>
+      )}
+      {repository && (
+        <a
+          title={repository}
+          class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-skin-accent hover:opacity-75"
+          href={repository}
+        >
+          <span class="underline underline-offset-4">Repository</span>:{" "}
+          {repository}
+        </a>
+      )}
+    </div>
 
     <article id="article" class="prose mx-auto my-8 max-w-3xl">
       <Content />

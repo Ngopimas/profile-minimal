@@ -12,7 +12,7 @@ export default function ProjectCard({
   frontmatter,
   secHeading = true,
 }: Props) {
-  const { title, url, tags, repository, description, ogImage } = frontmatter;
+  const { title, tags, description, ogImage } = frontmatter;
 
   const headerProps = {
     style: { viewTransitionName: slugifyStr(title) },
@@ -47,27 +47,6 @@ export default function ProjectCard({
         )}
         <p className="text-skin-base/80">{description}</p>
       </a>
-      <div className="my-2 grid gap-2 text-sm text-skin-base/80">
-        {url && (
-          <a
-            title={url}
-            className="overflow-hidden text-ellipsis whitespace-nowrap hover:text-skin-accent hover:opacity-75"
-            href={url}
-          >
-            <span className="underline underline-offset-4">Live</span>: {url}
-          </a>
-        )}
-        {repository && (
-          <a
-            title={repository}
-            className="overflow-hidden text-ellipsis whitespace-nowrap hover:text-skin-accent hover:opacity-75"
-            href={repository}
-          >
-            <span className="underline underline-offset-4">Repository</span>:{" "}
-            {repository}
-          </a>
-        )}
-      </div>
     </li>
   );
 }
