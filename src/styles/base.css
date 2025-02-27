@@ -142,7 +142,7 @@
     @apply list-none rounded-sm border-0 bg-skin-card p-6 transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg;
   }
   .heading {
-    @apply text-4xl font-light tracking-tight text-skin-base;
+    @apply text-2xl font-semibold sm:text-3xl;
   }
   .subheading {
     @apply mb-6 text-base font-light text-skin-base/70;
