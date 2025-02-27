@@ -9,18 +9,7 @@ url: "https://emili3d.imerys.com"
 
 I developed a web-based 3D visualization platform for the EMILI lithium mining project by Imerys, enabling stakeholders to explore and understand the environmental and infrastructural aspects of this significant initiative in the Allier region of France. The platform serves as a crucial tool for the public debate scheduled from March to July 2024.
 
-[Learn more about the EMILI project](https://emili.imerys.com/)
-
-[Public debate details](https://www.debatpublic.fr/mine-de-lithium-allier/le-dossier-du-maitre-douvrage-5411)
-
-[Visit the current EMILI 3D platform](https://emili3d.imerys.com)
-
-## 1st POC Video
-
-<video controls>
-  <source src="/assets/video/emili.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+![EMILI 3D Visualization Platform](../../assets/images/emili.png)
 
 ## Project Overview
 
@@ -33,36 +22,34 @@ The EMILI project represents a significant step in European industrial sovereign
 
 All components are geolocated and positioned on the actual site topography, overlaid with satellite imagery.
 
+## 1st POC Video
+
+<video controls>
+  <source src="/assets/video/emili.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
 ## Technical Achievements
 
 ### Interactive 3D Visualization
 
 - **High-Performance Rendering**: Implemented efficient 3D rendering using Three.js and WebGL
-- **Dynamic Asset Management**: Developed a progressive loading system for 3D models (OBJ, GLTF) and textures
 - **Responsive Interface**: Created a fluid interface that adapts to various devices
 - **Intuitive Navigation**: Implemented user-friendly controls for 3D exploration
+- **Interactive Layers**: Developed a system for toggling different project components
 
 ### Geospatial Integration
 
+- **GIS Data Integration**: Utilized Mapbox for geospatial data visualization
+- **Terrain Visualization**: Implemented detailed terrain rendering using topographic data
+- **Real-World Context**: Combined 3D models with real-world satellite imagery
 - **Georeferencing**: Integrated DXF topographic maps for accurate positioning
-- **Terrain Visualization**: Implemented detailed terrain rendering using real topographic data
-- **High-Resolution Imagery**: Incorporated TIFF satellite imagery for environmental context
-- **Interactive Layers**: Developed a system for toggling different project components
 
-## Technical Implementation
-
-### Core Technologies
+## Core Technologies
 
 - **Three.js**: Utilized for 3D rendering and scene management
 - **Mapbox**: Integrated for GIS data visualization
 - **Vite**: Used for fast development and bundling
-
-### Key Features
-
-- **Multi-scale Visualization**: Implemented seamless navigation from regional to local views
-- **Layer Management**: Created an intuitive system for managing visualization layers
-- **Performance Optimization**: Developed level-of-detail systems and asset streaming
-- **Cross-browser Compatibility**: Ensured consistent experience across modern browsers
 
 ## Impact and Results
 
@@ -75,8 +62,8 @@ All components are geolocated and positioned on the actual site topography, over
 
 Planned enhancements include:
 
+- Enhanced displayed information and data integration
 - Additional environmental impact visualization layers
-- Enhanced mobile device optimizations
 - Project progress visualization features
 - Offline mode for remote areas
 
@@ -86,3 +73,13 @@ Planned enhancements include:
 - **Cross-Platform Compatibility**: Ensured consistent experience across devices
 - **Performance Optimization**: Balanced visual quality with performance
 - **Intuitive Controls**: Simplified complex 3D navigation for public users
+
+## Further Information
+
+- [Learn more about the EMILI project](https://emili.imerys.com/)
+
+- [Public debate details](https://www.debatpublic.fr/mine-de-lithium-allier/le-dossier-du-maitre-douvrage-5411)
+
+- [Visit the current EMILI 3D platform](https://emili3d.imerys.com)
+
+<iframe src="https://emili3d.imerys.com" title="EMILI 3D Platform Demo" width="100%" height="400" allowfullscreen></iframe>
