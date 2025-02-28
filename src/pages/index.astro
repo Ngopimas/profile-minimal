@@ -30,9 +30,9 @@ const socialCount = SOCIALS.filter(social => social.active).length;
       <div class="hero-container">
         <div class="hero-content">
           <p>
-            Software engineer @<LinkButton
+            Software engineer <span class="text-skin-accent">@</span><LinkButton
               href="https://deeplime.io/"
-              className="text-skin-accent hover:opacity-80"
+              className="text-skin-accent underline-offset-4 hover:underline hover:opacity-80"
               title="DeepLime website"
               aria-label="DeepLime website">DeepLime</LinkButton
             >, with a passion for creating nice and functional web applications.
@@ -43,7 +43,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
             <a
               target="_blank"
               href="/rss.xml"
-              class="text-skin-accent hover:opacity-80"
+              class="text-skin-accent underline-offset-4 hover:underline hover:opacity-80"
               aria-label="rss feed"
               title="RSS Feed"
             >

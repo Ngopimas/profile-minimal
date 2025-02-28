@@ -22,7 +22,7 @@
 
   /* SVG color inheritance fix */
   .nav-icon {
-    @apply fill-current text-skin-accent transition-colors duration-200 hover:text-skin-accent/80;
+    @apply fill-current hover:text-skin-accent/80;
   }
 
   /* Typography styles */
@@ -60,7 +60,8 @@
   }
 
   a {
-    @apply text-skin-accent outline-2 outline-offset-1 outline-skin-fill transition-all duration-300 hover:text-skin-accent/80 focus-visible:no-underline focus-visible:outline-dashed;
+    /* @apply text-skin-accent outline-2 outline-offset-1 outline-skin-fill transition-all duration-300 hover:text-skin-accent/80 focus-visible:no-underline focus-visible:outline-dashed; */
+    @apply outline-2 outline-offset-1 outline-skin-fill hover:text-skin-accent/80 focus-visible:no-underline focus-visible:outline-dashed;
   }
 
   svg {
