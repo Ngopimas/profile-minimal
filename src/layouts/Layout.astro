@@ -138,37 +138,29 @@ const structuredData = {
   </head>
   <body>
     <div class="flex min-h-screen flex-col">
-      <!-- Elegant geometric composition -->
+      <!-- Minimalist geometric composition -->
       <div class="fixed inset-0 -z-10 overflow-hidden">
-        <!-- Primary focal area - top right visual weight -->
-        <div class="geometric-circle striped absolute right-[12%] top-[10%] h-72 w-72 opacity-30"></div>
-        <div class="geometric-triangle dotted absolute right-[25%] top-[18%] h-36 w-36 opacity-45 rotate-12"></div>
+        <!-- Primary elements - top area -->
+        <div class="geometric-circle striped absolute right-[10%] top-[8%] h-48 w-48 opacity-20 md:h-64 md:w-64 md:opacity-25"></div>
+        <div class="geometric-triangle dotted absolute right-[22%] top-[15%] h-28 w-28 opacity-30 rotate-12 md:h-36 md:w-36"></div>
         
-        <!-- Secondary focal point - left side balance -->
-        <div class="geometric-parallelogram striped absolute left-[10%] top-[22%] h-60 w-60 opacity-25"></div>
-        <div class="geometric-circle dotted absolute left-[18%] top-[15%] h-24 w-24 opacity-50"></div>
+        <!-- Left side elements - balanced composition -->
+        <div class="geometric-box striped absolute left-[8%] top-[18%] h-40 w-40 opacity-15 md:h-52 md:w-52 md:left-[12%]"></div>
+        <div class="geometric-circle dotted absolute left-[15%] top-[12%] h-20 w-20 opacity-25 md:h-24 md:w-24"></div>
         
-        <!-- Visual bridge - connecting center elements -->
-        <div class="geometric-diamond striped absolute left-[38%] top-[38%] h-36 w-36 opacity-20 rotate-6"></div>
-        <div class="geometric-box dotted absolute right-[36%] top-[32%] h-28 w-28 opacity-35 rotate-12"></div>
+        <!-- Center elements - subtle balance -->
+        <div class="geometric-diamond striped absolute left-[40%] top-[35%] h-24 w-24 opacity-20 rotate-6 md:h-32 md:w-32"></div>
         
-        <!-- Lower composition - anchoring elements -->
-        <div class="geometric-hexagon striped absolute right-[18%] bottom-[18%] h-64 w-64 opacity-20"></div>
-        <div class="geometric-triangle dotted absolute right-[24%] bottom-[25%] h-32 w-32 opacity-40 -rotate-6"></div>
+        <!-- Bottom right elements -->
+        <div class="geometric-circle striped absolute right-[15%] bottom-[20%] h-36 w-36 opacity-20 md:h-56 md:w-56 md:right-[18%]"></div>
+        <div class="geometric-triangle dotted absolute right-[22%] bottom-[25%] h-24 w-24 opacity-30 -rotate-6 md:h-30 md:w-30"></div>
         
-        <!-- Lower left balancing elements -->
-        <div class="geometric-circle striped absolute left-[15%] bottom-[22%] h-48 w-48 opacity-15"></div>
-        <div class="geometric-box dotted absolute left-[22%] bottom-[15%] h-30 w-30 opacity-35 rotate-25"></div>
+        <!-- Bottom left elements -->
+        <div class="geometric-box dotted absolute left-[18%] bottom-[15%] h-24 w-24 opacity-20 rotate-15 md:h-32 md:w-32 md:left-[20%]"></div>
         
-        <!-- Small accent elements for visual interest -->
-        <div class="geometric-diamond dotted absolute left-[60%] top-[15%] h-16 w-16 opacity-45"></div>
-        <div class="geometric-triangle striped absolute right-[60%] bottom-[30%] h-20 w-20 opacity-20 -rotate-15"></div>
-        <div class="geometric-circle dotted absolute left-[50%] bottom-[12%] h-18 w-18 opacity-30"></div>
-        <div class="geometric-box striped absolute right-[30%] top-[55%] h-14 w-14 opacity-25 rotate-20"></div>
-        
-        <!-- Subtle edge details -->
-        <div class="geometric-triangle dotted absolute left-[8%] top-[60%] h-24 w-24 opacity-20 rotate-45"></div>
-        <div class="geometric-circle striped absolute right-[8%] top-[40%] h-16 w-16 opacity-15"></div>
+        <!-- Accent elements -->
+        <div class="geometric-triangle striped absolute left-[60%] bottom-[28%] h-16 w-16 opacity-15 -rotate-12 md:h-20 md:w-20"></div>
+        <div class="geometric-circle dotted absolute right-[30%] top-[50%] h-14 w-14 opacity-20 md:h-18 md:w-18"></div>
       </div>
 
       <slot />

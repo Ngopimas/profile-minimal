@@ -17,7 +17,7 @@ export default function Card({ href, frontmatter, secHeading = true }: Props) {
   };
 
   return (
-    <li className="card group">
+    <li className="card group rounded-lg">
       <a href={href} className="grid w-full gap-2">
         <Datetime
           pubDatetime={pubDatetime}

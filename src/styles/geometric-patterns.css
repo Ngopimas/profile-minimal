@@ -1,0 +1,106 @@
+/* Base geometric shapes using the geometric-shape class */
+.geometric-shape {
+  @apply pointer-events-none absolute;
+}
+
+/* Shape definitions */
+.geometric-circle {
+  @apply geometric-shape;
+  border-radius: 50%;
+}
+
+.geometric-box {
+  @apply geometric-shape;
+  border-radius: 4px;
+}
+
+.geometric-triangle {
+  @apply geometric-shape;
+}
+.geometric-triangle::before {
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.geometric-parallelogram {
+  @apply geometric-shape;
+}
+.geometric-parallelogram::before {
+  clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
+}
+
+.geometric-diamond {
+  @apply geometric-shape;
+}
+.geometric-diamond::before {
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.geometric-hexagon {
+  @apply geometric-shape;
+}
+.geometric-hexagon::before {
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+}
+
+.geometric-star {
+  @apply geometric-shape;
+}
+.geometric-star::before {
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+}
+
+/* Pattern definitions */
+.striped {
+  background-image: repeating-linear-gradient(
+    45deg,
+    currentColor,
+    currentColor 1px,
+    transparent 1px,
+    transparent 10px
+  );
+}
+
+.dotted {
+  background-image: radial-gradient(currentColor 1px, transparent 1px);
+  background-size: 10px 10px;
+}
+
+/* Dark mode adjustments */
+:root.dark .striped,
+:root.dark .dotted {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+:root:not(.dark) .striped,
+:root:not(.dark) .dotted {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+/* Media queries for responsive designs */
+@media (min-width: 768px) {
+  .striped {
+    background-image: repeating-linear-gradient(
+      45deg,
+      currentColor,
+      currentColor 1.5px,
+      transparent 1.5px,
+      transparent 12px
+    );
+  }
+
+  .dotted {
+    background-image: radial-gradient(currentColor 1.5px, transparent 1.5px);
+    background-size: 12px 12px;
+  }
+}

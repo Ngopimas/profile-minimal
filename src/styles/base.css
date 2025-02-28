@@ -1,3 +1,5 @@
+@import "./geometric-patterns.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -165,89 +167,6 @@
       rgba(255, 255, 255, 0.025) 1px,
       transparent 1px,
       transparent 10px
-    );
-  }
-  .geometric-shape {
-    @apply pointer-events-none absolute;
-    transition: opacity 0.8s ease;
-  }
-  .geometric-shape::before {
-    content: "";
-    @apply absolute inset-0;
-    background-color: rgb(var(--color-accent));
-    opacity: 0.05; /* Slightly reduced opacity for larger shapes */
-  }
-  .geometric-shape.dark::before {
-    opacity: 0.07;
-  }
-
-  /* Striped pattern - slightly bolder for larger shapes */
-  .geometric-shape.striped::before {
-    background-image: repeating-linear-gradient(
-      45deg,
-      rgb(var(--color-accent)) 0px,
-      rgb(var(--color-accent)) 2.5px,
-      transparent 2.5px,
-      transparent 10px
-    );
-    background-color: transparent;
-  }
-
-  /* Dotted pattern - slightly larger dots for bigger shapes */
-  .geometric-shape.dotted::before {
-    background-image: radial-gradient(
-      rgb(var(--color-accent)) 1.5px,
-      transparent 1.5px
-    );
-    background-size: 12px 12px;
-    background-color: transparent;
-  }
-
-  .geometric-box {
-    @apply geometric-shape before:rounded-sm;
-  }
-  .geometric-circle {
-    @apply geometric-shape before:rounded-full;
-  }
-  .geometric-triangle {
-    @apply geometric-shape;
-  }
-  .geometric-triangle::before {
-    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-  }
-  .geometric-parallelogram {
-    @apply geometric-shape;
-  }
-  .geometric-parallelogram::before {
-    clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
-  }
-  .geometric-diamond {
-    @apply geometric-shape;
-  }
-  .geometric-diamond::before {
-    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-  }
-  .geometric-hexagon {
-    @apply geometric-shape;
-  }
-  .geometric-hexagon::before {
-    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-  }
-  .geometric-star {
-    @apply geometric-shape;
-  }
-  .geometric-star::before {
-    clip-path: polygon(
-      50% 0%,
-      61% 35%,
-      98% 35%,
-      68% 57%,
-      79% 91%,
-      50% 70%,
-      21% 91%,
-      32% 57%,
-      2% 35%,
-      39% 35%
     );
   }
 

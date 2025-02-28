@@ -22,7 +22,7 @@ export default function ProjectCard({
   const imageUrl = typeof ogImage === "string" ? ogImage : ogImage?.src;
 
   return (
-    <li className="card group">
+    <li className="card group rounded-lg">
       <a href={href} className="grid w-full gap-2">
         {imageUrl && (
           <div className="mb-4 overflow-hidden rounded-sm border border-skin-line">
