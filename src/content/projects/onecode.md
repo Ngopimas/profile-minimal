@@ -72,4 +72,6 @@ The OneCode Cloud Platform is now a powerful tool for deploying and managing Pyt
 
 [OneCode GitHub Repository](https://github.com/deeplime-io/onecode): The source code for the OneCode Python library
 
+[Ring Meeting Paper](https://www.ring-team.org/research-publications/ring-meeting-papers?view=pub&id=223009): A research paper on the OneCode ecosystem and its impact on collaborative Python development
+
 [DeepLime Official Website](https://www.deeplime.io): Learn more about DeepLime and their projects
