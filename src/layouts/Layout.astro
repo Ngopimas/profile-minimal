@@ -52,10 +52,7 @@ const structuredData = {
 ---
 
 <!doctype html>
-<html
-  lang={LOCALE.lang ?? "en"}
-  class={`${scrollSmooth && "scroll-smooth"}`}
->
+<html lang={LOCALE.lang ?? "en"} class={`${scrollSmooth && "scroll-smooth"}`}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -140,27 +137,37 @@ const structuredData = {
     <div class="flex min-h-screen flex-col">
       <!-- Minimalist geometric composition -->
       <div class="fixed inset-0 -z-10 overflow-hidden">
-        <!-- Primary elements - top area -->
-        <div class="geometric-circle striped absolute right-[10%] top-[8%] h-48 w-48 opacity-20 md:h-64 md:w-64 md:opacity-25"></div>
-        <div class="geometric-triangle dotted absolute right-[22%] top-[15%] h-28 w-28 opacity-30 rotate-12 md:h-36 md:w-36"></div>
-        
-        <!-- Left side elements - balanced composition -->
-        <div class="geometric-box striped absolute left-[8%] top-[18%] h-40 w-40 opacity-15 md:h-52 md:w-52 md:left-[12%]"></div>
-        <div class="geometric-circle dotted absolute left-[15%] top-[12%] h-20 w-20 opacity-25 md:h-24 md:w-24"></div>
-        
-        <!-- Center elements - subtle balance -->
-        <div class="geometric-diamond striped absolute left-[40%] top-[35%] h-24 w-24 opacity-20 rotate-6 md:h-32 md:w-32"></div>
-        
-        <!-- Bottom right elements -->
-        <div class="geometric-circle striped absolute right-[15%] bottom-[20%] h-36 w-36 opacity-20 md:h-56 md:w-56 md:right-[18%]"></div>
-        <div class="geometric-triangle dotted absolute right-[22%] bottom-[25%] h-24 w-24 opacity-30 -rotate-6 md:h-30 md:w-30"></div>
-        
-        <!-- Bottom left elements -->
-        <div class="geometric-box dotted absolute left-[18%] bottom-[15%] h-24 w-24 opacity-20 rotate-15 md:h-32 md:w-32 md:left-[20%]"></div>
-        
-        <!-- Accent elements -->
-        <div class="geometric-triangle striped absolute left-[60%] bottom-[28%] h-16 w-16 opacity-15 -rotate-12 md:h-20 md:w-20"></div>
-        <div class="geometric-circle dotted absolute right-[30%] top-[50%] h-14 w-14 opacity-20 md:h-18 md:w-18"></div>
+        <!-- Top right composition -->
+        <div
+          class="geometric-circle dotted absolute right-[8%] top-[7%] h-36 w-36 opacity-20 md:h-48 md:w-48"
+        >
+        </div>
+        <div
+          class="geometric-box striped absolute right-[17%] top-[18%] size-20 opacity-15 md:h-24 md:w-24"
+        >
+        </div>
+
+        <!-- Top left composition -->
+        <div
+          class="geometric-diamond striped rotate-15 absolute left-[4%] top-[24%] h-28 w-28 opacity-15 md:h-32 md:w-32"
+        >
+        </div>
+
+        <!-- Center accent -->
+        <div
+          class="geometric-triangle dotted -rotate-15 absolute left-[42%] top-[35%] h-16 w-16 opacity-15 md:h-20 md:w-20"
+        >
+        </div>
+
+        <!-- Bottom composition -->
+        <div
+          class="geometric-triangle striped absolute bottom-[15%] right-[18%] h-32 w-32 opacity-15 md:h-40 md:w-40"
+        >
+        </div>
+        <div
+          class="geometric-circle dotted md:h-30 md:w-30 absolute bottom-[18%] left-[15%] h-24 w-24 rotate-6 opacity-20"
+        >
+        </div>
       </div>
 
       <slot />

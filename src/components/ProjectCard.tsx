@@ -36,7 +36,7 @@ export default function ProjectCard({
         <ul className="flex flex-wrap gap-4 text-sm text-skin-base/70">
           {tags.map(tag => (
             <li>
-              #<span>{tag}</span>
+              #&nbsp;<span>{tag}</span>
             </li>
           ))}
         </ul>

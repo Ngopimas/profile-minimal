@@ -1,6 +1,7 @@
 /* Base geometric shapes using the geometric-shape class */
 .geometric-shape {
   @apply pointer-events-none absolute;
+  backdrop-filter: blur(1px);
 }
 
 /* Shape definitions */
@@ -11,13 +12,11 @@
 
 .geometric-box {
   @apply geometric-shape;
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 .geometric-triangle {
   @apply geometric-shape;
-}
-.geometric-triangle::before {
   clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
 }
 
@@ -30,8 +29,6 @@
 
 .geometric-diamond {
   @apply geometric-shape;
-}
-.geometric-diamond::before {
   clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
 }
 
@@ -65,26 +62,26 @@
   background-image: repeating-linear-gradient(
     45deg,
     currentColor,
-    currentColor 1px,
-    transparent 1px,
-    transparent 10px
+    currentColor 0.5px,
+    transparent 0.5px,
+    transparent 8px
   );
 }
 
 .dotted {
-  background-image: radial-gradient(currentColor 1px, transparent 1px);
-  background-size: 10px 10px;
+  background-image: radial-gradient(currentColor 0.5px, transparent 0.5px);
+  background-size: 8px 8px;
 }
 
 /* Dark mode adjustments */
 :root.dark .striped,
 :root.dark .dotted {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.4);
 }
 
 :root:not(.dark) .striped,
 :root:not(.dark) .dotted {
-  color: rgba(0, 0, 0, 0.7);
+  color: rgba(0, 0, 0, 0.4);
 }
 
 /* Media queries for responsive designs */
@@ -93,14 +90,14 @@
     background-image: repeating-linear-gradient(
       45deg,
       currentColor,
-      currentColor 1.5px,
-      transparent 1.5px,
-      transparent 12px
+      currentColor 1px,
+      transparent 1px,
+      transparent 10px
     );
   }
 
   .dotted {
-    background-image: radial-gradient(currentColor 1.5px, transparent 1.5px);
-    background-size: 12px 12px;
+    background-image: radial-gradient(currentColor 1px, transparent 1px);
+    background-size: 10px 10px;
   }
 }

@@ -15,27 +15,46 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
+        display: ["Inter", "system-ui", "sans-serif"],
       },
       fontSize: {
         'title': ['4rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
         'heading': ['2.25rem', { lineHeight: '1.2', letterSpacing: '-0.01em' }],
         'subheading': ['1.5rem', { lineHeight: '1.4', letterSpacing: '-0.01em' }],
+        'lg': ['1.125rem', { lineHeight: '1.5' }],
+        'base': ['1rem', { lineHeight: '1.6' }],
+        'sm': ['0.875rem', { lineHeight: '1.5' }],
+        'xs': ['0.75rem', { lineHeight: '1.4' }],
       },
       textColor: {
         skin: {
           base: withOpacity("color-text-base"),
           accent: withOpacity("color-accent"),
+          secondary: withOpacity("color-accent-secondary"),
+          muted: withOpacity("color-text-base"),
           inverted: withOpacity("color-fill"),
-          muted: withOpacity("color-text-muted"),
+          success: withOpacity("color-success"),
+          error: withOpacity("color-error"),
+          warning: withOpacity("color-warning"),
         },
       },
       backgroundColor: {
         skin: {
           fill: withOpacity("color-fill"),
           accent: withOpacity("color-accent"),
+          "accent-secondary": withOpacity("color-accent-secondary"),
           inverted: withOpacity("color-text-base"),
           card: withOpacity("color-card"),
           "card-muted": withOpacity("color-card-muted"),
+          success: withOpacity("color-success"),
+          error: withOpacity("color-error"),
+          warning: withOpacity("color-warning"),
+        },
+      },
+      gradientColorStops: {
+        skin: {
+          accent: withOpacity("color-accent"),
+          secondary: withOpacity("color-accent-secondary"),
         },
       },
       outlineColor: {
@@ -48,25 +67,45 @@ module.exports = {
           line: withOpacity("color-border"),
           fill: withOpacity("color-text-base"),
           accent: withOpacity("color-accent"),
+          secondary: withOpacity("color-accent-secondary"),
+        },
+      },
+      ringColor: {
+        skin: {
+          base: withOpacity("color-text-base"),
+          accent: withOpacity("color-accent"),
+          secondary: withOpacity("color-accent-secondary"),
+          fill: withOpacity("color-fill"),
         },
       },
       fill: {
         skin: {
           base: withOpacity("color-text-base"),
           accent: withOpacity("color-accent"),
+          secondary: withOpacity("color-accent-secondary"),
         },
         transparent: "transparent",
       },
       stroke: {
         skin: {
-          accent: withOpacity("color-accent")
-        }
-      },
-      strokeColor: {
-        skin: {
           base: withOpacity("color-text-base"),
           accent: withOpacity("color-accent"),
-        },
+          secondary: withOpacity("color-accent-secondary"),
+        }
+      },
+      boxShadow: {
+        sm: 'var(--shadow-sm)',
+        md: 'var(--shadow-md)',
+        lg: 'var(--shadow-lg)',
+      },
+      spacing: {
+        'xs': 'var(--space-xs)',
+        'sm': 'var(--space-sm)',
+        'md': 'var(--space-md)',
+        'lg': 'var(--space-lg)',
+        'xl': 'var(--space-xl)',
+        '2xl': 'var(--space-2xl)',
+        '3xl': 'var(--space-3xl)',
       },
       typography: {
         DEFAULT: {
@@ -78,19 +117,26 @@ module.exports = {
               color: false,
             },
             h1: {
-              fontWeight: '300',
+              fontWeight: 'var(--font-weight-light)',
               letterSpacing: '-0.02em',
             },
             h2: {
-              fontWeight: '300',
+              fontWeight: 'var(--font-weight-light)',
               letterSpacing: '-0.01em',
             },
             h3: {
-              fontWeight: '400',
+              fontWeight: 'var(--font-weight-regular)',
               letterSpacing: '-0.01em',
             },
             p: {
               lineHeight: '1.6',
+            },
+            a: {
+              fontWeight: 'var(--font-weight-medium)',
+              textDecoration: 'none',
+              '&:hover': {
+                opacity: 0.8,
+              },
             },
           },
         },

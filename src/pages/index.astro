@@ -20,8 +20,6 @@ const sortedProjects = getSortedPosts(projects);
 const featuredProjects = sortedProjects.filter(({ data }) => data.featured);
 
 const socialCount = SOCIALS.filter(social => social.active).length;
-
-
 ---
 
 <Layout>
@@ -34,21 +32,25 @@ const socialCount = SOCIALS.filter(social => social.active).length;
           <p>
             Software engineer @<LinkButton
               href="https://deeplime.io/"
-              className="text-skin-accent hover:opacity-80 underline underline-offset-4"
-            >DeepLime</LinkButton>, with a passion for creating nice and functional web applications. 
-            I love working with modern technologies and am always eager to learn new things.
+              className="text-skin-accent hover:opacity-80"
+              title="DeepLime website"
+              aria-label="DeepLime website">DeepLime</LinkButton
+            >, with a passion for creating nice and functional web applications.
+            I love working with modern technologies and am always eager to learn
+            new things.
           </p>
           <p>
             <a
               target="_blank"
               href="/rss.xml"
-              class="text-skin-accent hover:opacity-80 underline underline-offset-4"
+              class="text-skin-accent hover:opacity-80"
               aria-label="rss feed"
               title="RSS Feed"
             >
               Follow along
             </a>
-            as I continue to explore web development, AI, cloud architecture, and interactive data visualizations.
+            as I continue to explore web development, AI, cloud architecture, and
+            interactive data visualizations.
           </p>
           {
             socialCount > 0 && (
@@ -60,25 +62,21 @@ const socialCount = SOCIALS.filter(social => social.active).length;
           }
         </div>
 
-      <div class="hero-image">
-        <div class="image-container">
-          <Image src={image} alt="Romain" class="profile-image" />
-          <div class="image-bg-decoration"></div>
+        <div class="hero-image">
+          <div class="image-container">
+            <Image src={image} alt="Romain" class="profile-image" />
+            <div class="image-bg-decoration"></div>
+          </div>
         </div>
       </div>
-
-
-    </div>
-
     </section>
-
 
     {
       featuredProjects.length > 0 && (
         <section class="mx-auto max-w-3xl py-12">
           <div class="mb-8 flex items-center justify-between">
             <h2 class="heading">Work</h2>
-            <LinkButton 
+            <LinkButton
               href="/projects/"
               className="text-sm text-skin-accent hover:opacity-80"
             >
@@ -103,10 +101,10 @@ const socialCount = SOCIALS.filter(social => social.active).length;
 
     {
       sortedPosts.length > 0 && (
-        <section class="mx-auto max-w-3xl py-12">
+        <section class="mx-auto max-w-3xl pb-6 pt-12">
           <div class="mb-8 flex items-center justify-between">
             <h2 class="heading">Writing</h2>
-            <LinkButton 
+            <LinkButton
               href="/posts/"
               className="text-sm text-skin-accent hover:opacity-80"
             >
@@ -140,22 +138,21 @@ const socialCount = SOCIALS.filter(social => social.active).length;
 
   /* ===== Hero Section ===== */
   #hero {
-    @apply pb-6 pt-8;
+    @apply pb-12 pt-8;
   }
 
   .hero-container {
-    @apply flex flex-col md:flex-row-reverse justify-between items-center gap-8;
+    @apply flex flex-col items-center justify-between gap-8 md:flex-row-reverse;
     position: relative;
     z-index: 2;
   }
-  
 
   #hero h1 {
     @apply my-4 inline-block text-3xl font-bold sm:my-8 sm:text-5xl;
   }
 
   .hero-content {
-    @apply flex-1 ;
+    @apply flex-1;
   }
   #hero p {
     @apply my-2;
@@ -170,13 +167,13 @@ const socialCount = SOCIALS.filter(social => social.active).length;
   .hero-image {
     @apply flex-shrink-0;
   }
-  
+
   .image-container {
     position: relative;
     width: 280px;
     height: 280px;
   }
-  
+
   .profile-image {
     @apply rounded-lg object-cover;
     width: 100%;
@@ -184,9 +181,11 @@ const socialCount = SOCIALS.filter(social => social.active).length;
     position: relative;
     z-index: 2;
     border: 3px solid var(--color-bg);
-    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+    box-shadow:
+      0 20px 25px -5px rgba(0, 0, 0, 0.1),
+      0 8px 10px -6px rgba(0, 0, 0, 0.1);
   }
-  
+
   .image-bg-decoration {
     position: absolute;
     width: 100%;

@@ -1,0 +1,66 @@
+:root,
+html[data-theme="light"] {
+  /* Primary Colors */
+  --color-fill: 250, 250, 250;
+  --color-text-base: 38, 38, 38;
+  --color-accent: 0, 107, 166; /* Blue accent for light mode */
+  --color-accent-secondary: 212, 86, 48; /* Secondary warm accent */
+
+  /* UI Colors */
+  --color-card: 255, 255, 255;
+  --color-card-muted: 248, 248, 248;
+  --color-border: 236, 236, 236;
+
+  /* Feedback Colors */
+  --color-success: 0, 148, 133;
+  --color-error: 176, 0, 32;
+  --color-warning: 245, 159, 0;
+
+  /* Spacing */
+  --space-xs: 0.25rem; /* 4px */
+  --space-sm: 0.5rem; /* 8px */
+  --space-md: 1rem; /* 16px */
+  --space-lg: 1.5rem; /* 24px */
+  --space-xl: 2rem; /* 32px */
+  --space-2xl: 3rem; /* 48px */
+  --space-3xl: 4rem; /* 64px */
+
+  /* Typography */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  /* Transitions */
+  --transition-slow: 500ms ease;
+  --transition-medium: 300ms ease;
+  --transition-fast: 150ms ease;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+html[data-theme="dark"] {
+  /* Primary Colors */
+  --color-fill: 18, 18, 18;
+  --color-text-base: 236, 236, 236;
+  --color-accent: 88, 166, 219; /* Lighter blue for dark mode */
+  --color-accent-secondary: 235, 109, 71; /* Lighter warm accent */
+
+  /* UI Colors */
+  --color-card: 28, 28, 28;
+  --color-card-muted: 32, 32, 32;
+  --color-border: 38, 38, 38;
+
+  /* Feedback Colors */
+  --color-success: 0, 188, 173;
+  --color-error: 226, 50, 82;
+  --color-warning: 255, 179, 20;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.4), 0 5px 15px rgba(0, 0, 0, 0.2);
+}
