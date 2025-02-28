@@ -24,7 +24,7 @@ const {
   modDatetime,
   tags,
   repository,
-  url
+  url,
 } = post.data;
 
 const { Content } = await post.render();
@@ -65,10 +65,12 @@ const nextPost =
 
   <div class="mx-auto flex w-full max-w-3xl justify-start px-2">
     <button
-      class="focus-outline mb-2 mt-8 flex hover:opacity-75"
+      class="focus-outline group mb-2 mt-8 flex hover:text-skin-accent"
       onclick="(() => (history.length === 1) ? window.location = '/' : history.back())()"
     >
-      <svg xmlns="http://www.w3.org/2000/svg"
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="group-hover:fill-skin-accent"
         ><path
           d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"
         ></path>
@@ -81,33 +83,39 @@ const nextPost =
     </h1>
 
     <ul class="my-4 flex flex-wrap gap-4 text-sm text-skin-base/80">
-      {tags.map(tag => (
-        <li>
-          #&nbsp;<span>{tag}</span>
-        </li>
-      ))}
+      {
+        tags.map(tag => (
+          <li>
+            #&nbsp;<span>{tag}</span>
+          </li>
+        ))
+      }
     </ul>
 
     <div class="my-2 grid gap-2 text-sm">
-      {url && (
-        <a
-          title={url}
-          class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-skin-accent hover:opacity-75"
-          href={url}
-        >
-          <span class="underline underline-offset-4">Live</span>: {url}
-        </a>
-      )}
-      {repository && (
-        <a
-          title={repository}
-          class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-skin-accent hover:opacity-75"
-          href={repository}
-        >
-          <span class="underline underline-offset-4">Repository</span>:{" "}
-          {repository}
-        </a>
-      )}
+      {
+        url && (
+          <a
+            title={url}
+            class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-skin-accent hover:opacity-75"
+            href={url}
+          >
+            <span class="underline underline-offset-4">Live</span>: {url}
+          </a>
+        )
+      }
+      {
+        repository && (
+          <a
+            title={repository}
+            class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-skin-accent hover:opacity-75"
+            href={repository}
+          >
+            <span class="underline underline-offset-4">Repository</span>:{" "}
+            {repository}
+          </a>
+        )
+      }
     </div>
 
     <article id="article" class="prose mx-auto my-8 max-w-3xl">
@@ -119,9 +127,12 @@ const nextPost =
     >
       <button
         id="back-to-top"
-        class="focus-outline whitespace-nowrap py-1 hover:opacity-75"
+        class="focus-outline group whitespace-nowrap py-1 hover:text-skin-accent"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" class="rotate-90">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="rotate-90 group-hover:fill-skin-accent"
+        >
           <path
             d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"
           ></path>
