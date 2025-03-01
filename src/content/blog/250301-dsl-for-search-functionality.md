@@ -3,7 +3,7 @@ author: Romain C.
 pubDatetime: 2025-03-01T09:00:00Z
 title: "Building Domain-Specific Languages for Search Functionality"
 slug: dsl-for-search-functionality
-featured: true
+featured: false
 draft: false
 tags: ["javascript", "dsl", "search", "developer-experience", "user-experience"]
 description: "Creating intuitive search interfaces that empower users while maintaining developer control"
