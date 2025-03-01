@@ -9,7 +9,7 @@ tags: ["javascript", "gamedev", "canvas", "web development"]
 description: "Building a developer-themed endless runner game built with pure JavaScript"
 ---
 
-Every developer knows the feeling: racing against deadlines, jumping over bugs, and desperately seeking that next cup of coffee. But what if we could transform these daily experiences into something more entertaining? That's exactly what I set out to do with "Mac the Developer" - a JavaScript-powered endless runner that turns the software development journey into an engaging gameplay experience.
+Every developer knows the feeling: racing against deadlines, jumping over bugs, and desperately seeking that next cup of coffee. But what if we could transform these daily experiences into something more entertaining? That's exactly what I set out to do with [**"Mac the Developer"**](https://ngopimas.github.io/mac-the-dev/) - a JavaScript-powered endless runner that turns the software development journey into an engaging gameplay experience.
 
 ![Mac the Developer](../../assets/images/mac-the-developer.png)
 
