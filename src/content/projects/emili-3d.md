@@ -7,7 +7,7 @@ featured: true
 url: "https://emili3d.imerys.com"
 ---
 
-I developed a web-based 3D visualization platform for the EMILI lithium mining project by Imerys, enabling stakeholders to explore and understand the environmental and infrastructural aspects of this significant initiative in the Allier region of France. The platform serves as a crucial tool for the public debate scheduled from March to July 2024.
+At [**DeepLime**](https://www.deeplime.io), I developed a web-based 3D visualization platform for the EMILI lithium mining project by Imerys, enabling stakeholders to explore and understand the environmental and infrastructural aspects of this significant initiative in the Allier region of France. The platform serves as a crucial tool for the public debate scheduled from March to July 2024.
 
 ![EMILI 3D Visualization Platform](../../assets/images/emili.png)
 
