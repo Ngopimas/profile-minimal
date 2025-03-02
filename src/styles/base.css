@@ -144,6 +144,11 @@
   }
 }
 
+/* Override Tailwind prose plugin's styling for code blocks in dark mode */
+html[data-theme="dark"] .prose pre code {
+  background-color: transparent !important;
+}
+
 @layer components {
   .display-none {
     @apply hidden;
