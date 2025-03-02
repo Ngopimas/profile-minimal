@@ -1,6 +1,6 @@
 ---
 title: "StartBridge - Innovation Marketplace Platform"
-description: "Contributed to building a trusted marketplace platform connecting innovators and stakeholders, implementing key features using React."
+description: "A trusted marketplace platform connecting innovators and stakeholders."
 pubDatetime: 2022-07-01T09:00:00Z
 tags: ["react", "reactquery", "material-ui"]
 featured: false

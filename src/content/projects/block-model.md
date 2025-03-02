@@ -1,6 +1,6 @@
 ---
 title: "Block Model Visualization"
-description: "Transforming Easily Mining Data into Interactive Insights"
+description: "A 3D visualization tool that transforms complex mining block model data into interactive, web-based 3D visualizations."
 pubDatetime: 2022-07-11T15:30:00Z
 tags: ["threejs", "react", "typescript"]
 featured: false

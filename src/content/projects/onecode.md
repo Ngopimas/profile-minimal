@@ -8,9 +8,9 @@ url: "https://www.onecode.rocks"
 repository: "https://github.com/deeplime-io/onecode"
 ---
 
-I developed OneCode Cloud, a sophisticated web application that enables seamless deployment and management of Python applications. This platform serves as the cornerstone of the OneCode ecosystem, providing users with a streamlined interface for deploying their Python scripts without the complexity of traditional cloud infrastructure.
+I am developing OneCode Cloud, a sophisticated web application that enables seamless deployment and management of Python applications. This platform serves as the cornerstone of the OneCode ecosystem, providing users with a streamlined interface for deploying their Python scripts without the complexity of traditional cloud infrastructure.
 
-OneCode is an open-source library developed by DeepLime designed to facilitate easy collaborative Python development. The OneCode Cloud Platform extends this ecosystem by providing a secure, scalable, and cost-effective way to deploy these applications to end-users.
+OneCode is an open-source library developed by [**DeepLime**](https://www.deeplime.io) designed to facilitate easy collaborative Python development. The OneCode Cloud Platform extends this ecosystem by providing a secure, scalable, and cost-effective way to deploy these applications to end-users.
 
 ![OneCode Cloud](../../assets/images/onecode-cloud.png)
 
@@ -63,10 +63,7 @@ The OneCode Cloud Platform is now a powerful tool for deploying and managing Pyt
 
 ## Related Links
 
-[OneCode Cloud Platform](https://www.onecode.rocks): The official website for the OneCode Cloud Platform
-
-[OneCode GitHub Repository](https://github.com/deeplime-io/onecode): The source code for the OneCode Python library
-
-[Ring Meeting Paper](https://www.ring-team.org/research-publications/ring-meeting-papers?view=pub&id=223009): A research paper on the OneCode ecosystem and its impact on collaborative Python development
-
-[DeepLime Official Website](https://www.deeplime.io): Learn more about DeepLime and their projects
+- [OneCode Cloud Platform](https://www.onecode.rocks): The official website for the OneCode Cloud Platform
+- [OneCode GitHub Repository](https://github.com/deeplime-io/onecode): The source code for the OneCode Python library
+- [Ring Meeting Paper](https://www.ring-team.org/research-publications/ring-meeting-papers?view=pub&id=223009): A research paper on the OneCode ecosystem and its impact on collaborative Python development
+- [DeepLime Official Website](https://www.deeplime.io): Learn more about DeepLime and their projects

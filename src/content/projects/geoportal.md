@@ -1,13 +1,13 @@
 ---
 title: "GeoPortal by DeepLime"
-description: "Develop a corporate cloud-based data science platform for geoscientists, enabling automated workflows and enhanced productivity through advanced computation capabilities."
+description: "A corporate cloud-based data science platform for geoscientists, enabling automated workflows and enhanced productivity through advanced computation capabilities."
 pubDatetime: 2023-02-11T15:30:00Z
 tags: ["react", "cloud", "data-science", "python", "automation"]
 featured: true
 url: "https://deeplime.io/products#geoportal"
 ---
 
-As a Developer at DeepLime, I played a crucial role in the development of GeoPortal, a sophisticated cloud-based platform that revolutionizes how geoscientists interact with and analyze geological data.
+As a Developer at [**DeepLime**](https://www.deeplime.io), I played a crucial role in the development of GeoPortal, a sophisticated cloud-based platform that revolutionizes how geoscientists interact with and analyze geological data.
 
 ![GeoPortal](../../assets/images/geoportal.jpg)
 

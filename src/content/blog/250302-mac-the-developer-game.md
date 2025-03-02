@@ -6,10 +6,10 @@ slug: mac-the-developer-game
 featured: false
 draft: false
 tags: ["javascript", "gamedev", "canvas", "web development"]
-description: "Building a developer-themed endless runner game built with pure JavaScript"
+description: "Building a developer-themed endless runner game with pure JavaScript"
 ---
 
-Every developer knows the feeling: racing against deadlines, jumping over bugs, and desperately seeking that next cup of coffee. But what if we could transform these daily experiences into something more entertaining? That's exactly what I set out to do with [**"Mac the Developer"**](https://ngopimas.github.io/mac-the-dev/) - a JavaScript-powered endless runner that turns the software development journey into an engaging gameplay experience.
+Every developer knows the feeling: racing against deadlines, jumping over bugs, and desperately seeking that next cup of coffee. But what if we could transform these daily experiences into something more entertaining? That's exactly what I set out to do with [**"Mac the Developer"**](https://ngopimas.github.io/mac-the-dev/) - a JavaScript-powered endless runner that turns the software development journey into a gameplay experience.
 
 ![Mac the Developer](../../assets/images/mac-the-developer.png)
 
@@ -27,7 +27,7 @@ The game's core mechanics mirror our daily development experiences:
 
 ## Technical Architecture: Keeping it Pure and Powerful
 
-One of my key decisions was to build the entire game using vanilla JavaScript and HTML5 Canvas. No frameworks, no libraries - just pure, modern JavaScript. This approach not only created a lightweight experience but also served as an excellent exercise in leveraging modern browser APIs effectively.
+One of my key decisions was to build the entire game using vanilla JavaScript and HTML5 Canvas. No frameworks, no libraries - just pure JavaScript. This approach not only created a lightweight experience but also served as an excellent exercise.
 
 ### The Heart of the Game: A Robust Game Loop
 
