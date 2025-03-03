@@ -65,7 +65,9 @@ I implemented a modular architecture with clear separation of concerns across mu
 └── README.md                  # Project overview
 ```
 
-This modular approach made the codebase more maintainable and allowed me to focus on one aspect at a time. The main game engine coordinates all the components:
+This modular approach made the codebase more maintainable and allowed me to focus on one aspect at a time.
+
+The main game engine coordinates all the components:
 
 ```javascript
 export class GameEngine {
@@ -272,7 +274,7 @@ When activated, this mode reveals:
 
 What started as a development tool became a fun easter egg that adds another layer of developer-themed interaction.
 
-## Character Animation Showcase
+## Character Showcase
 
 An other tool built was an [interactive character showcase page](https://ngopimas.github.io/code-connection/character-showcase-advanced.html). Initially created as a way to debug and fine-tune animations, it evolved into a comprehensive visualization tool that helped ensure consistency across all character states.
 
