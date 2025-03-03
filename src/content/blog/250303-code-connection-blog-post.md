@@ -17,6 +17,11 @@ Have you ever found yourself staring at your code editor, thinking about the inv
 
 I discovered an interesting "Stick Hero" style game on CodePen created by Hunor Marton Borbely ([@HunorMarton](https://codepen.io/HunorMarton/pen/xxOMQKg)). The elegant simplicity of his codebase and the gameplay immediately captivated me - tap to extend a stick, release to set it in place, and try to reach the next platform. Hunor even created a [YouTube tutorial](https://youtu.be/eue3UdFvwPo) explaining how he built the original game.
 
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 8px;">
+  <iframe     style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+ src="https://www.youtube.com/embed/eue3UdFvwPo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
 While playing with Hunor's code, ideas clicked: what if I reimagined this game with a developer theme?
 
 What if the platforms were code blocks? What if the bridges were connections between systems? What if the character was a developer trying to navigate this abstract landscape? What kind of basic animations could I add to make it more engaging?
@@ -267,9 +272,9 @@ The showcase features:
 - Controls to adjust scale, animation speed, and grid overlay and background color
 - Mini previews of each animation state running in a loop
 
-![Character Animation Showcase](../../assets/images/character-showcase.png)
+<iframe src="https://ngopimas.github.io/code-connection/character-showcase.html" style="width: 100%; height: 800px; border: none;"></iframe>
 
-This [**tool**](https://ngopimas.github.io/code-connection/character-showcase-advanced.html) proved invaluable for several reasons:
+This tool proved invaluable for several reasons:
 
 1. **Animation Debugging**: I could isolate and debug each animation state more easily
 2. **Visual Consistency**: Seeing all states side-by-side helped ensure visual coherence
