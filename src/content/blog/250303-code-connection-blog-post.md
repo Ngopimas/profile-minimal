@@ -45,14 +45,24 @@ Building Code Connection presented several interesting technical hurdles:
 I implemented a modular architecture with clear separation of concerns across multiple files:
 
 ```
-main.js               # Entry point, bootstraps the game
-game-engine.js        # Core game loop and state management
-renderer.js           # Handles all canvas drawing operations
-game-objects.js       # Game object definitions (Platform, Stick, Server)
-character-reference.js # Character animation and rendering
-input-handler.js      # Touch and keyboard input management
-debug.js              # Debug mode and developer tools
-utils.js              # Shared utilities and constants
+.
+├── assets
+│   ├── code-connection.png    # Game preview image
+│   └── favicon.ico            # Game favicon
+├── css
+│   └── style.css              # Main CSS file
+├── js
+│   ├── character-reference.js # Character animation and rendering
+│   ├── debug.js               # Debug mode and developer tools
+│   ├── game-engine.js         # Core game loop and state management
+│   ├── game-objects.js        # Game object definitions (Platform, Stick, Server)
+│   ├── input-handler.js       # Touch and keyboard input management
+│   ├── main.js                # Entry point, bootstraps the game
+│   ├── renderer.js            # Handles all canvas drawing operations
+│   └── utils.js               # Shared utilities and constants
+├── index.html                 # Main game page
+├── character-showcase.html    # Character showcase tool
+└── README.md                  # Project overview
 ```
 
 This modular approach made the codebase more maintainable and allowed me to focus on one aspect at a time. The main game engine coordinates all the components:
