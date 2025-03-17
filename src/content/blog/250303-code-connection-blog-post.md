@@ -15,7 +15,7 @@ Have you ever found yourself staring at your code editor, thinking about the inv
 
 ## The Spark of Inspiration
 
-I discovered an interesting "Stick Hero" style game on CodePen created by Hunor Marton Borbely ([@HunorMarton](https://codepen.io/HunorMarton/pen/xxOMQKg)). The elegant simplicity of his codebase and the gameplay immediately captivated me - tap to extend a stick, release to set it in place, and try to reach the next platform. Hunor even created a [YouTube tutorial](https://youtu.be/eue3UdFvwPo) explaining how he built the original game.
+I discovered an interesting "Stick Hero" style game on CodePen created by Hunor Márton Borbély ([@HunorMarton](https://codepen.io/HunorMarton/pen/xxOMQKg)). The elegant simplicity of his codebase and the gameplay immediately captivated me - tap to extend a stick, release to set it in place, and try to reach the next platform. Hunor even created a [YouTube tutorial](https://youtu.be/eue3UdFvwPo) explaining how he built the original game.
 
 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 8px;">
   <iframe     style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
@@ -338,6 +338,6 @@ The source code is also available on [GitHub](https://github.com/Ngopimas/code-c
 
 ## Acknowledgments
 
-I want to express my sincere gratitude to Hunor Marton Borbely for creating an open source "Stick Hero" game that served as the foundation for Code Connection. His elegant implementation and clear code structure made it possible for me to build upon his work and create something new. I highly recommend checking out his [original CodePen](https://codepen.io/HunorMarton/pen/xxOMQKg) and [YouTube tutorial](https://youtu.be/eue3UdFvwPo) to see where this journey began.
+I want to express my sincere gratitude to Hunor Márton Borbélyfor creating an open source "Stick Hero" game that served as the foundation for Code Connection. His elegant implementation and clear code structure made it possible for me to build upon his work and create something new. I highly recommend checking out his [original CodePen](https://codepen.io/HunorMarton/pen/xxOMQKg) and [YouTube tutorial](https://youtu.be/eue3UdFvwPo) to see where this journey began.
 
 Building upon the work of others is a fundamental aspect of software development, and this project is a testament to how inspiration and collaboration (even indirectly) can lead to new and exciting creations.
