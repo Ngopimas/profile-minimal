@@ -13,21 +13,25 @@ Many developers overlook the importance of a properly configured `tsconfig.json`
 
 ## The Problem with Lax Configurations
 
-It's not uncommon to encounter projects with the following issues:
+When TypeScript configurations are too lenient, they allow unsafe patterns to creep into your codebase. This can lead to issues such as implicit `any` types, unchecked null or undefined values, and unexpected runtime errors. Over time, these problems accumulate, making the code harder to debug, refactor, and maintain. A lax configuration undermines the very purpose of using TypeScript: to catch errors early and enforce type safety.
 
-- `allowJs` enabled without a clear purpose
-- `noImplicitAny` turned off
-- `strictNullChecks` disabled
-- The absence of `strict: true`
+### Example: Implicit `any`
 
-These relaxed settings might seem convenient at first, but they lead to:
+```typescript
+function add(a, b) {
+  return a + b; // TypeScript won't catch the missing types here.
+}
+```
 
-- Ambiguous type definitions
-- Hard-to-diagnose runtime errors
-- Poor developer experience
-- Long-term maintenance challenges
+With `noImplicitAny: true`, the compiler forces you to define types explicitly:
 
-A seasoned developer recognizes that strict type checking is not a burden but a safeguard.
+```typescript
+function add(a: number, b: number): number {
+  return a + b;
+}
+```
+
+This simple change prevents potential runtime errors caused by type mismatches.
 
 ## The Essential Strict Rules
 
@@ -40,6 +44,14 @@ To ensure your TypeScript codebase is reliable, enable these key settings in you
 ✅ `strictBindCallApply: true`  
 ✅ `noImplicitThis: true`  
 ✅ `useUnknownInCatchVariables: true`
+
+### Comparison: Strict vs. Non-Strict
+
+| Setting                  | Non-Strict Behavior                          | Strict Behavior                              |
+|--------------------------|-----------------------------------------------|---------------------------------------------|
+| `noImplicitAny`          | Allows variables without explicit types       | Forces explicit type annotations            |
+| `strictNullChecks`       | Null/undefined values can be accessed freely | Null/undefined must be explicitly handled   |
+| `strictFunctionTypes`    | Function type mismatches are ignored         | Enforces stricter function type checks      |
 
 These rules collectively enforce better type safety, reduce runtime errors, and improve code clarity.
 
@@ -80,9 +92,9 @@ By adopting strict TypeScript settings, you create a codebase that is:
 
 ## Final Thoughts
 
-Strict TypeScript configuration is not just a best practice—it's a necessity for professional software development. It ensures your code is reliable, maintainable, and scalable. As a senior developer or tech lead, championing these practices demonstrates your commitment to quality and your team's success.
+Take a moment today to review your `tsconfig.json`. Enabling strict settings, even incrementally, will save countless hours of debugging and refactoring in the future. Your team—and your future self—will thank you.
 
-Remember, the effort you put into configuring TypeScript today will pay dividends in the form of fewer bugs, faster development, and happier developers tomorrow.
+Strict TypeScript configuration is not just a best practice—it’s a cornerstone of professional software development. It ensures your code is reliable, maintainable, and scalable. Championing these practices demonstrates your commitment to quality and sets your team up for long-term success.
 
 ## Further Reading
 
