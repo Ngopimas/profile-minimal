@@ -8,7 +8,7 @@ url: "https://www.onecode.rocks"
 repository: "https://github.com/deeplime-io/onecode"
 ---
 
-I am developing OneCode Cloud, a sophisticated web application that enables seamless deployment and management of Python applications. This platform serves as the cornerstone of the OneCode ecosystem, providing users with a streamlined interface for deploying their Python scripts without the complexity of traditional cloud infrastructure.
+I was in charge of building OneCode Cloud, a sophisticated web application that enables seamless deployment and management of Python applications. This platform serves as the cornerstone of the OneCode ecosystem, providing users with a streamlined interface for deploying their Python scripts without the complexity of traditional cloud infrastructure.
 
 OneCode is an open-source library developed by [**DeepLime**](https://www.deeplime.io) designed to facilitate easy collaborative Python development. The OneCode Cloud Platform extends this ecosystem by providing a secure, scalable, and cost-effective way to deploy these applications to end-users.
 
