@@ -32,7 +32,7 @@ The transformation from concept to playable prototype happened organically:
 
 1. **Code Blocks as Islands**: Each platform became a snippet of code, complete with syntax highlighting and brackets
 2. **Connections as Bridges**: The extendable stick became a visual "connection" that grows as you hold down your input
-3. **The Developer Avatar**: Our protagonist – a developer with a trusty laptop
+3. **The Developer Avatar**: Our protagonist - a developer with a trusty laptop
 
 The core gameplay emerged naturally from this metaphor: tap to start building a connection, release to set it in place. If your connection reaches the next code block, you can cross safely. Too short or too long, and you'll plummet into the void (something all too familiar when connections between systems fail).
 
@@ -249,7 +249,7 @@ For the visual design, I wanted to create something that would resonate with dev
 - **Binary and Circuit Patterns**: Subtle background elements that evoke the digital world
 - **Server Racks**: Background elements with indicator lights to create a data center feel
 
-The color scheme was particularly important – I wanted it to feel like a comfortable coding environment:
+The color scheme was particularly important - I wanted it to feel like a comfortable coding environment:
 
 ```css
 html,
@@ -298,7 +298,7 @@ Creating dedicated showcase pages for key game elements is something I'll defini
 
 ### 1. Prototype Early, Refine Later
 
-My first playable version took just one evening to build – it was ugly and buggy, but it proved the concept was fun. This early validation kept me motivated through the more challenging aspects of development.
+My first playable version took just one evening to build - it was ugly and buggy, but it proved the concept was fun. This early validation kept me motivated through the more challenging aspects of development.
 
 ### 2. User Testing Reveals the Unexpected
 
