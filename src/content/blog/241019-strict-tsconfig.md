@@ -47,11 +47,11 @@ To ensure your TypeScript codebase is reliable, enable these key settings in you
 
 ### Comparison: Strict vs. Non-Strict
 
-| Setting                  | Non-Strict Behavior                          | Strict Behavior                              |
-|--------------------------|-----------------------------------------------|---------------------------------------------|
-| `noImplicitAny`          | Allows variables without explicit types       | Forces explicit type annotations            |
-| `strictNullChecks`       | Null/undefined values can be accessed freely | Null/undefined must be explicitly handled   |
-| `strictFunctionTypes`    | Function type mismatches are ignored         | Enforces stricter function type checks      |
+| Setting               | Non-Strict Behavior                          | Strict Behavior                           |
+| --------------------- | -------------------------------------------- | ----------------------------------------- |
+| `noImplicitAny`       | Allows variables without explicit types      | Forces explicit type annotations          |
+| `strictNullChecks`    | Null/undefined values can be accessed freely | Null/undefined must be explicitly handled |
+| `strictFunctionTypes` | Function type mismatches are ignored         | Enforces stricter function type checks    |
 
 These rules collectively enforce better type safety, reduce runtime errors, and improve code clarity.
 
@@ -92,9 +92,9 @@ By adopting strict TypeScript settings, you create a codebase that is:
 
 ## Final Thoughts
 
-Take a moment today to review your `tsconfig.json`. Enabling strict settings, even incrementally, will save countless hours of debugging and refactoring in the future. Your team—and your future self—will thank you.
+Take a moment today to review your `tsconfig.json`. Enabling strict settings, even incrementally, will save countless hours of debugging and refactoring in the future. Your team-and your future self-will thank you.
 
-Strict TypeScript configuration is not just a best practice—it’s a cornerstone of professional software development. It ensures your code is reliable, maintainable, and scalable. Championing these practices demonstrates your commitment to quality and sets your team up for long-term success.
+Strict TypeScript configuration is not just a best practice-it’s a cornerstone of professional software development. It ensures your code is reliable, maintainable, and scalable. Championing these practices demonstrates your commitment to quality and sets your team up for long-term success.
 
 ## Further Reading
 

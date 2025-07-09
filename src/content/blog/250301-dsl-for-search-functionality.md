@@ -464,7 +464,7 @@ A well-designed search DSL creates a powerful interface between users and data. 
 
 The most successful search DSLs grow with users, meeting them where they are with simple queries while enabling increasingly sophisticated filtering as their needs evolve. When done right, a search DSL becomes not just a feature but a compelling reason for users to choose and stick with a product.
 
-Remember that the best DSLs feel invisible—they're so natural that users don't even realize they're using a specialized language. That invisibility is the mark of excellent design, making complex data manipulation accessible to everyone.
+Remember that the best DSLs feel invisible-they're so natural that users don't even realize they're using a specialized language. That invisibility is the mark of excellent design, making complex data manipulation accessible to everyone.
 
 ## Further Reading
 

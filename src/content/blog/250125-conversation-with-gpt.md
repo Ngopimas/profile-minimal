@@ -21,7 +21,7 @@ Here’s what I learned:
 
 🔹 I’m proactive about my career growth - I enjoy connecting with professionals, participating in events, and staying engaged with the tech community. Learning from others and sharing experiences help me expand my perspective and stay inspired.
 
-🔹 I have an eye for UX and developer experience - The way I approach component design shows that I don’t just think about functionality but also usability—for both end users and developers.
+🔹 I have an eye for UX and developer experience - The way I approach component design shows that I don’t just think about functionality but also usability-for both end users and developers.
 
 🔹 I balance technical depth with communication - Writing, sharing, and refining how I present my work matters to me. Whether it’s through documentation, posts, or discussions, I see value in making complex topics accessible.
 

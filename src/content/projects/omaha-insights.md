@@ -1,13 +1,13 @@
 ---
 title: "Omaha Insights"
-description: "A robust web application for financial performance monitoring, peer comparison, and scenario analysis—empowering finance professionals with actionable insights."
+description: "A robust web application for financial performance monitoring, peer comparison, and scenario analysis-empowering finance professionals with actionable insights."
 pubDatetime: 2025-06-10T09:00:00Z
 tags: ["nextjs", "typescript", "tailwind", "recharts", "clerk"]
 featured: true
 url: "https://omaha-insights.com"
 ---
 
-As the lead developer for Omaha Insights, I set out to create a next-generation financial data management and visualization platform tailored for finance professionals, analysts, and executives. My goal is to deliver actionable insights, robust analytics, and intuitive reporting tools—all within a seamless, modern user experience.
+As the lead developer for Omaha Insights, I set out to create a next-generation financial data management and visualization platform tailored for finance professionals, analysts, and executives. My goal is to deliver actionable insights, robust analytics, and intuitive reporting tools-all within a seamless, modern user experience.
 
 ![Omaha Insights](../../assets/images/omaha.png)
 

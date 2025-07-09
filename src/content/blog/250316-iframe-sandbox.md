@@ -9,7 +9,7 @@ tags: ["security", "iframe", "web development", "frontend", "cross-origin"]
 description: "Iframe security concerns and best practices for safely embedding third-party content"
 ---
 
-Web developers often face a challenging paradox: how to safely integrate third-party content while maintaining the security and integrity of their applications. At the heart of this challenge lies the humble iframe — a powerful yet often misunderstood HTML element that creates windows within windows.
+Web developers often face a challenging paradox: how to safely integrate third-party content while maintaining the security and integrity of their applications. At the heart of this challenge lies the humble iframe - a powerful yet often misunderstood HTML element that creates windows within windows.
 
 In this post, I'll explore how to securely integrate external content through iframes, the security risks they present, and the modern techniques that balance functionality with protection.
 
@@ -66,7 +66,7 @@ Malicious iframes might attempt to:
 
 ## The Sandbox: Your First Line of Defense
 
-Modern iframe security begins with the `sandbox` attribute — a powerful mechanism for restricting iframe capabilities. Like a real sandbox, it creates a controlled environment where potentially risky code can run with limited privileges:
+Modern iframe security begins with the `sandbox` attribute - a powerful mechanism for restricting iframe capabilities. Like a real sandbox, it creates a controlled environment where potentially risky code can run with limited privileges:
 
 ```html
 <iframe
@@ -93,7 +93,7 @@ The empty `sandbox` attribute applies maximum restrictions. You can then selecti
 
 ### Permission Layering
 
-The real power of the sandbox comes from combining permissions to create precisely the level of access required — no more, no less. For example:
+The real power of the sandbox comes from combining permissions to create precisely the level of access required - no more, no less. For example:
 
 ```html
 <iframe
@@ -303,7 +303,7 @@ Before deploying iframe integrations, verify these security measures:
 
 Iframe security represents a careful balancing act between functionality and protection. By understanding the security model, applying appropriate restrictions, and implementing defense-in-depth strategies, you can safely integrate third-party content without compromising your application's security posture.
 
-The most secure approach combines multiple techniques — sandbox restrictions, content security policies, and careful communication patterns — to create a comprehensive security strategy appropriate for your specific integration needs.
+The most secure approach combines multiple techniques - sandbox restrictions, content security policies, and careful communication patterns - to create a comprehensive security strategy appropriate for your specific integration needs.
 
 ## Further Reading
 
