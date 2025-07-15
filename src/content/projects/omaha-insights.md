@@ -2,7 +2,7 @@
 title: "Omaha Insights"
 description: "A robust web application for financial performance monitoring, peer comparison, and scenario analysis-empowering finance professionals with actionable insights."
 pubDatetime: 2025-06-10T09:00:00Z
-tags: ["nextjs", "typescript", "tailwind", "recharts", "clerk"]
+tags: ["nextjs", "typescript", "tailwind", "recharts", "GCP"]
 featured: true
 url: "https://omaha-insights.com"
 ---
