@@ -15,6 +15,8 @@ That idea stuck with me. What if you could explore that concept interactively?
 
 This post is about how I built [Pouvoir d'Achat en Minutes](https://github.com/ngopimas/enminutes) - a basic bilingual, interactive data visualization app that lets you explore the real cost of everyday French goods from the 1950s to today - and how AI-assisted development shaped the process.
 
+![En Minutes](../../assets/images/en-minutes.png)
+
 ## The Core Idea
 
 The premise is simple: a baguette costs around €1.20 today. But is that expensive? Compared to what?
