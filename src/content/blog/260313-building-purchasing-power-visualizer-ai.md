@@ -13,7 +13,7 @@ A few years ago, I stumbled upon an article in [Alternatives Économiques](https
 
 That idea stuck with me. What if you could explore that concept interactively?
 
-This post is about how I built [Pouvoir d'Achat en Minutes](https://github.com/ngopimas/enminutes) - a basic bilingual, interactive data visualization app that lets you explore the real cost of everyday French goods from the 1950s to today - and how AI-assisted development shaped the process.
+This post is about how I built [Pouvoir d'Achat en Minutes](https://enminutes.fr) - a basic bilingual, interactive data visualization app that lets you explore the real cost of everyday French goods from the 1950s to today - and how AI-assisted development shaped the process.
 
 ![En Minutes](../../assets/images/en-minutes.png)
 
@@ -21,7 +21,7 @@ This post is about how I built [Pouvoir d'Achat en Minutes](https://github.com/n
 
 The premise is simple: a baguette costs around €1.20 today. But is that expensive? Compared to what?
 
-Raw prices are deceiving. A baguette cost 0.24 francs in 1950 - sounds cheap, but the minimum wage was about 0.64 francs per hour. That means earning a baguette took roughly **22 minutes of work**. Today, it takes around **4 minutes**.
+Raw prices are deceiving. A baguette cost 0.24 francs in 1950 - sounds cheap, but the minimum wage was about 0.64 francs per hour. That means earning a baguette took roughly **17 minutes of work**. Today, it takes around **5 minutes**.
 
 By converting every price into minutes of SMIC (the French minimum wage), you get a universal unit that cuts through inflation, currency changes, and decades of economic shifts. It lets you compare a 1955 pack of cigarettes to a 2024 one in a way that actually means something.
 
@@ -113,7 +113,7 @@ Each round produced a deployable build. The project went through a brutalist red
 
 ### 1. Minutes of SMIC > Raw Prices
 
-This is the single most important design decision in the project. Showing that a baguette went from 0.24F to €1.10 tells you nothing. Showing it went from 22 minutes to 4 minutes tells a story. The unit of measurement _is_ the narrative.
+This is the single most important design decision in the project. Showing that a baguette went from 0.44F to €1.20 tells you nothing. Showing it went from 17 minutes to 5 minutes tells a story. The unit of measurement _is_ the narrative.
 
 ### 2. Bilingual Is Not Just Translation
 
@@ -133,6 +133,10 @@ When each design iteration takes 2 minutes instead of 2 hours, you explore more 
 - **Everyday items over 70+ years of data**, all in a static React app with Chart.js, shadcn/ui, and Tailwind.
 - **AI-assisted development** worked best as an iterative loop: intent → build → critique → refine. The human brings taste and editorial judgment; the AI brings speed and consistency.
 - **The hard part is always the data**. No API will give you the price of a croissant in 1965. You need to dig.
+
+## Try It
+
+Curious to see how long it took to earn a baguette in 1965? [Explore the app at enminutes.fr](https://enminutes.fr) and see how everyday French life has changed over seven decades. The [source code is on GitHub](https://github.com/ngopimas/enminutes) if you want to dig into the data or contribute.
 
 ## Further Reading
 
