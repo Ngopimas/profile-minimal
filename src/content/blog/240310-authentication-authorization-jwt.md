@@ -5,46 +5,25 @@ title: "Implementing Authentication and Authorization in Node.js with JWT"
 featured: false
 draft: false
 tags: ["nodejs", "jwt", "authentication", "authorization", "api"]
-description: "How to implement authentication and authorization in a RESTful API using JWT"
+description: "A minimal JWT setup in Node.js that covers the basics without over-engineering"
 ---
 
-## Introduction
+JWT is just a signed JSON payload. You create it on login, send it back to the client, and the client includes it in every subsequent request. The server verifies the signature and trusts the claims inside. That is it. Everything else is implementation detail.
 
-Authentication and authorization are critical components of any secure web application. JSON Web Tokens (JWT) is a popular way to handle authentication and authorization in a RESTful API. Let's implement it in a Node.js project.
+I have seen teams over-engineer this with refresh token rotations, complex permission matrices, and opaque token formats. For most projects, a simple access token with a reasonable expiry is enough.
 
-## Prerequisites
+## A minimal setup
 
-To follow along, you should have a basic understanding of:
-
-- JavaScript and Node.js
-- Express.js
-- JWT (JSON Web Tokens)
-
-## Setting Up the Project
-
-### 1. Initialize the Project
-
-First, create a new directory for your project and initialize a new Node.js project.
+Create a new project and install the dependencies:
 
 ```sh
 mkdir auth-api
 cd auth-api
 npm init -y
-```
-
-### 2. Install Dependencies
-
-We'll need the `express`, `jsonwebtoken`, and `bcryptjs` packages to set up our server, handle JWTs, and hash passwords.
-
-```sh
 npm install express jsonwebtoken bcryptjs
 ```
 
-## Creating the Server
-
-### 1. Set Up Express Server
-
-Create a file named `server.js` and set up a basic Express server.
+Here is the server I usually start with:
 
 ```javascript
 // filepath: /auth-api/server.js
@@ -99,36 +78,31 @@ app.listen(3000, () => {
 });
 ```
 
-## Testing the API
+That is the whole thing. Register, login, and a protected route. In production you would swap the in-memory `users` array for a database, move the secret key to an environment variable, and probably add rate limiting. But the core mechanism is the same.
 
-### 1. Register a User
+## Testing it
 
-Use a tool like Postman to send a POST request to `http://localhost:3000/register` with the following JSON body:
+I usually test with `curl` rather than Postman. Register a user:
 
-```json
-{
-  "username": "testuser",
-  "password": "password123"
-}
+```bash
+curl -X POST http://localhost:3000/register \
+  -H "Content-Type: application/json" \
+  -d '{"username":"testuser","password":"secret"}'
 ```
 
-### 2. Log In
+Log in to get a token:
 
-Send a POST request to `http://localhost:3000/login` with the following JSON body:
-
-```json
-{
-  "username": "testuser",
-  "password": "password123"
-}
+```bash
+curl -X POST http://localhost:3000/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"testuser","password":"secret"}'
 ```
 
-You should receive a JWT token in the response.
+Use the token on a protected route:
 
-### 3. Access Protected Route
+```bash
+curl http://localhost:3000/protected \
+  -H "Authorization: Bearer <your-token>"
+```
 
-Send a GET request to `http://localhost:3000/protected` with the `Authorization` header set to `Bearer <your-token>`.
-
-## Conclusion
-
-We just implemented basic authentication and authorization in a Node.js RESTful API using JWT. This example can be extended to include more features such as role-based access control, token refresh, and more.
+If you are building a real API, you will want role-based access control, token refresh, and maybe OAuth for social login. But start simple. JWT is easy to get wrong when you add complexity too early.

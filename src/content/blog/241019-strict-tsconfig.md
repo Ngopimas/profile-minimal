@@ -17,7 +17,7 @@ With `strict: false`, TypeScript lets you write this:
 
 ```typescript
 function add(a, b) {
-  return a + b;
+ return a + b;
 }
 ```
 
@@ -27,7 +27,7 @@ Turn on `strict: true` and the same function becomes:
 
 ```typescript
 function add(a: number, b: number): number {
-  return a + b;
+ return a + b;
 }
 ```
 
@@ -35,9 +35,9 @@ Yes, it's more typing. But now the compiler catches mismatches at build time ins
 
 The settings that matter most:
 
-- `noImplicitAny` — forces explicit types instead of silent `any`
-- `strictNullChecks` — makes `null` and `undefined` part of the type system
-- `strictFunctionTypes` — catches function signature mismatches
+- `noImplicitAny` - forces explicit types instead of silent `any`
+- `strictNullChecks` - makes `null` and `undefined` part of the type system
+- `strictFunctionTypes` - catches function signature mismatches
 
 ## The Migration Is Less Painful Than You Think
 
