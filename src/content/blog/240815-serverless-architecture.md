@@ -15,9 +15,9 @@ Serverless doesn't mean there are no servers. It means someone else manages them
 
 I reach for serverless functions in three situations:
 
-1. **Webhooks and callbacks** — an endpoint that receives a payload, validates it, and queues work. These are usually low-traffic and event-driven. Perfect fit.
-2. **Scheduled jobs** — a nightly cleanup script, a weekly report generator. CloudWatch Events or cron triggers handle the scheduling; the function handles the logic.
-3. **Glue between services** — processing an S3 upload, transforming a DynamoDB stream, reacting to a Pub/Sub message. Short, stateless transformations.
+1. **Webhooks and callbacks** - an endpoint that receives a payload, validates it, and queues work. These are usually low-traffic and event-driven. Perfect fit.
+2. **Scheduled jobs** - a nightly cleanup script, a weekly report generator. CloudWatch Events or cron triggers handle the scheduling; the function handles the logic.
+3. **Glue between services** - processing an S3 upload, transforming a DynamoDB stream, reacting to a Pub/Sub message. Short, stateless transformations.
 
 ## When It Doesn't
 
@@ -41,14 +41,14 @@ My default serverless API structure looks like this:
 
 ```javascript
 exports.handler = async event => {
-  try {
-    const result = await doWork(event);
-    return { statusCode: 200, body: JSON.stringify(result) };
-  } catch (error) {
-    console.error(error);
-    return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
-  }
+ try {
+ const result = await doWork(event);
+ return { statusCode: 200, body: JSON.stringify(result) };
+ } catch (error) {
+ console.error(error);
+ return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
+ }
 };
 ```
 
-Wrap the business logic, catch errors, return JSON. Everything else — routing, auth, validation — belongs in middleware or a framework layer. Don't stuff it all into the handler.
+Wrap the business logic, catch errors, return JSON. Everything else - routing, auth, validation - belongs in middleware or a framework layer. Don't stuff it all into the handler.

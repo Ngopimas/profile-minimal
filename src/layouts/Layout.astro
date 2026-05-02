@@ -39,7 +39,7 @@ const structuredData = {
   "@type": "BlogPosting",
   headline: `${title}`,
   image: `${socialImageURL}`,
-  datePublished: `${pubDatetime?.toISOString()}`,
+  ...(pubDatetime && { datePublished: pubDatetime.toISOString() }),
   ...(modDatetime && { dateModified: modDatetime.toISOString() }),
   author: [
     {
@@ -52,7 +52,7 @@ const structuredData = {
 ---
 
 <!doctype html>
-<html lang={LOCALE.lang ?? "en"} class={`${scrollSmooth && "scroll-smooth"}`}>
+<html lang={LOCALE.lang ?? "en"} class:list={[{ "scroll-smooth": scrollSmooth }]}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -115,7 +115,7 @@ const structuredData = {
       crossorigin
     />
 
-    <meta name="theme-color" content="" />
+    <meta name="theme-color" content="var(--color-bg)" />
 
     {
       // If PUBLIC_GOOGLE_SITE_VERIFICATION is set in the environment variable,

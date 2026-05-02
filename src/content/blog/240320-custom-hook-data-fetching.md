@@ -5,26 +5,10 @@ title: "Creating a Custom Hook for Data Fetching in React"
 featured: false
 draft: false
 tags: ["react", "hooks", "data-fetching", "javascript"]
-description: "How to create a custom hook for data fetching in React"
+description: "A simple useFetch hook I copy-paste into most projects"
 ---
 
-## Introduction
-
-Data fetching is a common requirement in React applications. Creating a custom hook for data fetching can help you reuse logic and keep your components clean. Let's create a custom hook for data fetching in React.
-
-## Prerequisites
-
-To follow along, you should have a basic understanding of:
-
-- JavaScript and React
-- React Hooks
-- Promises and async/await syntax
-
-## Creating the Custom Hook
-
-### 1. Define the Hook
-
-Create a file named `useFetch.ts` and define the custom hook.
+I write some version of this hook in almost every React project. It is not clever. It just wraps fetch in useEffect and exposes loading, error, and data states. That is usually all you need.
 
 ```typescript
 // filepath: /src/hooks/useFetch.ts
@@ -60,9 +44,7 @@ const useFetch = (url: string) => {
 export default useFetch;
 ```
 
-### 2. Using the Custom Hook
-
-Here's an example of how to use the `useFetch` hook in a React component.
+Using it in a component:
 
 ```typescript
 // filepath: /src/components/App.tsx
@@ -86,18 +68,6 @@ const App = () => {
 export default App;
 ```
 
-## Benefits of Custom Hooks
+This pattern keeps data fetching out of your components. The component only cares about rendering. The hook only cares about fetching. Separation of concerns, but without the ceremony of a full state management library.
 
-1. **Reusability**: Encapsulate logic that can be reused across multiple components.
-2. **Separation of Concerns**: Keep data fetching logic separate from UI logic.
-3. **Cleaner Components**: Simplify components by moving data fetching logic to custom hooks.
-
-## Summary
-
-By creating a custom hook for data fetching, you can easily manage data fetching logic in your React applications. This approach not only promotes reusability but also keeps your components clean and maintainable.
-
-## Further Reading
-
-- [React Hooks](https://reactjs.org/docs/hooks-intro.html)
-- [Using the Effect Hook](https://reactjs.org/docs/hooks-effect.html)
-- [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+For more complex cases, I usually reach for React Query or SWR. They handle caching, deduplication, background refetching, and all the edge cases that this simple hook ignores. But for a quick prototype or a small project, the simple hook above is enough.

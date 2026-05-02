@@ -17,32 +17,32 @@ Here's the workflow I copy into new projects:
 name: CI
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+ push:
+ branches: [main]
+ pull_request:
+ branches: [main]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
-      - run: npm ci
-      - run: npm test
-      - run: npm run build
+ build:
+ runs-on: ubuntu-latest
+ steps:
+ - uses: actions/checkout@v4
+ - uses: actions/setup-node@v4
+ with:
+ node-version: "20"
+ cache: "npm"
+ - run: npm ci
+ - run: npm test
+ - run: npm run build
 ```
 
 That's it. `npm ci` instead of `npm install` because it's faster and respects the lockfile. Node 20 because 14 and 16 are dead. `actions/cache` is built into `setup-node` now, so you don't need a separate cache step.
 
 ## What I Add Later
 
-- **Lint check** — `npm run lint` or `npx eslint .` before tests. Catches style issues before review.
-- **Type check** — `npx tsc --noEmit` for TypeScript projects. Faster than a full build and catches type errors tests miss.
-- **Deploy on tags** — a separate job that only runs on `v*` tags, building and pushing to the hosting platform.
+- **Lint check** - `npm run lint` or `npx eslint .` before tests. Catches style issues before review.
+- **Type check** - `npx tsc --noEmit` for TypeScript projects. Faster than a full build and catches type errors tests miss.
+- **Deploy on tags** - a separate job that only runs on `v*` tags, building and pushing to the hosting platform.
 
 ## What I Don't Add
 
@@ -52,4 +52,4 @@ That's it. `npm ci` instead of `npm install` because it's faster and respects th
 
 ## The Real Value
 
-The biggest benefit of CI isn't the automation—it's the social contract. When tests pass on CI, it means the code works in a clean environment, not just on your machine. When they fail, everyone sees it. That accountability matters more than any tooling choice.
+The biggest benefit of CI isn't the automation - it's the social contract. When tests pass on CI, it means the code works in a clean environment, not just on your machine. When they fail, everyone sees it. That accountability matters more than any tooling choice.

@@ -6,9 +6,10 @@ export interface Props {
   href?: string;
   frontmatter: CollectionEntry<"blog">["data"];
   secHeading?: boolean;
+  readingTime?: string;
 }
 
-export default function Card({ href, frontmatter, secHeading = true }: Props) {
+export default function Card({ href, frontmatter, secHeading = true, readingTime }: Props) {
   const { title, pubDatetime, modDatetime, description } = frontmatter;
 
   const headerProps = {
@@ -24,6 +25,9 @@ export default function Card({ href, frontmatter, secHeading = true }: Props) {
           modDatetime={modDatetime}
           className="text-sm text-skin-base/70"
         />
+        {readingTime && (
+          <span className="text-sm text-skin-base/70">{readingTime}</span>
+        )}
         {secHeading ? (
           <h2 {...headerProps}>{title}</h2>
         ) : (

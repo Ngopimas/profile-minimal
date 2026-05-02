@@ -6,7 +6,7 @@ slug: optimizing-react-performance
 featured: false
 draft: false
 tags: ["react", "performance", "optimization", "javascript"]
-description: "When React.memo, useMemo, and useCallback help — and when they make things worse."
+description: "When React.memo, useMemo, and useCallback help - and when they make things worse."
 ---
 
 The first thing most developers do when a React app feels slow is wrap everything in `React.memo` and `useMemo`. That's usually the wrong move.
@@ -28,7 +28,7 @@ Before you memoize anything, check if you're:
 
 ```javascript
 const sortedItems = useMemo(() => {
-  return [...items].sort((a, b) => a.price - b.price);
+ return [...items].sort((a, b) => a.price - b.price);
 }, [items]);
 ```
 
@@ -38,7 +38,7 @@ Note the spread `[...items]`. If you mutate the array in place with `.sort()`, `
 
 ```javascript
 const handleClick = useCallback(() => {
-  doSomething(id);
+ doSomething(id);
 }, [id]);
 
 // MemoizedButton won't re-render unless id changes
@@ -59,11 +59,11 @@ Don't guess. Open React DevTools Profiler, record a session, and look at what's 
 const HeavyChart = React.lazy(() => import("./HeavyChart"));
 
 function Dashboard() {
-  return (
-    <Suspense fallback={<Spinner />}>
-      <HeavyChart />
-    </Suspense>
-  );
+ return (
+ <Suspense fallback={<Spinner />}>
+ <HeavyChart />
+ </Suspense>
+ );
 }
 ```
 
@@ -71,4 +71,4 @@ Split your routes, not your buttons. Micro-optimizing component-level lazy loadi
 
 ## Bottom Line
 
-Measure first. Memoization adds complexity and can hurt performance if misapplied. The default in React is to re-render — and most of the time, that's fine.
+Measure first. Memoization adds complexity and can hurt performance if misapplied. The default in React is to re-render - and most of the time, that's fine.
