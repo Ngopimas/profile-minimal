@@ -13,7 +13,6 @@ export const getStaticPaths = (async ({ paginate }) => {
 
 const page = Astro.props.page as Page<CollectionEntry<"blog">>
 
-
 ---
 
 <Posts {page} />

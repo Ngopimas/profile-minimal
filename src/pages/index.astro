@@ -11,6 +11,7 @@ import { SITE, SOCIALS } from "@config";
 import ProjectCard from "@components/ProjectCard";
 import Image from "astro/components/Image.astro";
 import image from "@assets/images/romain.jpeg";
+import getReadingTime from "@utils/getReadingTime";
 
 const posts = await getCollection("blog");
 const projects = await getCollection("projects");
@@ -34,7 +35,9 @@ const socialCount = SOCIALS.filter(social => social.active).length;
               href="https://www.omaha-insights.com/"
               className="text-skin-accent underline-offset-4 hover:underline hover:opacity-80"
               title="Omaha Insights website"
-              aria-label="Omaha Insights website">Omaha Insights</LinkButton
+              aria-label="Omaha Insights website"
+              target="_blank"
+              rel="noopener noreferrer">Omaha Insights</LinkButton
             >, with a passion for creating nice and functional web applications.
             I love working with modern technologies and am always eager to learn
             new things.
@@ -64,7 +67,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
 
         <div class="hero-image">
           <div class="image-container">
-            <Image src={image} alt="Romain" class="profile-image" />
+            <Image src={image} alt="Romain" class="profile-image" loading="eager" />
             <div class="image-bg-decoration"></div>
           </div>
         </div>
@@ -113,12 +116,13 @@ const socialCount = SOCIALS.filter(social => social.active).length;
           </div>
           <div class="grid gap-6">
             {sortedPosts.map(
-              ({ data, slug }, index) =>
+              ({ data, slug, body }, index) =>
                 index < SITE.postPerIndex && (
                   <Card
                     href={`/posts/${slug}/`}
                     frontmatter={data}
                     secHeading={false}
+                    readingTime={getReadingTime(body)}
                   />
                 )
             )}
