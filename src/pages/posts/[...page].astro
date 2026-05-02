@@ -11,8 +11,7 @@ export const getStaticPaths = (async ({ paginate }) => {
   return paginate(getSortedPosts(posts), { pageSize: SITE.postPerPage });
 }) satisfies GetStaticPaths;
 
-const page = Astro.props.page as Page<CollectionEntry<"blog">>
-
+const page = Astro.props.page as Page<CollectionEntry<"blog">>;
 ---
 
 <Posts {page} />

@@ -78,9 +78,16 @@ I added a payload check too. If someone reuses the same idempotency key with dif
 ```typescript
 const cachedPayload = await redisClient.get(`${idempotencyKey}-payload`);
 if (cachedPayload && cachedPayload !== JSON.stringify(req.body)) {
-  return res.status(400).json({ error: "Payload mismatch for Idempotency-Key" });
+  return res
+    .status(400)
+    .json({ error: "Payload mismatch for Idempotency-Key" });
 }
-await redisClient.set(`${idempotencyKey}-payload`, JSON.stringify(req.body), "EX", 3600);
+await redisClient.set(
+  `${idempotencyKey}-payload`,
+  JSON.stringify(req.body),
+  "EX",
+  3600
+);
 ```
 
 Tests with supertest are straightforward. Fire two identical requests, assert the same body back:

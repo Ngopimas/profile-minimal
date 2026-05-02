@@ -51,7 +51,7 @@ Your server should send headers that say who can embed what:
 Content-Security-Policy: frame-src https://trusted-domain.com https://*.approved-service.net;
 ```
 
-This only allows iframes from specific domains. You can also control who embeds *your* content:
+This only allows iframes from specific domains. You can also control who embeds _your_ content:
 
 ```
 Content-Security-Policy:

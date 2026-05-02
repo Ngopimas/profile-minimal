@@ -28,7 +28,7 @@ Before you memoize anything, check if you're:
 
 ```javascript
 const sortedItems = useMemo(() => {
- return [...items].sort((a, b) => a.price - b.price);
+  return [...items].sort((a, b) => a.price - b.price);
 }, [items]);
 ```
 
@@ -38,11 +38,11 @@ Note the spread `[...items]`. If you mutate the array in place with `.sort()`, `
 
 ```javascript
 const handleClick = useCallback(() => {
- doSomething(id);
+  doSomething(id);
 }, [id]);
 
 // MemoizedButton won't re-render unless id changes
-<MemoizedButton onClick={handleClick} />
+<MemoizedButton onClick={handleClick} />;
 ```
 
 If `MemoizedButton` isn't memoized, `useCallback` does nothing.
@@ -59,11 +59,11 @@ Don't guess. Open React DevTools Profiler, record a session, and look at what's 
 const HeavyChart = React.lazy(() => import("./HeavyChart"));
 
 function Dashboard() {
- return (
- <Suspense fallback={<Spinner />}>
- <HeavyChart />
- </Suspense>
- );
+  return (
+    <Suspense fallback={<Spinner />}>
+      <HeavyChart />
+    </Suspense>
+  );
 }
 ```
 

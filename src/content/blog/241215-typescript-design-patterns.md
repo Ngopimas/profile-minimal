@@ -17,9 +17,9 @@ I rarely implement a full-blown Factory class with a switch statement. What I do
 
 ```typescript
 function createStorage(type: "local" | "session" | "memory") {
- if (type === "local") return new LocalStorageAdapter();
- if (type === "session") return new SessionStorageAdapter();
- return new InMemoryStorageAdapter();
+  if (type === "local") return new LocalStorageAdapter();
+  if (type === "session") return new SessionStorageAdapter();
+  return new InMemoryStorageAdapter();
 }
 ```
 
@@ -33,20 +33,20 @@ If you're building something custom, a typed event emitter in TypeScript is usua
 
 ```typescript
 type Events = {
- userLoggedIn: { id: string };
- dataLoaded: { items: Item[] };
+  userLoggedIn: { id: string };
+  dataLoaded: { items: Item[] };
 };
 
 class TypedEmitter {
- private listeners: Partial<Record<keyof Events, Function[]>> = {};
+  private listeners: Partial<Record<keyof Events, Function[]>> = {};
 
- on<K extends keyof Events>(event: K, handler: (payload: Events[K]) => void) {
- (this.listeners[event] ??= []).push(handler);
- }
+  on<K extends keyof Events>(event: K, handler: (payload: Events[K]) => void) {
+    (this.listeners[event] ??= []).push(handler);
+  }
 
- emit<K extends keyof Events>(event: K, payload: Events[K]) {
- this.listeners[event]?.forEach(h => h(payload));
- }
+  emit<K extends keyof Events>(event: K, payload: Events[K]) {
+    this.listeners[event]?.forEach(h => h(payload));
+  }
 }
 ```
 
@@ -64,8 +64,8 @@ I write:
 
 ```typescript
 function processPayment(amount: number, processor: (n: number) => void) {
- validateAmount(amount);
- processor(amount);
+  validateAmount(amount);
+  processor(amount);
 }
 
 processPayment(100, payWithStripe);
@@ -80,15 +80,19 @@ I use decorators in TypeScript (`@Injectable`, `@Component`), but I almost never
 
 ```typescript
 const withLogging = (fn: () => void) => () => {
- console.log("start");
- fn();
- console.log("end");
+  console.log("start");
+  fn();
+  console.log("end");
 };
 
 const withRetry = (fn: () => Promise<void>) => async () => {
- for (let i = 0; i < 3; i++) {
- try { return await fn(); } catch (e) { if (i === 2) throw e; }
- }
+  for (let i = 0; i < 3; i++) {
+    try {
+      return await fn();
+    } catch (e) {
+      if (i === 2) throw e;
+    }
+  }
 };
 ```
 

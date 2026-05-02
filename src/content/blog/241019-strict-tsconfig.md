@@ -17,7 +17,7 @@ With `strict: false`, TypeScript lets you write this:
 
 ```typescript
 function add(a, b) {
- return a + b;
+  return a + b;
 }
 ```
 
@@ -27,7 +27,7 @@ Turn on `strict: true` and the same function becomes:
 
 ```typescript
 function add(a: number, b: number): number {
- return a + b;
+  return a + b;
 }
 ```
 
