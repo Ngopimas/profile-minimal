@@ -11,7 +11,7 @@ export const SITE: Site = {
   postPerIndex: 4,
   postPerPage: 5,
   scheduledPostMargin: 15 * 60 * 1000, // 15 minutes
-  showArchives: true,
+  showArchives: false,
   editPost: {
     url: "https://github.com/Ngopimas/profile-minimal/edit/master/src/content/blog",
     text: "Suggest Changes",
