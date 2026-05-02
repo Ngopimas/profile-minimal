@@ -1,148 +1,66 @@
 ---
 author: Romain C.
 pubDatetime: 2024-02-19T13:00:00Z
-title: "Introduction to Web Workers API"
+title: "Web Workers: When the Main Thread Needs a Break"
+slug: optimizing-react-performance
 featured: false
 draft: false
 tags: ["javascript", "web-workers", "performance", "concurrency"]
-description: "How to use the Web Workers API to run JavaScript in the background"
+description: "Moving heavy work off the main thread without overcomplicating your app."
 ---
 
-## Introduction
+The main thread in a browser does everything: parsing HTML, running your JavaScript, handling events, painting pixels. If you dump a heavy computation on it, the UI freezes. Users can't scroll, click, or type. Web Workers are the escape hatch.
 
-The Web Workers API allows you to run JavaScript code in the background, separate from the main execution thread of a web application. This can improve performance and responsiveness by offloading heavy computations or tasks that would otherwise block the main thread. In this article, we'll explore how to use the Web Workers API to create and manage background tasks.
+A Web Worker is just a JavaScript file that runs in its own thread. It can't touch the DOM, but it can do math, process data, or run algorithms without blocking the UI.
 
-## Prerequisites
-
-To follow along, you should have a basic understanding of:
-
-- JavaScript
-- Asynchronous programming
-
-## Why Use Web Workers?
-
-Web Workers are useful for:
-
-- **Improving Performance**: Offload heavy computations to a background thread to keep the main thread responsive.
-- **Concurrency**: Run multiple tasks simultaneously without blocking the UI.
-- **Background Tasks**: Perform tasks like data processing, file handling, or network requests in the background.
-
-## Creating a Web Worker
-
-To create a Web Worker, you need to write the worker code in a separate JavaScript file and instantiate a `Worker` object in your main script.
-
-### Worker Script
-
-Create a file named `worker.js` with the following code:
+Here's the simplest possible setup. A worker that adds two numbers:
 
 ```javascript
-// filepath: /src/workers/worker.js
+// worker.js
 self.addEventListener("message", event => {
-  const data = event.data;
-  const result = data.num1 + data.num2; // Example computation
-  self.postMessage(result);
+  const { num1, num2 } = event.data;
+  self.postMessage(num1 + num2);
 });
 ```
 
-### Main Script
-
-In your main script, create a `Worker` instance and communicate with it using `postMessage` and `onmessage`.
+Main thread:
 
 ```javascript
-// filepath: /src/main.js
 const worker = new Worker("worker.js");
 
 worker.onmessage = event => {
-  console.log("Result from worker:", event.data);
+  console.log("Result:", event.data);
 };
 
 worker.postMessage({ num1: 5, num2: 10 });
 ```
 
-## Handling Errors
+That's the whole API. `postMessage` sends data, `onmessage` receives it. The worker lives until you call `worker.terminate()` or the page closes.
 
-You can handle errors in the worker by listening to the `onerror` event.
+## When I Actually Use Them
+
+- **CSV parsing** in a dashboard where users upload files with 100k+ rows
+- **Image resizing** before upload
+- **Search indexing** for a large local dataset
+- **Any calculation that takes longer than ~50ms** and runs in response to user input
+
+The 50ms threshold isn't arbitrary. That's roughly how long you have before a user notices lag. If your function might exceed it, consider a worker.
+
+## The Catch: No DOM, No Shared State
+
+Workers can't access `window`, `document`, or any DOM API. They also don't share memory with the main thread (unless you use `SharedArrayBuffer`, which has its own security headaches). Everything passes through `postMessage`, which clones the data. Send a 50MB object and you'll feel the serialization cost.
+
+For most cases, I keep it simple: send small payloads, get results back, update the UI. If the architecture starts getting complicated, I ask whether the task actually needs to run in the browser or if I should just send it to a server.
+
+## Error Handling
+
+Workers fail silently if you don't listen for errors:
 
 ```javascript
-// filepath: /src/main.js
 worker.onerror = error => {
-  console.error("Worker error:", error.message);
+  console.error("Worker failed:", error.message);
+  worker.terminate();
 };
 ```
 
-## Terminating a Worker
-
-To terminate a worker, use the `terminate` method.
-
-```javascript
-// filepath: /src/main.js
-worker.terminate();
-```
-
-## Example: Prime Number Calculation
-
-Let's create a more complex example where the worker calculates prime numbers.
-
-### Worker Script
-
-Create a file named `primeWorker.js` with the following code:
-
-```javascript
-// filepath: /src/workers/primeWorker.js
-self.addEventListener("message", event => {
-  const limit = event.data;
-  const primes = [];
-
-  for (let num = 2; num <= limit; num++) {
-    let isPrime = true;
-    for (let i = 2; i <= Math.sqrt(num); i++) {
-      if (num % i === 0) {
-        isPrime = false;
-        break;
-      }
-    }
-    if (isPrime) {
-      primes.push(num);
-    }
-  }
-
-  self.postMessage(primes);
-});
-```
-
-### Main Script
-
-In your main script, create a `Worker` instance and communicate with it to calculate prime numbers.
-
-```javascript
-// filepath: /src/main.js
-const primeWorker = new Worker("primeWorker.js");
-
-primeWorker.onmessage = event => {
-  console.log("Prime numbers:", event.data);
-};
-
-primeWorker.postMessage(100); // Calculate primes up to 100
-```
-
-## Benefits of Using Web Workers
-
-1. **Improved Performance**: Offload heavy computations to keep the main thread responsive.
-2. **Concurrency**: Run multiple tasks simultaneously without blocking the UI.
-3. **Better User Experience**: Perform background tasks without affecting the user interface.
-
-## Limitations of Web Workers
-
-1. **No DOM Access**: Workers cannot access the DOM directly.
-2. **Limited APIs**: Only a subset of browser APIs are available in workers.
-3. **Communication Overhead**: Passing large amounts of data between the main thread and workers can be slow.
-
-## Conclusion
-
-The Web Workers API provides a powerful way to run JavaScript code in the background, improving performance and responsiveness. By offloading heavy computations and tasks to background threads, you can create more efficient and user-friendly web applications. Experiment with Web Workers to see how they can benefit your projects.
-
-## Further Reading
-
-- [MDN Web Docs: Web Workers API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API)
-- [MDN Web Docs: Using Web Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers)
-- [HTML5 Rocks: Web Workers](https://www.html5rocks.com/en/tutorials/workers/basics/)
+Always include this. A crashed worker won't recover on its own.

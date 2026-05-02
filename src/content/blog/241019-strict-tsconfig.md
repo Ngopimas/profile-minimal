@@ -1,29 +1,29 @@
 ---
 author: Romain C.
 pubDatetime: 2024-10-19T15:00:00Z
-title: "Why Strict tsconfig.json Matters"
+title: "Stop Putting Off strict: true"
 slug: mastering-strict-tsconfig
 featured: false
 draft: false
 tags: ["typescript", "configuration", "best practices", "software engineering"]
-description: "Explore why enabling strict TypeScript settings is critical for building reliable and maintainable software."
+description: "Enable strict TypeScript. Yes, it will break your build. That's the point."
 ---
 
-Many developers overlook the importance of a properly configured `tsconfig.json`. Yet, this file is the cornerstone of a robust TypeScript project. Without strict settings, you risk introducing subtle bugs, increasing technical debt, and compromising code quality.
+Every TypeScript project I inherit has `strict: false` or no strict settings at all. The reason is always the same: "We started without it and now there's too much code to change." That's how you end up with a codebase where half the variables are implicitly `any` and null checks are just vibes.
 
-## The Problem with Lax Configurations
+## What You're Actually Missing
 
-When TypeScript configurations are too lenient, they allow unsafe patterns to creep into your codebase. This can lead to issues such as implicit `any` types, unchecked null or undefined values, and unexpected runtime errors. Over time, these problems accumulate, making the code harder to debug, refactor, and maintain. A lax configuration undermines the very purpose of using TypeScript: to catch errors early and enforce type safety.
-
-### Example: Implicit `any`
+With `strict: false`, TypeScript lets you write this:
 
 ```typescript
 function add(a, b) {
-  return a + b; // TypeScript won't catch the missing types here.
+  return a + b;
 }
 ```
 
-With `noImplicitAny: true`, the compiler forces you to define types explicitly:
+Both parameters are implicitly `any`. The compiler shrugs. You might as well be writing JavaScript with extra steps.
+
+Turn on `strict: true` and the same function becomes:
 
 ```typescript
 function add(a: number, b: number): number {
@@ -31,73 +31,27 @@ function add(a: number, b: number): number {
 }
 ```
 
-This simple change prevents potential runtime errors caused by type mismatches.
+Yes, it's more typing. But now the compiler catches mismatches at build time instead of letting them hit production.
 
-## The Essential Strict Rules
+The settings that matter most:
 
-To ensure your TypeScript codebase is reliable, enable these key settings in your `tsconfig.json`:
+- `noImplicitAny` — forces explicit types instead of silent `any`
+- `strictNullChecks` — makes `null` and `undefined` part of the type system
+- `strictFunctionTypes` — catches function signature mismatches
 
-✅ `strict: true`  
-✅ `noImplicitAny: true`  
-✅ `strictNullChecks: true`  
-✅ `strictFunctionTypes: true`  
-✅ `strictBindCallApply: true`  
-✅ `noImplicitThis: true`  
-✅ `useUnknownInCatchVariables: true`
+## The Migration Is Less Painful Than You Think
 
-### Comparison: Strict vs. Non-Strict
+For existing projects, you don't have to flip the switch and fix everything in one day. TypeScript supports incremental adoption:
 
-| Setting               | Non-Strict Behavior                          | Strict Behavior                           |
-| --------------------- | -------------------------------------------- | ----------------------------------------- |
-| `noImplicitAny`       | Allows variables without explicit types      | Forces explicit type annotations          |
-| `strictNullChecks`    | Null/undefined values can be accessed freely | Null/undefined must be explicitly handled |
-| `strictFunctionTypes` | Function type mismatches are ignored         | Enforces stricter function type checks    |
+1. Enable `strict: true` locally
+2. Fix one module at a time
+3. Use `// @ts-expect-error` (not `@ts-ignore`) for violations you plan to fix
+4. Run `tsc --noEmit` in CI so new code can't add more violations
 
-These rules collectively enforce better type safety, reduce runtime errors, and improve code clarity.
+The key is having a rule that new files must pass strict checks. Old code gets cleaned up as you touch it. Within a few months, the problem shrinks dramatically.
 
-## Why Strict Settings Are Crucial
+## New Projects Have No Excuse
 
-Strict configurations enforce:
+If you're starting a project today and `strict` isn't in your `tsconfig.json`, you're paying for type safety without getting it. Turn it on from day one. The initial friction is a few extra type annotations. The payoff is catching entire categories of bugs before they leave your editor.
 
-- **Stronger Type Inference**: The compiler can better understand your code, leading to safer refactoring and more accurate autocompletion.
-- **Fewer Runtime Errors**: Issues like null/undefined access and type mismatches are caught during development.
-- **Improved Developer Experience**: Clearer type expectations and better IDE support make coding more efficient.
-- **Higher Code Quality**: Explicit types and consistent usage lead to cleaner, more maintainable code.
-
-## Implementation Tips
-
-### For Existing Projects:
-
-1. Enable strict settings incrementally.
-2. Use `// @ts-ignore` sparingly to handle transitional issues.
-3. Prioritize new files and critical modules.
-4. Set clear deadlines for full compliance.
-5. Automate type checks in your CI pipeline.
-
-### For New Projects:
-
-1. Start with `strict: true` from day one.
-2. Combine with a robust ESLint configuration.
-3. Leverage tools like `typescript-strict-plugin` for additional enforcement.
-4. Document team guidelines for consistent type usage.
-
-## The Long-Term Benefits
-
-By adopting strict TypeScript settings, you create a codebase that is:
-
-- Easier to maintain
-- Safer to refactor
-- More scalable for future growth
-- A pleasure to work with for both current and future developers
-
-## Final Thoughts
-
-Take a moment today to review your `tsconfig.json`. Enabling strict settings, even incrementally, will save countless hours of debugging and refactoring in the future. Your team-and your future self-will thank you.
-
-Strict TypeScript configuration is not just a best practice-it’s a cornerstone of professional software development. It ensures your code is reliable, maintainable, and scalable. Championing these practices demonstrates your commitment to quality and sets your team up for long-term success.
-
-## Further Reading
-
-- [TypeScript Handbook: tsconfig.json](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html)
-- [TypeScript Strict Options Explained](https://www.typescriptlang.org/tsconfig#strict)
-- [TSLint vs. ESLint: Which Should You Use?](https://www.robertcooper.me/using-eslint-and-prettier-in-a-typescript-project)
+I've never met a developer who enabled strict mode and regretted it. I have met plenty who wished they'd done it sooner.

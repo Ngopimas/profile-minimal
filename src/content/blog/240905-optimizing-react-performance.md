@@ -1,118 +1,74 @@
 ---
 author: Romain C.
 pubDatetime: 2024-09-05T18:22:00Z
-title: "Optimizing React Applications for Performance"
+title: "React Performance: Memoization Is Not Free"
 slug: optimizing-react-performance
 featured: false
 draft: false
 tags: ["react", "performance", "optimization", "javascript"]
-description: "How to optimize your React applications for better performance"
+description: "When React.memo, useMemo, and useCallback help — and when they make things worse."
 ---
 
-## Introduction
+The first thing most developers do when a React app feels slow is wrap everything in `React.memo` and `useMemo`. That's usually the wrong move.
 
-As React applications grow in complexity, performance can become a concern. Optimizing your React application can lead to a smoother user experience and better overall performance. Let's explore various techniques to optimize React applications.
+## The Real Bottleneck Is Usually Elsewhere
 
-## Common Performance Bottlenecks
+Before you memoize anything, check if you're:
 
-Before diving into optimization techniques, it's important to understand common performance bottlenecks in React applications:
+- Rendering a massive list without virtualization
+- Running heavy computations during render
+- Including libraries you don't need in the bundle
+- Triggering re-renders by putting objects in context that change reference every render
 
-- **Unnecessary re-renders**: Components re-rendering when they don't need to.
-- **Large bundle sizes**: Including unnecessary code in the bundle.
-- **Expensive computations**: Performing heavy computations during rendering.
+`React.memo` won't fix any of that. It only helps when a component receives the same props but re-renders because its parent did. If your props are changing anyway, memoization is pure overhead.
 
-## Using React.memo
+## When Memoization Actually Helps
 
-`React.memo` is a higher-order component that memoizes the result of a component's render. It prevents unnecessary re-renders by comparing the previous and next props.
+`useMemo` is worth it when you have an expensive computation:
 
 ```javascript
-import React from "react";
-
-const MyComponent = React.memo(({ value }) => {
-  console.log("Rendering MyComponent");
-  return <div>{value}</div>;
-});
+const sortedItems = useMemo(() => {
+  return [...items].sort((a, b) => a.price - b.price);
+}, [items]);
 ```
 
-## Using useMemo and useCallback
+Note the spread `[...items]`. If you mutate the array in place with `.sort()`, `useMemo` won't protect you because the reference doesn't change.
 
-`useMemo` and `useCallback` are hooks that memoize values and functions, respectively. They help prevent unnecessary re-computations and re-renders.
+`useCallback` matters when you pass a function to a memoized child:
 
 ```javascript
-import React, { useMemo, useCallback } from "react";
+const handleClick = useCallback(() => {
+  doSomething(id);
+}, [id]);
 
-const MyComponent = ({ items }) => {
-  const sortedItems = useMemo(() => {
-    return items.sort((a, b) => a - b);
-  }, [items]);
+// MemoizedButton won't re-render unless id changes
+<MemoizedButton onClick={handleClick} />
+```
 
-  const handleClick = useCallback(() => {
-    console.log("Button clicked");
-  }, []);
+If `MemoizedButton` isn't memoized, `useCallback` does nothing.
 
+## The Profiler Is Your Friend
+
+Don't guess. Open React DevTools Profiler, record a session, and look at what's actually slow. The flamegraph tells you which components are expensive and why. I've seen teams spend days optimizing memoization when the real problem was a single component making a synchronous API call on every keystroke.
+
+## Lazy Loading
+
+`React.lazy` + `Suspense` is the one technique that's almost always a win for initial page load:
+
+```javascript
+const HeavyChart = React.lazy(() => import("./HeavyChart"));
+
+function Dashboard() {
   return (
-    <div>
-      <ul>
-        {sortedItems.map(item => (
-          <li key={item}>{item}</li>
-        ))}
-      </ul>
-      <button onClick={handleClick}>Click me</button>
-    </div>
+    <Suspense fallback={<Spinner />}>
+      <HeavyChart />
+    </Suspense>
   );
-};
+}
 ```
 
-## Lazy Loading Components
+Split your routes, not your buttons. Micro-optimizing component-level lazy loading is usually not worth the complexity.
 
-Lazy loading components can improve the initial load time of your application by splitting the bundle into smaller chunks. Use `React.lazy` and `Suspense` to achieve this.
+## Bottom Line
 
-```javascript
-import React, { Suspense } from "react";
-
-const LazyComponent = React.lazy(() => import("./LazyComponent"));
-
-const App = () => (
-  <Suspense fallback={<div>Loading...</div>}>
-    <LazyComponent />
-  </Suspense>
-);
-```
-
-## Profiling and Measuring Performance
-
-React DevTools provides a profiling feature that helps identify performance bottlenecks. Use the Profiler to measure the performance of your components.
-
-```javascript
-import React, { Profiler } from "react";
-
-const onRenderCallback = (
-  id, // the "id" prop of the Profiler tree that has just committed
-  phase, // either "mount" (if the tree just mounted) or "update" (if it re-rendered)
-  actualDuration, // time spent rendering the committed update
-  baseDuration, // estimated time to render the entire subtree without memoization
-  startTime, // when React began rendering this update
-  commitTime, // when React committed this update
-  interactions // the Set of interactions belonging to this update
-) => {
-  console.log({
-    id,
-    phase,
-    actualDuration,
-    baseDuration,
-    startTime,
-    commitTime,
-    interactions,
-  });
-};
-
-const App = () => (
-  <Profiler id="App" onRender={onRenderCallback}>
-    <MyComponent />
-  </Profiler>
-);
-```
-
-## Summary
-
-Optimizing React applications involves identifying performance bottlenecks and applying techniques such as memoization, lazy loading, and profiling. By following these best practices, we can improve the performance of our React applications and provide a better user experience.
+Measure first. Memoization adds complexity and can hurt performance if misapplied. The default in React is to re-render — and most of the time, that's fine.
