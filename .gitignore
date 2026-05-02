@@ -19,6 +19,9 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
+# large media files
+public/assets/video/
+
 # ignore .astro directory
 .astro
 

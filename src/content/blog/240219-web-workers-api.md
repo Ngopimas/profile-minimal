@@ -2,7 +2,7 @@
 author: Romain C.
 pubDatetime: 2024-02-19T13:00:00Z
 title: "Web Workers: When the Main Thread Needs a Break"
-slug: optimizing-react-performance
+slug: web-workers-api
 featured: false
 draft: false
 tags: ["javascript", "web-workers", "performance", "concurrency"]
