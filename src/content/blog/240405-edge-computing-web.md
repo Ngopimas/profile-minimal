@@ -6,13 +6,13 @@ slug: edge-computing-web
 featured: false
 draft: false
 tags:
- [
- "edge-computing",
- "performance",
- "web-development",
- "serverless",
- "distributed-systems",
- ]
+  [
+    "edge-computing",
+    "performance",
+    "web-development",
+    "serverless",
+    "distributed-systems",
+  ]
 description: "Edge computing is useful, but it's not the revolution vendors want you to believe."
 ---
 

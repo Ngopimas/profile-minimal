@@ -17,18 +17,18 @@ Instead of fetching all pages upfront, yield each user as you get them:
 
 ```javascript
 async function* fetchAllUsers() {
- let page = 1;
- while (true) {
- const response = await fetch(`/api/users?page=${page}`);
- const data = await response.json();
- if (data.users.length === 0) break;
- yield* data.users;
- page++;
- }
+  let page = 1;
+  while (true) {
+    const response = await fetch(`/api/users?page=${page}`);
+    const data = await response.json();
+    if (data.users.length === 0) break;
+    yield* data.users;
+    page++;
+  }
 }
 
 for await (const user of fetchAllUsers()) {
- await processUser(user);
+  await processUser(user);
 }
 ```
 
@@ -40,12 +40,12 @@ Read a large file in 64KB chunks without loading the whole thing:
 
 ```javascript
 async function* readFileByChunks(file) {
- const reader = file.stream().getReader();
- while (true) {
- const { done, value } = await reader.read();
- if (done) break;
- yield value;
- }
+  const reader = file.stream().getReader();
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    yield value;
+  }
 }
 ```
 
@@ -55,18 +55,18 @@ Turn a WebSocket into an async iterable:
 
 ```javascript
 async function* webSocketStream(url) {
- const ws = new WebSocket(url);
- try {
- while (true) {
- const message = await new Promise((resolve, reject) => {
- ws.onmessage = e => resolve(e.data);
- ws.onerror = e => reject(e);
- });
- yield JSON.parse(message);
- }
- } finally {
- ws.close();
- }
+  const ws = new WebSocket(url);
+  try {
+    while (true) {
+      const message = await new Promise((resolve, reject) => {
+        ws.onmessage = e => resolve(e.data);
+        ws.onerror = e => reject(e);
+      });
+      yield JSON.parse(message);
+    }
+  } finally {
+    ws.close();
+  }
 }
 ```
 
@@ -79,20 +79,20 @@ Async generators are lazy but not parallel. Each `yield` waits for the previous 
 ```javascript
 // Sequential - slow for independent work
 for await (const item of source) {
- await process(item); // Each waits for the previous
+  await process(item); // Each waits for the previous
 }
 
 // Parallel - batch instead
 async function* batchProcessor(source, batchSize = 100) {
- let batch = [];
- for await (const item of source) {
- batch.push(item);
- if (batch.length >= batchSize) {
- yield await Promise.all(batch.map(process));
- batch = [];
- }
- }
- if (batch.length) yield await Promise.all(batch.map(process));
+  let batch = [];
+  for await (const item of source) {
+    batch.push(item);
+    if (batch.length >= batchSize) {
+      yield await Promise.all(batch.map(process));
+      batch = [];
+    }
+  }
+  if (batch.length) yield await Promise.all(batch.map(process));
 }
 ```
 

@@ -15,17 +15,17 @@ I spent years adding `console.log` everywhere before I bothered setting up a pro
 
 ```json
 {
- "version": "0.2.0",
- "configurations": [
- {
- "name": "React Debug",
- "type": "chrome",
- "request": "launch",
- "url": "http://localhost:5173",
- "webRoot": "${workspaceFolder}",
- "sourceMaps": true
- }
- ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "React Debug",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true
+    }
+  ]
 }
 ```
 
@@ -37,13 +37,13 @@ Add a debug effect to see what's changing:
 
 ```jsx
 function ProductCard({ product, onSave }) {
- useEffect(() => {
- console.log('[ProductCard] Rendered with:', {
- productId: product.id,
- savedCallback: onSave.toString()
- });
- });
- // ...
+  useEffect(() => {
+    console.log("[ProductCard] Rendered with:", {
+      productId: product.id,
+      savedCallback: onSave.toString(),
+    });
+  });
+  // ...
 }
 ```
 
@@ -56,13 +56,15 @@ Wrap components in `Profiler` to catch slow renders:
 ```jsx
 import { Profiler } from "react";
 
-<Profiler onRender={(id, phase, actualDuration) => {
- if (actualDuration > 16) {
- console.warn(`Slow render in ${id}: ${actualDuration}ms`);
- }
-}}>
- <YourComponent />
-</Profiler>
+<Profiler
+  onRender={(id, phase, actualDuration) => {
+    if (actualDuration > 16) {
+      console.warn(`Slow render in ${id}: ${actualDuration}ms`);
+    }
+  }}
+>
+  <YourComponent />
+</Profiler>;
 ```
 
 Anything over 16ms drops a frame. Profile in production builds too - dev mode is 2-3x slower.
@@ -73,10 +75,10 @@ For API calls, I add a simple Axios interceptor in dev:
 
 ```typescript
 api.interceptors.request.use(config => {
- console.debug(`${config.method?.toUpperCase()} ${config.url}`, {
- payload: config.data,
- });
- return config;
+  console.debug(`${config.method?.toUpperCase()} ${config.url}`, {
+    payload: config.data,
+  });
+  return config;
 });
 ```
 

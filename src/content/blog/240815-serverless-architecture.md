@@ -41,13 +41,13 @@ My default serverless API structure looks like this:
 
 ```javascript
 exports.handler = async event => {
- try {
- const result = await doWork(event);
- return { statusCode: 200, body: JSON.stringify(result) };
- } catch (error) {
- console.error(error);
- return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
- }
+  try {
+    const result = await doWork(event);
+    return { statusCode: 200, body: JSON.stringify(result) };
+  } catch (error) {
+    console.error(error);
+    return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
+  }
 };
 ```
 

@@ -69,11 +69,13 @@ For simpler cases, AssemblyScript gives you a TypeScript-like syntax that compil
 ## When to use it
 
 I would reach for WebAssembly when:
+
 - I have a compute bottleneck that profiling confirms is in JS
 - I am porting existing C/C++/Rust code to the web
 - I need predictable performance without GC pauses
 
 I would not reach for it when:
+
 - The bottleneck is network or DOM
 - The codebase is small enough that JS is already fast enough
 - The team does not know a systems language

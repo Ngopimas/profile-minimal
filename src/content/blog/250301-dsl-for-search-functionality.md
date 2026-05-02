@@ -19,33 +19,33 @@ I built a lightweight parser for a project last month. No fancy libraries, just 
 
 ```javascript
 function parseSearchQuery(queryString) {
- const tokens = [];
- let current = "";
- let inQuotes = false;
+  const tokens = [];
+  let current = "";
+  let inQuotes = false;
 
- for (const char of queryString) {
- if (char === '"') {
- inQuotes = !inQuotes;
- current += char;
- } else if (char === " " && !inQuotes) {
- if (current) tokens.push(current);
- current = "";
- } else {
- current += char;
- }
- }
- if (current) tokens.push(current);
+  for (const char of queryString) {
+    if (char === '"') {
+      inQuotes = !inQuotes;
+      current += char;
+    } else if (char === " " && !inQuotes) {
+      if (current) tokens.push(current);
+      current = "";
+    } else {
+      current += char;
+    }
+  }
+  if (current) tokens.push(current);
 
- const query = { textSearch: [], filters: [] };
- for (const token of tokens) {
- if (token.includes(":")) {
- const [field, value] = token.split(":");
- query.filters.push({ field, value });
- } else {
- query.textSearch.push(token);
- }
- }
- return query;
+  const query = { textSearch: [], filters: [] };
+  for (const token of tokens) {
+    if (token.includes(":")) {
+      const [field, value] = token.split(":");
+      query.filters.push({ field, value });
+    } else {
+      query.textSearch.push(token);
+    }
+  }
+  return query;
 }
 ```
 

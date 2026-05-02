@@ -14,25 +14,28 @@ localStorage is synchronous. Everyone knows this. But I keep seeing React hooks 
 Here's the wrapper I copy-paste into projects. It's nothing clever - just Promise wrappers so the API shape matches async storage libraries:
 
 ```typescript
-export const asyncSetItem = async (key: string, value: string): Promise<void> => {
- return new Promise((resolve, reject) => {
- try {
- localStorage.setItem(key, value);
- resolve();
- } catch (error) {
- reject(error);
- }
- });
+export const asyncSetItem = async (
+  key: string,
+  value: string
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    try {
+      localStorage.setItem(key, value);
+      resolve();
+    } catch (error) {
+      reject(error);
+    }
+  });
 };
 
 export const asyncGetItem = async (key: string): Promise<string | null> => {
- return new Promise((resolve, reject) => {
- try {
- resolve(localStorage.getItem(key));
- } catch (error) {
- reject(error);
- }
- });
+  return new Promise((resolve, reject) => {
+    try {
+      resolve(localStorage.getItem(key));
+    } catch (error) {
+      reject(error);
+    }
+  });
 };
 ```
 
@@ -43,33 +46,33 @@ import { useState, useEffect } from "react";
 import { asyncSetItem, asyncGetItem } from "../utils/asyncLocalStorage";
 
 const useAsyncLocalStorage = (key: string, initialValue: string) => {
- const [storedValue, setStoredValue] = useState<string>(initialValue);
- const [loading, setLoading] = useState<boolean>(true);
+  const [storedValue, setStoredValue] = useState<string>(initialValue);
+  const [loading, setLoading] = useState<boolean>(true);
 
- useEffect(() => {
- const fetchValue = async () => {
- setLoading(true);
- try {
- const item = await asyncGetItem(key);
- if (item !== null) setStoredValue(item);
- } finally {
- setLoading(false);
- }
- };
- fetchValue();
- }, [key]);
+  useEffect(() => {
+    const fetchValue = async () => {
+      setLoading(true);
+      try {
+        const item = await asyncGetItem(key);
+        if (item !== null) setStoredValue(item);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchValue();
+  }, [key]);
 
- const setValue = async (value: string) => {
- setLoading(true);
- try {
- await asyncSetItem(key, value);
- setStoredValue(value);
- } finally {
- setLoading(false);
- }
- };
+  const setValue = async (value: string) => {
+    setLoading(true);
+    try {
+      await asyncSetItem(key, value);
+      setStoredValue(value);
+    } finally {
+      setLoading(false);
+    }
+  };
 
- return [storedValue, setValue, loading] as const;
+  return [storedValue, setValue, loading] as const;
 };
 ```
 

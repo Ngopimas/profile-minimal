@@ -24,25 +24,25 @@ I split the code into small modules so I wouldn't lose my mind in a single 800-l
 
 ```javascript
 export class GameEngine {
- constructor() {
- this.canvas = document.getElementById("game");
- this.ctx = this.canvas.getContext("2d");
- this.initializeGameStateBasics();
- this.renderer = new Renderer(this.ctx, this);
- this.completeGameStateInitialization();
- this.debugManager = new DebugManager(this);
- this.inputHandler = new InputHandler(this);
- window.requestAnimationFrame((timestamp) => this.animate(timestamp));
- }
+  constructor() {
+    this.canvas = document.getElementById("game");
+    this.ctx = this.canvas.getContext("2d");
+    this.initializeGameStateBasics();
+    this.renderer = new Renderer(this.ctx, this);
+    this.completeGameStateInitialization();
+    this.debugManager = new DebugManager(this);
+    this.inputHandler = new InputHandler(this);
+    window.requestAnimationFrame(timestamp => this.animate(timestamp));
+  }
 
- animate(timestamp) {
- if (!this.lastTimestamp) this.lastTimestamp = timestamp;
- const deltaTime = timestamp - this.lastTimestamp;
- this.lastTimestamp = timestamp;
- this.update(deltaTime);
- this.renderer.render();
- window.requestAnimationFrame((timestamp) => this.animate(timestamp));
- }
+  animate(timestamp) {
+    if (!this.lastTimestamp) this.lastTimestamp = timestamp;
+    const deltaTime = timestamp - this.lastTimestamp;
+    this.lastTimestamp = timestamp;
+    this.update(deltaTime);
+    this.renderer.render();
+    window.requestAnimationFrame(timestamp => this.animate(timestamp));
+  }
 }
 ```
 
@@ -50,35 +50,35 @@ Game objects are plain classes - nothing fancy:
 
 ```javascript
 export class Platform {
- constructor(x, w, id) {
- this.x = x;
- this.w = w;
- this.id = id;
- }
+  constructor(x, w, id) {
+    this.x = x;
+    this.w = w;
+    this.id = id;
+  }
 }
 
 export class Stick {
- constructor(x, length = 0, rotation = 0) {
- this.x = x;
- this.length = length;
- this.rotation = rotation;
- }
+  constructor(x, length = 0, rotation = 0) {
+    this.x = x;
+    this.length = length;
+    this.rotation = rotation;
+  }
 }
 
 export class Server {
- constructor(x) {
- this.x = x;
- const serverColors = ["#4A5568", "#2D3748", "#1A202C"];
- this.color = serverColors[Math.floor(Math.random() * serverColors.length)];
- this.indicatorLights = [];
- const rackLines = 5;
- for (let j = 0; j < rackLines; j++) {
- if (Math.random() > 0.5) {
- const lightColor = Math.random() > 0.5 ? "#68D391" : "#F56565";
- this.indicatorLights.push({ rack: j, color: lightColor });
- }
- }
- }
+  constructor(x) {
+    this.x = x;
+    const serverColors = ["#4A5568", "#2D3748", "#1A202C"];
+    this.color = serverColors[Math.floor(Math.random() * serverColors.length)];
+    this.indicatorLights = [];
+    const rackLines = 5;
+    for (let j = 0; j < rackLines; j++) {
+      if (Math.random() > 0.5) {
+        const lightColor = Math.random() > 0.5 ? "#68D391" : "#F56565";
+        this.indicatorLights.push({ rack: j, color: lightColor });
+      }
+    }
+  }
 }
 ```
 
@@ -86,58 +86,58 @@ The character animation was the first real headache. Five states - waiting, codi
 
 ```javascript
 const gameStatus = {
- waiting: "waiting",
- coding: "coding",
- deploying: "deploying",
- running: "running",
- migrating: "migrating",
- crashing: "crashing",
+  waiting: "waiting",
+  coding: "coding",
+  deploying: "deploying",
+  running: "running",
+  migrating: "migrating",
+  crashing: "crashing",
 };
 
 function drawCharacter(ctx, phase, heroX, heroY, canvasHeight, platformHeight) {
- ctx.save();
- ctx.translate(
- heroX - heroWidth / 2,
- heroY + canvasHeight - platformHeight - heroHeight / 2
- );
+  ctx.save();
+  ctx.translate(
+    heroX - heroWidth / 2,
+    heroY + canvasHeight - platformHeight - heroHeight / 2
+  );
 
- if (phase === "waiting") {
- if (forceBlinkCheck) {
- const now = Date.now();
- if (now - lastBlinkTime > timeBetweenBlinks) {
- blinkState = "closing";
- blinkTimer = 0;
- consecutiveBlinkCount = 1;
- lastBlinkTime = now;
- }
- }
- updateBlinkState();
- } else {
- blinkState = "open";
- }
+  if (phase === "waiting") {
+    if (forceBlinkCheck) {
+      const now = Date.now();
+      if (now - lastBlinkTime > timeBetweenBlinks) {
+        blinkState = "closing";
+        blinkTimer = 0;
+        consecutiveBlinkCount = 1;
+        lastBlinkTime = now;
+      }
+    }
+    updateBlinkState();
+  } else {
+    blinkState = "open";
+  }
 
- drawCharacterBase(ctx, phase !== "running", phase);
+  drawCharacterBase(ctx, phase !== "running", phase);
 
- switch (phase) {
- case "waiting":
- drawWaitingState(ctx);
- break;
- case "coding":
- drawCodingState(ctx, true);
- break;
- case "deploying":
- drawCodingState(ctx, false);
- break;
- case "running":
- case "migrating":
- drawRunningState(ctx);
- break;
- case "crashing":
- drawCrashingState(ctx);
- break;
- }
+  switch (phase) {
+    case "waiting":
+      drawWaitingState(ctx);
+      break;
+    case "coding":
+      drawCodingState(ctx, true);
+      break;
+    case "deploying":
+      drawCodingState(ctx, false);
+      break;
+    case "running":
+    case "migrating":
+      drawRunningState(ctx);
+      break;
+    case "crashing":
+      drawCrashingState(ctx);
+      break;
+  }
 
- ctx.restore();
+  ctx.restore();
 }
 ```
 
@@ -148,9 +148,9 @@ Visually I leaned hard into the dark-mode aesthetic. If I'm going to stare at th
 ```css
 html,
 body {
- background-color: #1a202c;
- color: #e2e8f0;
- font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+  background-color: #1a202c;
+  color: #e2e8f0;
+  font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
 }
 ```
 
