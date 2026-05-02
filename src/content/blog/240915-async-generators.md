@@ -1,41 +1,19 @@
 ---
 author: Romain C.
 pubDatetime: 2024-09-15T14:20:00Z
-title: "Async Generators in JavaScript: Taming the Data Flood"
+title: "Async Generators: Streaming Data Without the Memory Pain"
 slug: async-generators
 featured: false
 draft: false
 tags: ["javascript", "async", "generators", "streams", "performance"]
-description: "A deep dive into using async generators for handling large data streams efficiently"
+description: "How async generators let you process data as it arrives instead of loading everything into memory."
 ---
 
-In the world of modern web development, we often find ourselves dealing with large amounts of data. Whether it's streaming API responses, processing large files, or handling real-time updates, managing data flow efficiently is crucial. Enter async generators - a powerful feature that combines the best of async programming and iterative processing.
+Loading a 10,000-item array into memory just to process it one by one is wasteful. Async generators let you yield values as they arrive, keeping memory usage flat regardless of dataset size.
 
-## Understanding Async Generators
+## Paginated APIs
 
-At their core, async generators are a fusion of two powerful JavaScript features: async/await and generator functions. They allow you to create functions that can pause execution, yield values asynchronously, and resume when needed.
-
-```javascript
-async function* numberStream() {
-  for (let i = 0; i < 1000; i++) {
-    // Simulate async operation
-    await new Promise(resolve => setTimeout(resolve, 100));
-    yield i;
-  }
-}
-
-// Using the generator
-const stream = numberStream();
-for await (const number of stream) {
-  console.log(number);
-}
-```
-
-## Real-World Applications
-
-Let's look at some practical examples where async generators shine:
-
-### 1. Paginated API Calls
+Instead of fetching all pages upfront, yield each user as you get them:
 
 ```javascript
 async function* fetchAllUsers() {
@@ -43,47 +21,41 @@ async function* fetchAllUsers() {
   while (true) {
     const response = await fetch(`/api/users?page=${page}`);
     const data = await response.json();
-
     if (data.users.length === 0) break;
-
     yield* data.users;
     page++;
   }
 }
 
-// Process users one at a time
 for await (const user of fetchAllUsers()) {
   await processUser(user);
 }
 ```
 
-### 2. Large File Processing
+`yield*` delegates to another iterable, so each user is yielded individually even though they arrive in pages.
+
+## File Chunks
+
+Read a large file in 64KB chunks without loading the whole thing:
 
 ```javascript
 async function* readFileByChunks(file) {
-  const chunkSize = 64 * 1024; // 64KB chunks
   const reader = file.stream().getReader();
-
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
     yield value;
   }
 }
-
-// Process file chunks
-const file = await fetch("large-file.txt").then(r => r.blob());
-for await (const chunk of readFileByChunks(file)) {
-  await processChunk(chunk);
-}
 ```
 
-### 3. Real-time Data Handling
+## WebSocket Streams
+
+Turn a WebSocket into an async iterable:
 
 ```javascript
 async function* webSocketStream(url) {
   const ws = new WebSocket(url);
-
   try {
     while (true) {
       const message = await new Promise((resolve, reject) => {
@@ -96,65 +68,32 @@ async function* webSocketStream(url) {
     ws.close();
   }
 }
-
-// Handle real-time updates
-const stream = webSocketStream("wss://api.example.com/live");
-for await (const update of stream) {
-  await handleUpdate(update);
-}
 ```
 
-## Best Practices and Patterns
+The `finally` block ensures cleanup even if the consumer breaks early.
 
-When working with async generators, keep these principles in mind:
+## The One Gotcha
 
-1. **Memory Management**: Yield values as soon as they're available to prevent memory buildup
-2. **Error Handling**: Use try/catch blocks effectively within generator functions
-3. **Resource Cleanup**: Implement proper cleanup in finally blocks
-4. **Backpressure**: Consider implementing backpressure mechanisms for data streams
+Async generators are lazy but not parallel. Each `yield` waits for the previous one to finish. If you're doing independent work per item, use `Promise.all` on a batch instead.
 
 ```javascript
-async function* withBackpressure(source, processFunc) {
-  for await (const item of source) {
-    await processFunc(item); // Natural backpressure
-    yield item;
-  }
+// Sequential — slow for independent work
+for await (const item of source) {
+  await process(item); // Each waits for the previous
 }
-```
 
-## Performance Considerations
-
-Async generators are powerful, but they come with some overhead. Here are some tips for optimal performance:
-
-1. **Batch Processing**: Sometimes yielding in batches is more efficient
-
-```javascript
+// Parallel — batch instead
 async function* batchProcessor(source, batchSize = 100) {
   let batch = [];
   for await (const item of source) {
     batch.push(item);
     if (batch.length >= batchSize) {
-      yield batch;
+      yield await Promise.all(batch.map(process));
       batch = [];
     }
   }
-  if (batch.length > 0) yield batch;
+  if (batch.length) yield await Promise.all(batch.map(process));
 }
 ```
 
-2. **Caching**: Cache results when appropriate
-3. **Early Termination**: Implement break conditions to stop processing when needed
-
-## The Future of Data Processing
-
-Async generators represent a paradigm shift in how we handle data streams in JavaScript. They provide a clean, efficient way to process large amounts of data while maintaining control over memory usage and processing speed.
-
-As we move towards more data-intensive applications, understanding and effectively using async generators becomes increasingly important. They're not just a feature - they're a fundamental tool in the modern developer's arsenal.
-
-Remember: The key to handling large data streams isn't just about processing everything at once, but about maintaining a steady, controlled flow of data. Async generators give us exactly that - a way to tame the data flood, one yield at a time.
-
-## Further Reading
-
-- [MDN Web Docs: Web Streams API](https://developer.mozilla.org/en-US/docs/Web/API/Streams_API)
-- [MDN Web Docs: Async Iterators and Generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of#iterating_over_async_generators)
-- [Node.js Streams and Async Generators](https://nodejs.org/api/stream.html#streams-compatibility-with-async-generators-and-async-iterators)
+Async generators aren't magic. They're just a clean syntax for "get the next thing when I ask for it." But that simplicity is exactly what makes them useful for streams, pagination, and anything too big to fit in memory at once.

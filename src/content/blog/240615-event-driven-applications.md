@@ -1,48 +1,42 @@
 ---
 author: Romain C.
 pubDatetime: 2024-06-15T09:00:00Z
-title: "Building Modern Event-Driven Systems"
+title: "Event-Driven Systems: What Actually Works"
 slug: event-driven-applications
 featured: false
 draft: false
 tags: ["event-driven", "architecture", "cloud", "microservices"]
-description: "Insights into building and scaling event-driven systems"
+description: "Event-driven architecture in practice, not theory."
 ---
 
-While most articles focus on theoretical benefits, let's discuss what actually works in production. Event-driven architecture isn't just about publishing and subscribing to events - it's about designing systems that can evolve and scale with your business needs.
+Event-driven architecture is sold as the solution to everything. In practice, it's a trade-off: you gain decoupling, but you lose immediate consistency and simple debugging.
 
-### The Event-Driven Mindset
+## What "Event-Driven" Actually Means
 
-Instead of thinking in terms of direct requests, consider your system as a series of state changes:
+Instead of Service A calling Service B directly, Service A publishes an event (“OrderCreated”) and forgets about it. Service B listens and reacts. They don't know about each other.
 
-1. **State Changes as Facts**: Each event represents an immutable fact about something that happened.
-2. **Event Ownership**: Define clear boundaries around who can emit specific events.
-3. **Consumer Independence**: Services should be able to interpret events without tight coupling to producers.
+This is great until you need to know if Service B actually processed the order. Then you're adding polling, callbacks, or sagas, and the simplicity is gone.
 
-## Implementation Patterns
+## Event Versioning
 
-### Pattern 1: Event Versioning
-
-Handling event schema evolution is crucial for maintaining compatibility:
+Events change. The `OrderCreated` event from last year probably has different fields than today's version. I add a version field and a schema URL:
 
 ```javascript
-// Example event with versioning
-const orderCreatedEvent = {
+const event = {
   type: "ORDER_CREATED",
   version: "2024-01",
-  payload: {
-    orderId: "123",
-    items: [],
-    meta: {
-      schemaUrl: "https://schema.company.com/events/order-created/2024-01",
-    },
+  payload: { orderId: "123", items: [] },
+  meta: {
+    schemaUrl: "https://schema.company.com/events/order-created/2024-01",
   },
 };
 ```
 
-### Pattern 2: Smart Consumers
+Consumers check the version and handle what they understand. Don't break old consumers for new fields.
 
-Implement consumers with resilience and error handling in mind:
+## Handling Failures
+
+Events fail. Networks blip, databases lock, code has bugs. I use a simple retry + dead letter pattern:
 
 ```javascript
 class OrderEventConsumer {
@@ -60,104 +54,12 @@ class OrderEventConsumer {
 }
 ```
 
-## Common Pitfalls and Solutions
+Dead letter queues are your insurance policy. Without them, failed events just disappear.
 
-### 1. Event Storm Prevention
+## When I Don't Use Events
 
-Implement an event governance model to prevent event storms:
+- When the caller needs an immediate response
+- When consistency matters more than availability
+- When the system is small enough that direct calls are simpler
 
-```javascript
-class EventEmitter {
-  emit(event) {
-    if (!this.validateEventContract(event)) {
-      throw new Error("Event contract violation");
-    }
-    if (this.wouldCauseEventStorm(event)) {
-      return this.throttleEvent(event);
-    }
-    return this.publish(event);
-  }
-}
-```
-
-### 2. Debugging and Monitoring
-
-Use correlation IDs and tracing to track event flows:
-
-```javascript
-const trace = {
-  correlationId: uuidv4(),
-  path: [],
-  startTime: Date.now(),
-};
-
-async function processEvent(event, trace) {
-  trace.path.push(process.env.SERVICE_NAME);
-  // Process event
-  await nextService.send({ ...event, trace });
-}
-```
-
-## Advanced Patterns
-
-### 1. Event Sourcing with Snapshots
-
-Maintain an event log with periodic snapshots to rebuild state:
-
-```javascript
-class OrderAggregate {
-  async rebuild(upToEventId) {
-    const snapshot = await this.getLatestSnapshotBefore(upToEventId);
-    const events = await this.getEventsSince(snapshot.eventId);
-
-    return events.reduce(
-      (state, event) => this.apply(state, event),
-      snapshot.state
-    );
-  }
-}
-```
-
-### 2. Saga Pattern Implementation
-
-Manage distributed transactions through event choreography:
-
-```javascript
-class OrderSaga {
-  async start() {
-    const steps = [
-      this.validateInventory,
-      this.processPayment,
-      this.updateInventory,
-      this.notifyShipping,
-    ];
-
-    for (const step of steps) {
-      try {
-        await step();
-      } catch (error) {
-        return this.compensate(error);
-      }
-    }
-  }
-}
-```
-
-## Looking Forward
-
-The future of event-driven systems lies in:
-
-- Event-driven APIs using WebSockets and Server-Sent Events
-- Smart event routing based on AI/ML
-- Automated event schema evolution
-- Real-time event processing at the edge
-
-## Conclusion
-
-Building successful event-driven systems requires more than just understanding the theory. It's about making practical decisions that balance complexity with maintainability, and scalability with reliability.
-
-## Additional Resources
-
-- [OpenTelemetry for event tracing](https://opentelemetry.io/)
-- [CloudEvents spec](https://cloudevents.io/)
-- [Event Modeling examples](https://eventmodeling.org/)
+Event-driven architecture is a tool, not a religion. Use it where decoupling actually helps, not because it's the current trend.
