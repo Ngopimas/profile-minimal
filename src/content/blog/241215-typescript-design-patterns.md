@@ -1,312 +1,101 @@
 ---
 author: Romain C.
 pubDatetime: 2024-12-15T10:00:00Z
-title: "Design Patterns in TypeScript"
+title: "Design Patterns I Actually Use"
 slug: typescript-design-patterns
 featured: false
 draft: false
 tags: ["typescript", "design-patterns", "software-engineering"]
-description: "A quick guide to essential design patterns in TypeScript"
+description: "A no-nonsense look at the design patterns that show up in real TypeScript codebases."
 ---
 
-Design patterns are proven solutions to common problems in software design. They provide a template for writing code that is easy to understand, maintain, and extend. Let's explore five essential design patterns in TypeScript: Singleton, Factory, Observer, Strategy, and Decorator.
+Design pattern articles usually feel like homework. Singleton, Factory, Observer, Strategy, Decorator—each one gets a "What is it?" section, a code block, and a "Pros and Cons" table. Nobody writes code like that in practice. Here's what I actually reach for.
 
-## 1. Singleton Pattern
+## Factory-ish Things
 
-### What is it?
-
-The Singleton pattern ensures that a class has only one instance and provides a global point of access to it.
-
-### Implementation
+I rarely implement a full-blown Factory class with a switch statement. What I do use all the time is a simple function that returns different implementations based on a config value or environment variable:
 
 ```typescript
-class Logger {
-  private static instance: Logger;
-
-  private constructor() {}
-
-  public static getInstance(): Logger {
-    if (!Logger.instance) {
-      Logger.instance = new Logger();
-    }
-    return Logger.instance;
-  }
-
-  log(message: string): void {
-    console.log(`[LOG]: ${message}`);
-  }
+function createStorage(type: "local" | "session" | "memory") {
+  if (type === "local") return new LocalStorageAdapter();
+  if (type === "session") return new SessionStorageAdapter();
+  return new InMemoryStorageAdapter();
 }
-
-const loggerA = Logger.getInstance();
-const loggerB = Logger.getInstance();
-loggerA.log("Singleton pattern example");
-console.log(loggerA === loggerB); // true
 ```
 
-### Pros and Cons
+That's it. No `Factory` suffix, no UML diagram. Just a function that makes the right thing.
 
-**Pros:**
+## The Observer Pattern Is Just Events
 
-- Controlled access to the single instance.
-- Reduces the need for global variables.
+You don't need a `Subject` class with `addObserver` and `removeObserver` methods. In browser code, the Observer pattern is literally the DOM event system. In Node, it's `EventEmitter`. In React, it's a state management library. The concept is everywhere; the class hierarchy from the Gang of Four book is nowhere.
 
-**Cons:**
-
-- Can make unit testing tricky.
-- May introduce hidden dependencies.
-
-## 2. Factory Pattern
-
-### What is it?
-
-The Factory pattern provides a way to create objects without specifying the exact class of object that will be created.
-
-### Implementation
+If you're building something custom, a typed event emitter in TypeScript is usually enough:
 
 ```typescript
-interface Notification {
-  send(message: string): void;
-}
+type Events = {
+  userLoggedIn: { id: string };
+  dataLoaded: { items: Item[] };
+};
 
-class EmailNotification implements Notification {
-  send(message: string): void {
-    console.log(`Sending email: ${message}`);
+class TypedEmitter {
+  private listeners: Partial<Record<keyof Events, Function[]>> = {};
+
+  on<K extends keyof Events>(event: K, handler: (payload: Events[K]) => void) {
+    (this.listeners[event] ??= []).push(handler);
+  }
+
+  emit<K extends keyof Events>(event: K, payload: Events[K]) {
+    this.listeners[event]?.forEach(h => h(payload));
   }
 }
-
-class SMSNotification implements Notification {
-  send(message: string): void {
-    console.log(`Sending SMS: ${message}`);
-  }
-}
-
-class NotificationFactory {
-  public static createNotification(type: string): Notification {
-    switch (type) {
-      case "email":
-        return new EmailNotification();
-      case "sms":
-        return new SMSNotification();
-      default:
-        throw new Error("Unknown notification type");
-    }
-  }
-}
-
-const emailNotification = NotificationFactory.createNotification("email");
-emailNotification.send("Hello via Email!");
-
-const smsNotification = NotificationFactory.createNotification("sms");
-smsNotification.send("Hello via SMS!");
 ```
 
-### Pros and Cons
+## Strategy Pattern = Passing Functions
 
-**Pros:**
-
-- Encapsulates object creation logic.
-- Makes it easier to add new types of products.
-
-**Cons:**
-
-- Can introduce complexity for simple object creation.
-
-## 3. Observer Pattern
-
-### What is it?
-
-The Observer pattern allows an object (subject) to notify other objects (observers) about changes in its state.
-
-### Implementation
-
-```typescript
-class WeatherStation {
-  private temperature: number = 0;
-  private observers: Observer[] = [];
-
-  addObserver(observer: Observer): void {
-    this.observers.push(observer);
-  }
-
-  removeObserver(observer: Observer): void {
-    this.observers = this.observers.filter(obs => obs !== observer);
-  }
-
-  setTemperature(temp: number): void {
-    console.log(`WeatherStation: new temperature measurement: ${temp}`);
-    this.temperature = temp;
-    this.notifyObservers();
-  }
-
-  private notifyObservers(): void {
-    for (const observer of this.observers) {
-      observer.update(this.temperature);
-    }
-  }
-}
-
-interface Observer {
-  update(temperature: number): void;
-}
-
-class TemperatureDisplay implements Observer {
-  update(temperature: number): void {
-    console.log(
-      `TemperatureDisplay: I need to update my display to ${temperature}`
-    );
-  }
-}
-
-const weatherStation = new WeatherStation();
-const tempDisplay = new TemperatureDisplay();
-
-weatherStation.addObserver(tempDisplay);
-weatherStation.setTemperature(25);
-weatherStation.setTemperature(30);
-```
-
-### Pros and Cons
-
-**Pros:**
-
-- Promotes loose coupling.
-- Supports broadcast communication.
-
-**Cons:**
-
-- Can be complex to manage with many observers.
-
-## 4. Strategy Pattern
-
-### What is it?
-
-The Strategy pattern defines a family of algorithms, encapsulates each one, and makes them interchangeable.
-
-### Implementation
+The Strategy pattern sounds fancy until you realize it's just "pass a different function." Instead of:
 
 ```typescript
 class PaymentContext {
-  private strategy: PaymentStrategy;
-
-  setStrategy(strategy: PaymentStrategy): void {
-    this.strategy = strategy;
-  }
-
-  executeStrategy(amount: number): void {
-    this.strategy.pay(amount);
-  }
+  setStrategy(strategy: PaymentStrategy) { ... }
 }
-
-interface PaymentStrategy {
-  pay(amount: number): void;
-}
-
-class CreditCardPayment implements PaymentStrategy {
-  pay(amount: number): void {
-    console.log(`Paid ${amount} using Credit Card`);
-  }
-}
-
-class PayPalPayment implements PaymentStrategy {
-  pay(amount: number): void {
-    console.log(`Paid ${amount} using PayPal`);
-  }
-}
-
-const paymentContext = new PaymentContext();
-paymentContext.setStrategy(new CreditCardPayment());
-paymentContext.executeStrategy(100); // Paid 100 using Credit Card
-
-paymentContext.setStrategy(new PayPalPayment());
-paymentContext.executeStrategy(200); // Paid 200 using PayPal
 ```
 
-### Pros and Cons
-
-**Pros:**
-
-- Allows easy switching of algorithms.
-- Promotes open/closed principle.
-
-**Cons:**
-
-- Increases the number of classes.
-
-## 5. Decorator Pattern
-
-### What is it?
-
-The Decorator pattern allows behavior to be added to individual objects, dynamically, without affecting the behavior of other objects from the same class.
-
-### Implementation
+I write:
 
 ```typescript
-interface Coffee {
-  cost(): number;
-  description(): string;
+function processPayment(amount: number, processor: (n: number) => void) {
+  validateAmount(amount);
+  processor(amount);
 }
 
-class SimpleCoffee implements Coffee {
-  cost(): number {
-    return 5;
-  }
-
-  description(): string {
-    return "Simple coffee";
-  }
-}
-
-class MilkDecorator implements Coffee {
-  constructor(private coffee: Coffee) {}
-
-  cost(): number {
-    return this.coffee.cost() + 2;
-  }
-
-  description(): string {
-    return `${this.coffee.description()} with milk`;
-  }
-}
-
-class SugarDecorator implements Coffee {
-  constructor(private coffee: Coffee) {}
-
-  cost(): number {
-    return this.coffee.cost() + 1;
-  }
-
-  description(): string {
-    return `${this.coffee.description()} with sugar`;
-  }
-}
-
-let coffee: Coffee = new SimpleCoffee();
-console.log(`${coffee.description()} costs $${coffee.cost()}`);
-
-coffee = new MilkDecorator(coffee);
-console.log(`${coffee.description()} costs $${coffee.cost()}`);
-
-coffee = new SugarDecorator(coffee);
-console.log(`${coffee.description()} costs $${coffee.cost()}`);
+processPayment(100, payWithStripe);
+processPayment(200, payWithPayPal);
 ```
 
-### Pros and Cons
+No classes, no interfaces, no `Context`. Higher-order functions are the Strategy pattern without the ceremony.
 
-**Pros:**
+## Decorator = Composition or Higher-Order Functions
 
-- Flexible alternative to subclassing.
-- Can add responsibilities to objects dynamically.
+I use decorators in TypeScript (`@Injectable`, `@Component`), but I almost never write my own class-based decorators. When I need to layer behavior, I compose functions:
 
-**Cons:**
+```typescript
+const withLogging = (fn: () => void) => () => {
+  console.log("start");
+  fn();
+  console.log("end");
+};
 
-- Can lead to a large number of small classes.
+const withRetry = (fn: () => Promise<void>) => async () => {
+  for (let i = 0; i < 3; i++) {
+    try { return await fn(); } catch (e) { if (i === 2) throw e; }
+  }
+};
+```
 
-## Conclusion
+## What About Singleton?
 
-Design patterns are essential tools in a developer's toolkit. They provide solutions to common problems and help create code that is maintainable and scalable. Understanding and applying these patterns in TypeScript improve the quality of the codebase.
+I don't use Singleton on purpose. Module-level exports in ES modules are already singletons. `export const db = createConnection()` is a singleton. You don't need a `getInstance()` method.
 
-## Further Reading
+## The Real Pattern
 
-- [Refactoring Guru: Design Patterns](https://refactoring.guru/design-patterns)
-- [Head First Design Patterns](https://www.oreilly.com/library/view/head-first-design/0596007124/)
-- [Top 5 Essential JavaScript Design ](https://blogs.thnkandgrow.com/mastering-javascript-top-5-design-patterns//)
+If there's one pattern that matters more than the GoF list, it's "keep related code together and separate what changes from what stays the same." That's just good function boundaries. Everything else is a specific case of that principle.
