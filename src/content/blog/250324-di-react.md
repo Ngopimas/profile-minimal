@@ -1,18 +1,20 @@
 ---
 author: Romain C.
 pubDatetime: 2025-03-24T17:30:00Z
-title: "Dependency Injection in React?"
+title: "You Probably Don't Need Dependency Injection in React"
 featured: false
 draft: false
 tags: ["react", "testing", "architecture", "typescript"]
-description: "Benefits and trade-offs of using Dependency Injection pattern in React"
+description: "DI in React: when it helps, when it gets in the way, and how to do it without overengineering."
 ---
 
-Dependency Injection (DI) is a design pattern often associated with backend languages like Java or C#. However, it can also be a powerful tool in React applications, improving testability, flexibility, and maintainability. Let's explore when and how to use DI effectively in React.
+I used to think Dependency Injection was something Java developers argued about while React devs just imported what they needed and moved on. But after refactoring a codebase where half the components were married to a specific API client, I changed my mind.
 
-## The Problem: Tightly Coupled Dependencies
+DI in React isn't about frameworks or containers. It's about not hard-coding dependencies so you can swap them out later—usually for tests.
 
-Consider this common scenario in React:
+## The Mess It Fixes
+
+Here's the pattern I see everywhere:
 
 ```tsx
 function UserProfile({ userId }: { userId: string }) {
@@ -31,28 +33,11 @@ function UserProfile({ userId }: { userId: string }) {
 }
 ```
 
-This approach tightly couples the component to the `fetch` API, making it hard to test, reuse, or switch implementations.
+It works. Until you want to test it without hitting the real API, or reuse it with a GraphQL endpoint, or mock it in Storybook. Then you're stuck.
 
-## What is Dependency Injection?
+## Props: The Simplest Fix
 
-Dependency Injection allows components to receive their dependencies externally rather than creating them internally. This decouples components from specific implementations.
-
-### Benefits
-
-- **Loose Coupling**: Components depend on abstractions, not implementations.
-- **Testability**: Dependencies can be mocked for testing.
-- **Flexibility**: Swap implementations without changing component logic.
-
-### Challenges
-
-- **Complexity**: Requires additional setup.
-- **Learning Curve**: Team members must understand DI principles.
-
-## DI Implementation Patterns in React
-
-### 1. Props-Based Injection
-
-The simplest form of DI is passing dependencies as props:
+Pass the dependency as a prop:
 
 ```tsx
 interface UserService {
@@ -85,9 +70,22 @@ const userService: UserService = {
 <UserProfile userId="123" userService={userService} />;
 ```
 
-### 2. Context-Based Injection
+Now you can hand in a mock for tests:
 
-For larger applications, the Context API provides a scalable DI solution:
+```tsx
+const mockUserService: UserService = {
+  getUser: jest.fn().mockResolvedValue({ id: "1", name: "John Doe" }),
+};
+
+render(<UserProfile userId="1" userService={mockUserService} />);
+expect(mockUserService.getUser).toHaveBeenCalledWith("1");
+```
+
+No magic. Just props.
+
+## Context: When Props Become Tedious
+
+If you're threading the same service through five layers of components, Context is cleaner:
 
 ```tsx
 const UserServiceContext = createContext<UserService | null>(null);
@@ -118,46 +116,19 @@ export function useUserService() {
 </UserServiceProvider>;
 ```
 
-### 3. Advanced Patterns (Optional)
+## When You Actually Need This
 
-For complex applications, consider splitting contexts or memoizing services to optimize performance.
+- The app is large enough that you have multiple implementations of the same thing (real API, mock API, cached API).
+- You write tests and you're tired of mocking `fetch` globally.
+- You're building a library and don't know what backend the consumer will use.
 
-## When to Use DI
+## When You Don't
 
-### Good Use Cases
+- A prototype with a two-week lifespan.
+- A page with one API call that never changes.
+- Any situation where the "abstraction" is just wrapping `fetch` with no real benefit.
 
-- Large applications with complex dependencies
-- Applications requiring extensive testing
-- Scenarios with multiple implementation variants
-
-### When to Avoid
-
-- Small or simple applications
-- Performance-critical components
-- Rapid prototypes
-
-## Testing with DI
-
-DI simplifies testing by allowing you to mock dependencies:
-
-```tsx
-const mockUserService: UserService = {
-  getUser: jest.fn().mockResolvedValue({ id: "1", name: "John Doe" }),
-};
-
-render(<UserProfile userId="1" userService={mockUserService} />);
-expect(mockUserService.getUser).toHaveBeenCalledWith("1");
-```
-
-## Conclusion
-
-Dependency Injection in React enhances flexibility, testability, and maintainability but comes with added complexity. Start simple with props-based injection and evolve to context-based DI as your application grows. Always weigh the trade-offs before adopting DI.
-
-### TL;DR
-
-1. Use DI to decouple components from specific implementations.
-2. Start with simple patterns and scale as needed.
-3. Prioritize maintainability and testability over unnecessary abstraction.
+I've seen teams introduce DI layers so complex they needed documentation. The goal is looser coupling, not more architecture.
 
 ## Further Reading
 
