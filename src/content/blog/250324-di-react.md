@@ -10,7 +10,7 @@ description: "DI in React: when it helps, when it gets in the way, and how to do
 
 I used to think Dependency Injection was something Java developers argued about while React devs just imported what they needed and moved on. But after refactoring a codebase where half the components were married to a specific API client, I changed my mind.
 
-DI in React isn't about frameworks or containers. It's about not hard-coding dependencies so you can swap them out later—usually for tests.
+DI in React isn't about frameworks or containers. It's about not hard-coding dependencies so you can swap them out later - usually for tests.
 
 ## The Mess It Fixes
 

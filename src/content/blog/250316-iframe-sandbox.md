@@ -9,7 +9,7 @@ tags: ["security", "iframe", "web development", "frontend", "cross-origin"]
 description: "Practical iframe security: what actually goes wrong and how to lock things down without breaking your app."
 ---
 
-Iframes are ancient, messy, and somehow still everywhere. Maps, payment widgets, comment sections, embedded videos—half the web runs inside little boxes inside bigger boxes. The problem is that every iframe you embed is essentially a window into someone else's code running on your domain. That's not great.
+Iframes are ancient, messy, and somehow still everywhere. Maps, payment widgets, comment sections, embedded videos - half the web runs inside little boxes inside bigger boxes. The problem is that every iframe you embed is essentially a window into someone else's code running on your domain. That's not great.
 
 Here's what I've learned about keeping iframes under control without losing the functionality you actually need.
 
@@ -26,11 +26,11 @@ If your iframe doesn't have a `sandbox` attribute, fix that now. A bare sandbox 
 
 Common permissions you'll actually use:
 
-- `allow-scripts` — lets JavaScript run
-- `allow-forms` — allows form submission
-- `allow-same-origin` — keeps the original origin (be careful with this one)
-- `allow-popups` — lets the iframe open new windows
-- `allow-popups-to-escape-sandbox` — popups get fewer restrictions than the parent iframe
+- `allow-scripts` - lets JavaScript run
+- `allow-forms` - allows form submission
+- `allow-same-origin` - keeps the original origin (be careful with this one)
+- `allow-popups` - lets the iframe open new windows
+- `allow-popups-to-escape-sandbox` - popups get fewer restrictions than the parent iframe
 
 For a commenting widget, you might need:
 

@@ -27,7 +27,7 @@ By converting every price into minutes of work at a given salary, you get a univ
 
 ## What It Does
 
-The app tracks **30+ consumer products** — from baguettes and coffee to cinema tickets, electricity, and rent — across seven decades of data. You can browse interactive charts for each product, switch between minimum wage, median salary and mean salary to recalculate everything on the fly, compare two years side by side, or look at the aggregated purchasing power index with overlays for inflation, productivity, and presidential terms. Everything is bilingual and works in dark mode, because I like my charts readable at 11pm.
+The app tracks **30+ consumer products** - from baguettes and coffee to cinema tickets, electricity, and rent - across seven decades of data. You can browse interactive charts for each product, switch between minimum wage, median salary and mean salary to recalculate everything on the fly, compare two years side by side, or look at the aggregated purchasing power index with overlays for inflation, productivity, and presidential terms. Everything is bilingual and works in dark mode, because I like my charts readable at 11pm.
 
 ## The Stack
 
@@ -178,7 +178,7 @@ When each design iteration takes 2 minutes instead of 2 hours, you explore more 
 
 ## TL;DR
 
-Measuring prices in minutes of work cuts through inflation and currency changes. The app tracks 30+ items over 70+ years, using net (not gross) minimum wage as the baseline. Switching between SMIC, median and mean salary reveals different economic stories. The productivity overlay shows French workers produce 4.2x more value per hour than in 1960, but their purchasing power only grew 2.2x. AI helped build and audit the project, but the hard part was sourcing the data — no API has the 1965 croissant price.
+Measuring prices in minutes of work cuts through inflation and currency changes. The app tracks 30+ items over 70+ years, using net (not gross) minimum wage as the baseline. Switching between SMIC, median and mean salary reveals different economic stories. The productivity overlay shows French workers produce 4.2x more value per hour than in 1960, but their purchasing power only grew 2.2x. AI helped build and audit the project, but the hard part was sourcing the data - no API has the 1965 croissant price.
 
 ## Further Reading
 
