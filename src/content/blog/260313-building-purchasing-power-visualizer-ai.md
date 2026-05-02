@@ -27,16 +27,7 @@ By converting every price into minutes of work at a given salary, you get a univ
 
 ## What It Does
 
-The app tracks **30+ consumer products** - from baguettes and coffee to cinema tickets, electricity, and rent - across seven decades of data. Here's what you get:
-
-- **Interactive charts** for each product, showing its cost in minutes of work over time, with an optional inflation overlay
-- **A salary reference selector** - switch between SMIC (minimum wage), median salary, or mean salary and watch every chart, comparison, and insight recalculate instantly
-- **A purchasing power index** aggregating everything into a single trend line, with overlays for CPI inflation, labour productivity (GDP per hour worked), and French presidential timelines
-- **A comparison tool** where you pick two years and instantly see whether something got cheaper or more expensive to earn
-- **Dynamic insights cards** - all figures computed from the actual data, adapting automatically when you switch salary references
-- **Product categories** including food, energy, housing, tobacco, transport, and services
-- **Bilingual support** - every label, tooltip, and insight toggles between French and English
-- **Dark mode** with distinct chart color palettes per theme
+The app tracks **30+ consumer products** — from baguettes and coffee to cinema tickets, electricity, and rent — across seven decades of data. You can browse interactive charts for each product, switch between minimum wage, median salary and mean salary to recalculate everything on the fly, compare two years side by side, or look at the aggregated purchasing power index with overlays for inflation, productivity, and presidential terms. Everything is bilingual and works in dark mode, because I like my charts readable at 11pm.
 
 ## The Stack
 
@@ -187,13 +178,7 @@ When each design iteration takes 2 minutes instead of 2 hours, you explore more 
 
 ## TL;DR
 
-- **"Minutes of work" is a powerful lens** for understanding purchasing power - it normalizes across inflation, currency changes, and decades.
-- **30+ items over 70+ years of data**, all in a static React app with Chart.js, shadcn/ui, and Tailwind.
-- **Net SMIC, not gross** - the denominator matters, and getting it wrong silently distorts everything.
-- **Three salary references** (SMIC, median, mean) reveal different economic stories from the same data.
-- **Productivity overlay** shows the growing gap between what French workers produce and what they can buy.
-- **AI-assisted development** worked best as an iterative loop: intent, build, critique, refine - and then audit. The human brings taste and editorial judgment; the AI brings speed, consistency, and a willingness to question your assumptions.
-- **The hard part is always the data.** No API will give you the price of a croissant in 1965. You need to dig.
+Measuring prices in minutes of work cuts through inflation and currency changes. The app tracks 30+ items over 70+ years, using net (not gross) minimum wage as the baseline. Switching between SMIC, median and mean salary reveals different economic stories. The productivity overlay shows French workers produce 4.2x more value per hour than in 1960, but their purchasing power only grew 2.2x. AI helped build and audit the project, but the hard part was sourcing the data — no API has the 1965 croissant price.
 
 ## Further Reading
 
