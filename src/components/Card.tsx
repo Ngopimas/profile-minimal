@@ -9,7 +9,12 @@ export interface Props {
   readingTime?: string;
 }
 
-export default function Card({ href, frontmatter, secHeading = true, readingTime }: Props) {
+export default function Card({
+  href,
+  frontmatter,
+  secHeading = true,
+  readingTime,
+}: Props) {
   const { title, pubDatetime, modDatetime, description } = frontmatter;
 
   const headerProps = {

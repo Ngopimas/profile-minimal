@@ -11,7 +11,12 @@ const breadcrumbList = currentUrlPath.split("/").slice(1);
 breadcrumbList[0] === "posts" &&
   breadcrumbList.splice(0, 2, `Posts (page ${breadcrumbList[1] || 1})`);
 
-  breadcrumbList[0] === "projects" && breadcrumbList.splice(0, 2, `Projects & experiments (page ${breadcrumbList[1] || 1})`);
+breadcrumbList[0] === "projects" &&
+  breadcrumbList.splice(
+    0,
+    2,
+    `Projects & experiments (page ${breadcrumbList[1] || 1})`
+  );
 
 // if breadcrumb is Home > Tags > [tag] > [page] <etc>
 // replace [tag] > [page] with [tag] (page number)
@@ -63,7 +68,7 @@ breadcrumbList[0] === "tags" &&
     @apply inline;
   }
   .breadcrumb ul li a {
-    @apply capitalize
+    @apply capitalize;
   }
   .breadcrumb ul li span {
     @apply opacity-70;

@@ -17,9 +17,9 @@ A tagged template calls your function with two arguments: an array of string lit
 
 ```javascript
 function highlightValues(strings, ...values) {
- console.log(strings); // [ 'I have ', ' apples and ', ' oranges.' ]
- console.log(values); // [ 10, 20 ]
- return "Processed result";
+  console.log(strings); // [ 'I have ', ' apples and ', ' oranges.' ]
+  console.log(values); // [ 10, 20 ]
+  return "Processed result";
 }
 
 const x = 10;
@@ -35,13 +35,13 @@ The function can return anything - a string, an object, a React component. style
 
 ```javascript
 function html(strings, ...values) {
- return strings.reduce((result, str, i) => {
- const value = String(values[i] || "")
- .replace(/&/g, "&amp;")
- .replace(/</g, "&lt;")
- .replace(/>/g, "&gt;");
- return result + str + value;
- }, "");
+  return strings.reduce((result, str, i) => {
+    const value = String(values[i] || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+    return result + str + value;
+  }, "");
 }
 
 const userInput = '<script>alert("xss")</script>';
@@ -53,10 +53,10 @@ const safe = html`<div>${userInput}</div>`;
 
 ```javascript
 function sql(strings, ...values) {
- const query = strings.reduce((result, str, i) => {
- return result + str + (i < values.length ? `$${i + 1}` : "");
- }, "");
- return { text: query, values };
+  const query = strings.reduce((result, str, i) => {
+    return result + str + (i < values.length ? `$${i + 1}` : "");
+  }, "");
+  return { text: query, values };
 }
 
 const query = sql`SELECT * FROM users WHERE id = ${userId}`;
@@ -71,7 +71,7 @@ Tagged templates can access the raw, unescaped string through `strings.raw`. Use
 
 ```javascript
 function rawTag(strings) {
- console.log(strings.raw[0]); // "Line1\\nLine2" - the backslash is literal
+  console.log(strings.raw[0]); // "Line1\\nLine2" - the backslash is literal
 }
 rawTag`Line1\nLine2`;
 ```

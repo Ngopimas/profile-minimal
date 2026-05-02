@@ -44,14 +44,14 @@ I kept it simple: axis-aligned bounding boxes. Each sprite has a collision box t
 
 ```javascript
 class Sprite {
- isCollidingWith(other) {
- return (
- this.collisionBox.x < other.collisionBox.x + other.collisionBox.width &&
- this.collisionBox.x + this.collisionBox.width > other.collisionBox.x &&
- this.collisionBox.y < other.collisionBox.y + other.collisionBox.height &&
- this.collisionBox.y + this.collisionBox.height > other.collisionBox.y
- );
- }
+  isCollidingWith(other) {
+    return (
+      this.collisionBox.x < other.collisionBox.x + other.collisionBox.width &&
+      this.collisionBox.x + this.collisionBox.width > other.collisionBox.x &&
+      this.collisionBox.y < other.collisionBox.y + other.collisionBox.height &&
+      this.collisionBox.y + this.collisionBox.height > other.collisionBox.y
+    );
+  }
 }
 ```
 

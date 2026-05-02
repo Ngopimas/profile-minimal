@@ -20,7 +20,9 @@ async function getUserProfile(userId) {
   const cached = await redisClient.get(`user:${userId}`);
   if (cached) return JSON.parse(cached);
 
-  const profile = await database.query("SELECT * FROM users WHERE id = ?", [userId]);
+  const profile = await database.query("SELECT * FROM users WHERE id = ?", [
+    userId,
+  ]);
   await redisClient.set(`user:${userId}`, JSON.stringify(profile), "EX", 1800);
   return profile;
 }
@@ -41,7 +43,12 @@ Write to cache immediately, flush to database later in batches. Fast writes, but
 Every cached key should have a time-to-live. Even if you have explicit invalidation logic. I've debugged too many issues where "we clear the cache on update" turned out to miss an edge case. TTL is your insurance policy.
 
 ```javascript
-await redisClient.set(`weather:${cityId}`, JSON.stringify(forecast), "EX", 1800);
+await redisClient.set(
+  `weather:${cityId}`,
+  JSON.stringify(forecast),
+  "EX",
+  1800
+);
 ```
 
 ## What I Don't Do

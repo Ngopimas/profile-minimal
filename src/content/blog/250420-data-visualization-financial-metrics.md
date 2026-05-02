@@ -9,7 +9,7 @@ tags: ["data visualization", "finance", "best practices", "react", "recharts"]
 description: "Practical strategies for visualizing financial metrics without the confusion."
 ---
 
-Finance dashboards have a talent for making simple numbers look intimidating. I've sat in meetings where a perfectly healthy cash flow was hidden behind a 3D pie chart with seventeen slices. The problem usually isn't the data—it's the presentation.
+Finance dashboards have a talent for making simple numbers look intimidating. I've sat in meetings where a perfectly healthy cash flow was hidden behind a 3D pie chart with seventeen slices. The problem usually isn't the data - it's the presentation.
 
 Here are a few patterns I've learned from building finance dashboards that people actually use.
 
@@ -27,7 +27,7 @@ Direct labeling beats legends. A number sitting on top of a bar is faster to rea
 
 ## Make It Interactive, But Not Fragile
 
-Let people filter by date range or toggle metrics. Let them export the raw data when they want to dig deeper. But don't make the chart itself a puzzle—if the user has to hover over twelve data points to understand the trend, the chart failed.
+Let people filter by date range or toggle metrics. Let them export the raw data when they want to dig deeper. But don't make the chart itself a puzzle - if the user has to hover over twelve data points to understand the trend, the chart failed.
 
 ## Handle Large Datasets Without the Lag
 
@@ -39,7 +39,7 @@ Test your palettes with color-blind filters. Don't use red and green as your onl
 
 ## Example: A Revenue Chart That Doesn't Suck
 
-Here's a bar chart with a toggle, memoized transforms, and proper ARIA labels. Nothing fancy—just solid:
+Here's a bar chart with a toggle, memoized transforms, and proper ARIA labels. Nothing fancy - just solid:
 
 ```tsx
 import React, { useState, useMemo } from "react";
