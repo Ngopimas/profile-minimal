@@ -10,41 +10,50 @@ ogImage: "/assets/images/project-thumbs/en-minutes.jpg"
 image: "../../assets/images/project-thumbs/en-minutes-preview.png"
 ---
 
-En Minutes answers a simple question: what does something cost if you measure it in work time instead of euros?
+Raw prices are a bad way to talk about purchasing power.
 
-A baguette at 1.20€ today looks more expensive than a baguette in 1960. Raw prices are almost useless across decades, because inflation, francs, euros, wage growth, and tax changes all get mixed together. Minutes of work are easier to compare.
+En Minutes starts from a smaller question: what does something cost if the unit is work time instead of euros? A baguette, a coffee, a cinema ticket, rent, electricity, cigarettes, public transport. The answer changes depending on the salary reference, the period, and the method used to convert old prices.
+
+That is why the project is more about methodology than chart polish.
 
 ![How En Minutes works](../../assets/images/en-minutes-method.svg)
 
-## What I built
+## The constraint
 
-The app tracks everyday French goods from the 1950s to today: baguettes, coffee, cinema tickets, rent, electricity, cigarettes, public transport, and more.
+Historical price comparisons are easy to make and easy to get wrong.
 
-Users can switch between minimum wage, median salary, and mean salary. Every chart recalculates instantly, which changes the story in useful ways. Some goods got genuinely cheaper. Some did not. Some only look cheaper if you use the wrong salary reference.
+France moved from old francs to new francs, then to euros. Inflation changes nominal prices. Wages change too. Gross salary and net salary tell different stories. Minimum wage, median salary, and mean salary do not describe the same person.
+
+If the product hides those choices, the chart becomes a trick.
+
+## Product shape
+
+The app lets users compare everyday French prices from the 1950s to today in minutes of work.
+
+Users can switch between minimum wage, median salary, and mean salary. The chart recalculates in the browser, so the same product can tell different stories depending on the reference point. Some goods became meaningfully cheaper. Some did not. Some only look cheap when the salary reference is too generous.
 
 ![En Minutes app preview](../../assets/images/project-thumbs/en-minutes-preview.png)
 
-## Why it matters
+## The useful mistake
 
-The first version used gross minimum wage data. That was wrong.
+The first version used gross minimum wage data. It made the implementation cleaner, and it was wrong.
 
-If the question is "how long do I need to work to buy this?", the salary reference should be net pay. Nobody buys groceries with gross salary.
+The question is "how long do I need to work to buy this?" Nobody buys groceries with gross salary. The reference had to be net pay.
 
-Fixing that meant rebuilding part of the dataset. Recent net SMIC data is available from INSEE, but older years required reconstructing historical social contribution rates and checking the old franc to new franc conversion carefully. A small-looking accounting detail changed the whole app.
-
-## What it says about my work
-
-- Product thinking: the unit of measurement is the product, not just a chart setting
-- Data judgment: I corrected the gross/net salary methodology instead of keeping a cleaner but wrong story
-- Frontend execution: bilingual UI, dark mode, responsive charts, and instant recalculation in the browser
-- Practical architecture: static deployment, no backend, no database, dataset bundled with the app
+Fixing that meant rebuilding part of the dataset. Recent net SMIC data is available from INSEE. Older years required reconstructing historical contribution rates and checking currency conversions carefully. A small accounting detail changed the meaning of the whole app.
 
 ## Stack
 
 - Vite, React, and TypeScript
-- Tailwind CSS with shadcn/ui and Radix components
+- Tailwind CSS, shadcn/ui, and Radix components
 - Chart.js for interactive visualizations
 - Framer Motion for light transitions
-- GitHub Pages for deployment
+- GitHub Pages for static deployment
+
+## What this does not prove
+
+The app does not settle debates about purchasing power. It makes the assumptions inspectable.
+
+That is the useful part. A chart can be attractive and still be dishonest if the unit is wrong. En Minutes keeps the unit at the center of the product.
 
 I wrote a longer build note here: [Building a purchasing power visualizer with AI-assisted development](/posts/building-purchasing-power-visualizer-ai/).

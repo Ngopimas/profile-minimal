@@ -8,38 +8,44 @@ url: "https://deeplime.io/products#geoportal"
 ogImage: "/assets/images/project-thumbs/geoportal.jpg"
 ---
 
-GeoPortal is a cloud platform for geoscientists. It helps mining teams run data workflows, visualize geological information, and share results without forcing every user into desktop-only specialist software.
+Geoscience software has a translation problem.
 
-At DeepLime, I contributed to the web platform and the product workflows around geological data processing.
+The data is spatial, heavy, and domain specific. The workflows often live in specialist desktop tools or Python scripts. GeoPortal brought part of that work into a cloud platform, so geoscientists and mining teams could run processing workflows, visualize results, and share outputs without forcing every user into the same local setup.
 
 ![GeoPortal](../../assets/images/geoportal.jpg)
 
-## What I worked on
+## The constraint
 
-- Dashboards for monitoring data processing workflows
-- Interfaces for 2D and 3D geological visualization
-- Integration points between the web app and Python processing tools
+A generic dashboard is not enough for geological work.
+
+Users need spatial context, processing state, data lineage, and outputs that still make sense to domain experts. A chart that ignores the underlying geology is just decoration. A workflow runner that hides too much state is hard to trust when the result affects resource estimation or operational decisions.
+
+The product had to simplify the surface without flattening the domain.
+
+## Product shape
+
+The platform work included:
+
+- dashboards for monitoring data processing workflows
+- 2D and 3D geological visualization interfaces
+- integration between the web app and Python processing tools
 - GIS and spatial data workflows
-- Client-specific customization for mining and geoscience teams
+- client-specific customization for mining and geoscience teams
 
-## The hard parts
+The important part was the bridge between web product and technical computation. The UI needed to show enough process state for users to understand where an output came from.
 
-Geoscience software has two problems at once: the data is heavy, and the domain is specific. A generic dashboard is not enough. Users need to see geological context, keep track of processing steps, and trust that outputs match their existing workflows.
+## The hard part
 
-That meant working closely with domain experts, simplifying complex actions in the UI, and keeping the architecture flexible enough for different client setups.
+Different clients rarely have the same geological workflow.
 
-## What it says about my work
+That makes product design awkward. Too much customization creates a maintenance burden. Too little flexibility makes the platform unusable for real projects. The architecture had to leave room for client-specific setups while keeping the core interaction model consistent.
 
-- Experience with domain-heavy B2B software
-- Ability to translate specialist workflows into usable web interfaces
-- React and cloud platform development in a production context
-- Integration work across frontend, backend, Python processing, and GIS concepts
-- Comfort working with complex datasets and non-trivial user needs
+Working close to domain experts mattered more than guessing from the outside. The useful interface decisions came from the details: file formats, coordinate systems, processing steps, and how teams review results.
 
 ## Stack
 
 - React and Redux for the web interface
-- Cloud infrastructure on AWS and Azure depending on client context
+- AWS and Azure depending on client context
 - Node.js backend services
 - Python for geological data processing
 - GIS and spatial data tooling

@@ -8,33 +8,37 @@ url: "https://startbridge.io"
 ogImage: "/assets/images/project-thumbs/startbridge.jpg"
 ---
 
-As a contractor for StartBridge, I worked on a marketplace platform for innovation projects.
+Marketplace products are mostly coordination problems.
 
-The product helps innovators create offers or project calls, gather feedback from their professional network, and prepare launches on the marketplace. My work focused on translating business requirements into usable React interfaces.
+StartBridge was a platform for innovation projects: users could create offers or project calls, collect feedback from a professional network, and prepare launches on the marketplace. My work as a contractor focused on turning changing business requirements into React interfaces that could survive real product iteration.
 
 ![StartBridge](../../assets/images/startbridge.jpg)
 
-## What I worked on
+## The constraint
 
-- Updated Figma designs as requirements evolved
-- Built React interfaces with Material UI
-- Implemented project pages for innovation offers and calls
-- Worked on real-time communication features
-- Collaborated directly with the CTO on product and technical decisions
+The platform had to explain a domain that was not obvious to every user.
 
-## The hard parts
+Innovation offers, stakeholder feedback, calls for projects, and marketplace readiness all carry business-specific meaning. If the UI mirrors internal vocabulary too closely, new users get lost. If it hides that vocabulary too much, the workflow stops matching how the business actually operates.
 
-The platform had to support users who were not necessarily technical, while still handling a lot of business-specific language around innovation projects, stakeholders, and marketplace readiness.
+The product work was mostly about finding that middle layer.
 
-The main engineering challenge was integrating new features into an existing codebase without making the interface harder to maintain.
+## Product shape
 
-## What it says about my work
+The work included:
 
-- Contractor experience with direct stakeholder communication
-- React implementation inside an existing product
-- Ability to work from Figma to production UI
-- Product sensitivity around marketplace workflows
-- Comfortable collaboration with a CTO and small team
+- React interfaces built from evolving Figma designs
+- project pages for innovation offers and calls
+- marketplace preparation flows
+- real-time communication features
+- direct collaboration with the CTO on product and technical decisions
+
+Because the product was already moving, implementation had to fit into an existing codebase rather than assume a clean-room rewrite.
+
+## The hard part
+
+Small-team product work punishes overengineering.
+
+Requirements changed as the business tested the marketplace shape. The interface needed to adapt without becoming a pile of one-off screens. That meant keeping components practical, matching the design system where it helped, and avoiding abstractions that looked clever but slowed the next change.
 
 ## Stack
 

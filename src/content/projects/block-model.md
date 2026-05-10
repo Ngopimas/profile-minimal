@@ -9,33 +9,37 @@ ogImage: "/assets/images/project-thumbs/block-model.jpg"
 # repository: "https://github.com/Ngopimas/POC_BM_3D"
 ---
 
-This project turns mining block model data into an interactive 3D visualization that runs in the browser.
+A block model is easy to store and hard to inspect.
 
-The goal was to make geological models easier to inspect and share. Instead of opening desktop mining software for every quick look, a user can load the model, slice through it, change properties, and capture a useful view from the web app.
+The data is a 3D grid of blocks, each carrying geological properties. In specialist desktop software, that makes sense. In a browser, a naive implementation turns into a wall of cubes and a dead frame rate. This project was a proof of concept for making that kind of model explorable from a web page.
 
 ![Block Model Visualization](../../assets/images/bm.png)
 
-## What I built
+## The constraint
 
-- 3D rendering for large block model datasets
-- Instanced mesh rendering for hundreds of thousands of blocks
-- Property-based coloring for geological attributes
-- Cross-section controls across X, Y, and Z axes
-- A screenshot workflow for sharing model views
+The hard part is not drawing cubes. It is drawing enough of them to be useful while keeping the model interactive.
 
-## The hard parts
+A geological user needs to slice through the volume, change the property being colored, inspect patterns, and share a view. If the tool only shows the outside of the model, it hides the point. If it renders every block independently, it becomes too slow to use.
 
-The main constraint was performance. A block model can contain a huge number of small cubes, and rendering each one naively destroys the frame rate. I used instancing and filtering to keep interaction smooth while still letting users inspect the internal structure of the model.
+## System shape
 
-The UI also had to stay simple. Geological users need slicing, colors, and properties to be obvious. If the controls require a tutorial, the tool fails.
+The viewer includes:
 
-## What it says about my work
+- 3D rendering for block model datasets
+- instanced mesh rendering for large numbers of blocks
+- property-based coloring for geological attributes
+- cross-section controls across X, Y, and Z axes
+- a screenshot workflow for sharing model views
 
-- Practical 3D performance work in the browser
-- React and Three.js implementation on a data-heavy use case
-- Ability to simplify specialist workflows without removing the useful controls
-- TypeScript and Vite workflow for fast iteration
-- Comfort building tools for technical users in mining and geoscience
+The interface stays close to the domain task: choose a property, cut through the model, rotate the view, and capture the result.
+
+## The hard part
+
+Instancing solved the first performance problem, but not the whole product problem.
+
+The model still needed filtering, sensible defaults, and controls that did not require a tutorial. Geological users already understand the data. The interface should not make them learn a separate visualization vocabulary before they can inspect it.
+
+That is the useful lesson from the POC: performance work and product simplification are the same problem when the dataset is this visual.
 
 ## Stack
 

@@ -8,19 +8,29 @@ url: "https://emili3d.imerys.com"
 ogImage: "/assets/images/project-thumbs/emili.jpg"
 ---
 
-At DeepLime, I built a web-based 3D visualization platform for the EMILI lithium mining project by Imerys.
+Industrial projects are hard to explain with a PDF.
 
-The platform lets visitors explore the project in the browser: extraction site, concentration plant, transport platform, conversion plant, and surrounding terrain. It was designed for public communication, so the interface had to make industrial infrastructure understandable without requiring technical knowledge.
+The EMILI 3D platform is a browser-based visualization of Imerys' lithium mining project. It lets visitors explore the extraction site, concentration plant, transport platform, conversion plant, and surrounding terrain from a web page. The context matters because the project was part of a public debate. The interface had to help non-specialists understand the geography without pretending the infrastructure was simple.
 
 ![EMILI 3D Visualization Platform](../../assets/images/emili.png)
 
-## What I built
+## The constraint
 
-- A browser-based 3D scene using Three.js and WebGL
-- Geolocated project components placed on real site topography
-- Satellite imagery and terrain context through Mapbox
-- Layer controls for exploring different parts of the project
-- A responsive interface usable by non-technical visitors
+Public communication around industrial sites has an awkward requirement: enough detail to be credible, not so much detail that the user gets lost.
+
+A 3D scene can become decorative very quickly. If it only looks impressive, it does not explain anything. If it tries to include every technical object, it becomes unreadable. The product had to preserve spatial context while guiding attention to the parts of the project that mattered.
+
+## System shape
+
+The platform combines several layers:
+
+- a Three.js and WebGL 3D scene
+- geolocated project components
+- terrain and satellite context through Mapbox
+- layer controls for exploring the site
+- a responsive interface for public visitors
+
+The goal was not cinematic realism. It was orientation. A visitor should be able to understand where each component sits and how the pieces relate to one another.
 
 ## First POC video
 
@@ -29,19 +39,13 @@ The platform lets visitors explore the project in the browser: extraction site, 
   Your browser does not support the video tag.
 </video>
 
-## The hard parts
+## The hard part
 
-The project needed to balance technical accuracy with public readability. Too much detail and the scene becomes unusable. Too little and it stops being useful for explaining the project.
+Browser 3D has a strict budget.
 
-The other challenge was performance. 3D models, terrain, and geospatial context can get heavy quickly, especially in a browser. I had to keep the scene fluid while preserving enough context for visitors to understand what they were looking at.
+Terrain, geospatial context, models, labels, and controls all compete for performance. The scene has to stay smooth on ordinary devices, not only on a developer laptop. That means being selective about geometry, texture weight, camera behavior, and the amount of context shown at once.
 
-## What it says about my work
-
-- 3D web development with real constraints, not a decorative Three.js demo
-- Geospatial thinking with terrain, satellite imagery, and site positioning
-- Product judgment for public-facing industrial communication
-- Performance awareness in browser-based visualization
-- Ability to ship work for a high-visibility client context
+The other constraint was language. The interface had to avoid turning a public exploration tool into a specialist CAD viewer.
 
 ## Stack
 
@@ -50,7 +54,7 @@ The other challenge was performance. 3D models, terrain, and geospatial context 
 - JavaScript and Vite
 - Georeferenced 3D and topographic data
 
-Further information:
+## Further information
 
 - [Learn more about the EMILI project](https://emili.imerys.com/)
 - [Public debate details](https://www.debatpublic.fr/mine-de-lithium-allier/le-dossier-du-maitre-douvrage-5411)

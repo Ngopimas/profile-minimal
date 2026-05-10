@@ -9,35 +9,45 @@ repository: "https://github.com/Ngopimas/profile-minimal"
 ogImage: "/assets/images/project-thumbs/profile-minimal.svg"
 ---
 
-This portfolio is a small Astro site built to make my work easier to browse: project pages, writing, tags, search, dark mode, and static deployment.
+A portfolio site has one job: stay out of the way.
 
-The goal is not to impress with a heavy frontend. It is to keep the site fast, readable, and easy to maintain.
+This site is a small Astro build for project pages, writing, tags, search, dark mode, and static deployment. It is deliberately plain. The point is not to prove that a personal site can be an application. The point is to keep work readable, fast, and easy to change.
 
 ![Lighthouse Score](../../assets/images/lighthouse-score.svg)
 
-## What I built
+## The constraint
 
-- Markdown-based content collections for posts and projects
-- Project pages with links, tags, descriptions, and visual previews
-- Search and tag pages for browsing older work
-- Dark mode with user preference support
-- GitHub Pages deployment with a custom domain
-- Performance-focused Astro build with minimal client JavaScript
+Personal sites tend to rot because they are overbuilt.
 
-## What it says about my work
+A heavy CMS, a database, custom backend services, and complicated preview flows are usually more maintenance than the site deserves. The content changes slowly. The pages need to load quickly. The authoring path should be boring enough that publishing does not become a project by itself.
 
-- Care for performance and accessibility
-- Ability to keep a personal codebase clean and maintainable
-- Astro, TypeScript, Tailwind, and React usage in a real site
-- Content architecture for writing and portfolio pages
-- Practical SEO and Open Graph setup
+Astro fits that constraint well: content in Markdown, static output, and only a small amount of client JavaScript where the site actually needs it.
+
+## Site shape
+
+The site includes:
+
+- Markdown content collections for posts and projects
+- project pages with tags, descriptions, links, and visual previews
+- tag and archive pages for older writing
+- search for browsing content without a backend
+- dark mode with user preference support
+- GitHub Pages deployment on a custom domain
+
+The implementation is intentionally easy to inspect. If a page breaks, the source is a Markdown file and a small set of Astro layouts.
+
+## The maintenance part
+
+The interesting work is not the first build. It is keeping the site healthy without turning it into a hobby framework.
+
+That has meant pruning weak pages, tightening project copy, fixing link regressions after content collection changes, and keeping dependencies current enough that the static build remains boring. The site recently moved to Astro 6, which forced a cleaner content config and stricter slug handling across posts, projects, RSS, search, and generated images.
 
 ## Stack
 
-- Astro
-- TypeScript
+- Astro and TypeScript
 - Tailwind CSS
-- React for interactive components
+- React for isolated interactive components
+- Markdown content collections
 - GitHub Pages for deployment
 
 ## Local development
