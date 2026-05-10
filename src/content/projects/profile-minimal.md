@@ -1,73 +1,49 @@
 ---
 title: "A portfolio"
-description: "A minimalist portfolio website built with Astro, TypeScript, and Tailwind CSS, showcasing my projects and technical expertise."
+description: "A fast Astro portfolio focused on writing, project pages, search, dark mode, and clean static deployment."
 pubDatetime: 2025-02-11T15:30:00Z
 tags: ["astro", "typescript", "tailwind", "react"]
 featured: false
 url: "https://romaincoupey.com"
 repository: "https://github.com/Ngopimas/profile-minimal"
+ogImage: "/assets/images/project-thumbs/profile-minimal.svg"
 ---
 
-By leveraging modern web technologies and focusing on performance, I made this minimalist portfolio website to showcase my work and technical expertise.
+This portfolio is a small Astro site built to make my work easier to browse: project pages, writing, tags, search, dark mode, and static deployment.
 
-## Personal Achievements
-
-- **Modern Development**: Implemented best practices in modern web development, from SEO to accessibility
-- **Clean Architecture**: Designed a maintainable and scalable codebase that showcases my coding standards
-- **Responsive Design**: Created a fully responsive layout that provides seamless experience across all devices
-- **Performance Excellence**: Optimized the site to achieve 90+ Lighthouse scores across all metrics
+The goal is not to impress with a heavy frontend. It is to keep the site fast, readable, and easy to maintain.
 
 ![Lighthouse Score](../../assets/images/lighthouse-score.svg)
 
-## Technical Implementation
+## What I built
 
-- Built a modular component system that makes maintenance and updates effortless
-- Implemented an efficient content management workflow using Markdown
-- Created a fast and efficient search functionality for easy project navigation
-- Developed a dark mode feature that adapts to user preferences
+- Markdown-based content collections for posts and projects
+- Project pages with links, tags, descriptions, and visual previews
+- Search and tag pages for browsing older work
+- Dark mode with user preference support
+- GitHub Pages deployment with a custom domain
+- Performance-focused Astro build with minimal client JavaScript
 
-## Technology Stack
+## What this shows recruiters
 
-### Core Technologies
+- Care for performance and accessibility
+- Ability to keep a personal codebase clean and maintainable
+- Astro, TypeScript, Tailwind, and React usage in a real site
+- Content architecture for writing and portfolio pages
+- Practical SEO and Open Graph setup
 
-- **Astro**: Chose for its excellent static site generation and performance
-- **TypeScript**: Implemented for type safety and better code maintainability
-- **React**: Used for interactive components while keeping JavaScript minimal
-- **Tailwind CSS**: Employed for rapid styling and consistent design system
+## Stack
 
-### Architecture Highlights
+- Astro
+- TypeScript
+- Tailwind CSS
+- React for interactive components
+- GitHub Pages for deployment
 
-I focused on creating a clean, maintainable architecture with:
-
-- Clear separation of concerns
-- Reusable component structure
-- Efficient content management
-- Optimized build pipeline
-
-## Development Workflow
-
-### Local Development
+## Local development
 
 ```bash
-# Install dependencies
 npm install
-
-# Start development server
 npm run dev
-
-# Build for production
 npm run build
 ```
-
-### Deployment
-
-Deployed on GitHub Pages using GitHub Actions for CI/CD. The site is hosted on a custom domain with a free SSL certificate.
-
-## Future Enhancements
-
-I plan to continue improving this portfolio with:
-
-- Enhanced analytics for visitor insights
-- Testing suite
-- Additional interactive features
-- Redesign for a more modern look and feel

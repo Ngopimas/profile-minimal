@@ -118,6 +118,17 @@ That is the pattern I trust more and more:
 
 The best agentic systems do not feel like magic. They feel like a junior analyst who works all night, documents everything, and still needs a review process before anything touches money.
 
+## What this project says about how I work
+
+For recruiting, this is probably the clearest example of the kind of work I like doing: messy data, product constraints, automation, and a UI that has to stay useful after the novelty wears off.
+
+A few parts are representative:
+
+- I prefer inspectable systems over black boxes. The dashboard exposes logs, evidence, rejected ideas, and health checks.
+- I care about failure modes. The system has diagnostics for duplicate backtest results, stale data, unsupported strategy types, and blocked rebalances.
+- I build with boring infrastructure when boring is the right answer. Static files, JSON, cron, Jinja2, and Caddy are enough for this stage.
+- I use agents as leverage, not as an excuse to skip review. The more autonomy the system gets, the more visible its reasoning needs to be.
+
 ## Where this is going
 
 The near term goal is to make the loop more robust:

@@ -1,17 +1,46 @@
 ---
-title: "StartBridge - Innovation Marketplace Platform"
-description: "A trusted marketplace platform connecting innovators and stakeholders."
+title: "StartBridge"
+description: "A marketplace platform connecting innovators and stakeholders, with project pages, feedback workflows, and real-time communication features."
 pubDatetime: 2022-07-01T09:00:00Z
 tags: ["react", "reactquery", "material-ui"]
 featured: false
 url: "https://startbridge.io"
+ogImage: "/assets/images/project-thumbs/startbridge.jpg"
 ---
 
-As a contractor for StartBridge, I contributed to building a trusted marketplace platform that facilitates connections between innovators and stakeholders in the innovation ecosystem.
+As a contractor for StartBridge, I worked on a marketplace platform for innovation projects.
 
-## Business Value and Impact
+The product helps innovators create offers or project calls, gather feedback from their professional network, and prepare launches on the marketplace. My work focused on translating business requirements into usable React interfaces.
 
-The StartBridge platform addresses friction and inefficiency in innovation promotion and evaluation by enabling symmetry and collaboration. It allows innovators to create commercial offers or project calls ("Bridges") and gather feedback from their professional network before launching on the marketplace. This significantly reduces time-to-market and improves the quality of innovations.
+![StartBridge](../../assets/images/startbridge.jpg)
+
+## What I worked on
+
+- Updated Figma designs as requirements evolved
+- Built React interfaces with Material UI
+- Implemented project pages for innovation offers and calls
+- Worked on real-time communication features
+- Collaborated directly with the CTO on product and technical decisions
+
+## The hard parts
+
+The platform had to support users who were not necessarily technical, while still handling a lot of business-specific language around innovation projects, stakeholders, and marketplace readiness.
+
+The main engineering challenge was integrating new features into an existing codebase without making the interface harder to maintain.
+
+## What this shows recruiters
+
+- Contractor experience with direct stakeholder communication
+- React implementation inside an existing product
+- Ability to work from Figma to production UI
+- Product sensitivity around marketplace workflows
+- Comfortable collaboration with a CTO and small team
+
+## Stack
+
+- React
+- React Query
+- Material UI
 
 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 8px;">
   <iframe
@@ -22,53 +51,3 @@ The StartBridge platform addresses friction and inefficiency in innovation promo
     allowfullscreen
   ></iframe>
 </div>
-
-## Problem-Solving Approach and Key Challenges Overcome
-
-### Problem-Solving Approach
-
-- **User-Centric Design**: Focused on creating an intuitive and responsive user interface to enhance user engagement.
-- **Real-Time Communication**: Developed a robust chat system for seamless interaction between users.
-
-### Key Challenges Overcome
-
-- **Integration**: Successfully integrated new features into the existing codebase while maintaining code quality.
-- **Collaboration**: Worked closely with the CTO to align technical implementations with business goals.
-
-## My Role and Responsibilities
-
-As a contractor, I was responsible for:
-
-- Updating the existing Figma design to reflect the latest business requirements.
-- Implementing core features such as the chat system and innovation project pages.
-- Ensuring the user interface was responsive and intuitive.
-- Maintaining high code quality through regular code reviews and testing.
-- Collaborating with the CTO to align technical implementations with business goals.
-
-## Technologies Used
-
-- **React**: Built modular and reusable components for a seamless user experience.
-- **Material-UI**: Leveraged MUI components to create a consistent and professional design.
-- **ReactQuery**: Utilized for efficient data fetching and state management.
-
-## Technical Contributions
-
-### Key Features Implemented
-
-- **Figma Design**: Updated Figma designs and translated them into functional components.
-- **User Interface**: Implemented responsive and intuitive interfaces using Material-UI components.
-- **Project Pages**: Created dynamic project pages for showcasing innovations and collecting feedback.
-- **Chat System**: Developed a real-time communication system to facilitate discussions between innovators and stakeholders.
-
-## Measurable Outcomes and Achievements
-
-- Successfully launched new features that enhanced platform functionality.
-- Improved user engagement through intuitive interface design.
-- Contributed to the platform's goal of streamlining innovation promotion and evaluation.
-- Helped create a more efficient marketplace for connecting innovators with stakeholders.
-
-## Learning Outcomes
-
-- Gained extensive experience in building SaaS platforms.
-- Deepened expertise in React and ReactQuery development.
-- Developed skills in working with innovation-focused business requirements.

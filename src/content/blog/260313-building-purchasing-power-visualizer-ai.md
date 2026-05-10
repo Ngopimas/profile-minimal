@@ -7,6 +7,7 @@ featured: true
 draft: false
 tags: ["react", "data-visualization", "ai", "side-project", "economics"]
 description: "How I built and refined an interactive app to measure French purchasing power in minutes of work - from minimum wage to median salary, from a magazine article to a full economic tool, with AI as both copilot and auditor."
+ogImage: "/assets/images/project-thumbs/en-minutes.jpg"
 ---
 
 A few years ago, I stumbled upon an article in [Alternatives Économiques](https://www.alternatives-economiques.fr/) that tried to answer a deceptively simple question: did the switch to the euro actually make things more expensive in France? The article used an elegant trick - instead of comparing raw prices (which inflation makes meaningless over time), it measured how many **minutes of minimum wage** you'd need to earn to buy everyday items.
@@ -14,10 +15,6 @@ A few years ago, I stumbled upon an article in [Alternatives Économiques](https
 That idea stuck with me. What if you could explore that concept interactively?
 
 This post is about how I built [En Minutes](https://enminutes.fr) - a bilingual, interactive data visualization app that lets you explore the real cost of everyday French goods from the 1950s to today - and how it evolved from a quick prototype into something much more rigorous, with AI as both a development partner and an auditor that caught a fundamental error in my data.
-
-![En Minutes](../../assets/images/en-minutes.png)
-
-![How En Minutes works](../../assets/images/en-minutes-method.svg)
 
 ## The Core Idea
 
@@ -27,9 +24,13 @@ Raw prices are deceiving. A baguette cost about 0.067€ (in equivalent francs) 
 
 By converting every price into minutes of work at a given salary, you get a universal unit that cuts through inflation, currency changes, and decades of economic shifts. It lets you compare a 1955 pack of cigarettes to a 2024 one in a way that actually means something.
 
+![How En Minutes works](../../assets/images/en-minutes-method.svg)
+
 ## What It Does
 
 The app tracks **30+ consumer products** - from baguettes and coffee to cinema tickets, electricity, and rent - across seven decades of data. You can browse interactive charts for each product, switch between minimum wage, median salary and mean salary to recalculate everything on the fly, compare two years side by side, or look at the aggregated purchasing power index with overlays for inflation, productivity, and presidential terms. Everything is bilingual and works in dark mode, because I like my charts readable at 11pm.
+
+![En Minutes app preview](../../assets/images/project-thumbs/en-minutes-preview.png)
 
 ## The Stack
 

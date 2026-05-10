@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Autonomous research pipeline architecture</title>
+  <desc id="desc">A dark architecture diagram showing data sources flowing into research agents, backtests, assumption checks, paper trading, and a static dashboard.</desc>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 L0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.8" opacity="0.7" />
+    </pattern>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#64748b" />
+    </marker>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#000000" flood-opacity="0.35" />
+    </filter>
+    <style>
+      .bg { fill: #020617; }
+      .panel { fill: #0f172a; stroke: #334155; stroke-width: 1.5; filter: url(#softShadow); }
+      .title { fill: #e2e8f0; font: 700 30px Inter, ui-sans-serif, system-ui, sans-serif; }
+      .subtitle { fill: #94a3b8; font: 500 15px Inter, ui-sans-serif, system-ui, sans-serif; }
+      .label { fill: #e5e7eb; font: 700 16px Inter, ui-sans-serif, system-ui, sans-serif; }
+      .small { fill: #cbd5e1; font: 500 12px Inter, ui-sans-serif, system-ui, sans-serif; }
+      .tiny { fill: #94a3b8; font: 500 11px Inter, ui-sans-serif, system-ui, sans-serif; }
+      .box { rx: 18; stroke-width: 1.6; }
+      .data { fill: #082f49; stroke: #38bdf8; }
+      .agent { fill: #064e3b; stroke: #34d399; }
+      .test { fill: #4c1d95; stroke: #a78bfa; }
+      .gate { fill: #881337; stroke: #fb7185; }
+      .dash { fill: #78350f; stroke: #fbbf24; }
+      .line { fill: none; stroke: #64748b; stroke-width: 2.2; marker-end: url(#arrow); }
+      .mutedLine { fill: none; stroke: #475569; stroke-width: 1.8; stroke-dasharray: 7 7; marker-end: url(#arrow); }
+      .pill { fill: rgba(15,23,42,0.85); stroke: #334155; }
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="675" />
+  <rect width="1200" height="675" fill="url(#grid)" opacity="0.55" />
+  <rect class="panel" x="48" y="42" width="1104" height="590" rx="28" />
+
+  <text class="title" x="90" y="96">Autonomous research pipeline</text>
+  <text class="subtitle" x="90" y="125">An exploratory Hermes Agent build: collect data, test ideas, block weak trades, publish evidence.</text>
+
+  <path class="line" d="M232 260 C270 260 284 260 322 260" />
+  <path class="line" d="M476 260 C512 260 528 260 564 260" />
+  <path class="line" d="M718 260 C754 260 770 260 806 260" />
+  <path class="line" d="M958 260 C992 260 1008 260 1042 260" />
+  <path class="mutedLine" d="M927 330 C878 424 708 464 540 444 C376 425 288 373 232 310" />
+
+  <rect class="box data" x="90" y="188" width="142" height="144" />
+  <text class="label" x="118" y="228">Data</text>
+  <text class="small" x="118" y="258">European stocks</text>
+  <text class="small" x="118" y="282">ETF trends</text>
+  <text class="small" x="118" y="306">Prices and events</text>
+
+  <rect class="box agent" x="322" y="188" width="154" height="144" />
+  <text class="label" x="350" y="228">Agents</text>
+  <text class="small" x="350" y="258">Idea generation</text>
+  <text class="small" x="350" y="282">Screener updates</text>
+  <text class="small" x="350" y="306">Research notes</text>
+
+  <rect class="box test" x="564" y="188" width="154" height="144" />
+  <text class="label" x="592" y="228">Backtests</text>
+  <text class="small" x="592" y="258">Costs included</text>
+  <text class="small" x="592" y="282">Clone detection</text>
+  <text class="small" x="592" y="306">Viability filters</text>
+
+  <rect class="box gate" x="806" y="188" width="152" height="144" />
+  <text class="label" x="834" y="228">Gate</text>
+  <text class="small" x="834" y="258">Proceed</text>
+  <text class="small" x="834" y="282">Hold</text>
+  <text class="small" x="834" y="306">Abort</text>
+
+  <rect class="box dash" x="1042" y="188" width="94" height="144" />
+  <text class="label" x="1066" y="228">Web</text>
+  <text class="small" x="1066" y="258">Signals</text>
+  <text class="small" x="1066" y="282">Evidence</text>
+  <text class="small" x="1066" y="306">Logs</text>
+
+  <rect class="pill" x="286" y="394" width="626" height="112" rx="18" />
+  <text class="label" x="328" y="432">State files</text>
+  <text class="small" x="328" y="462">strategy_pool.json, assumption_check.json, portfolio_state.json</text>
+  <text class="tiny" x="328" y="486">The dashboard is static. The system stays understandable because every important decision leaves a file behind.</text>
+
+  <rect class="pill" x="90" y="544" width="264" height="46" rx="23" />
+  <circle cx="120" cy="567" r="6" fill="#38bdf8" />
+  <text class="tiny" x="138" y="571">Europe / PEA universe</text>
+  <rect class="pill" x="388" y="544" width="244" height="46" rx="23" />
+  <circle cx="418" cy="567" r="6" fill="#a78bfa" />
+  <text class="tiny" x="436" y="571">Sharpe and drawdown filters</text>
+  <rect class="pill" x="666" y="544" width="230" height="46" rx="23" />
+  <circle cx="696" cy="567" r="6" fill="#fb7185" />
+  <text class="tiny" x="714" y="571">Pre-rebalance checks</text>
+  <rect class="pill" x="930" y="544" width="206" height="46" rx="23" />
+  <circle cx="960" cy="567" r="6" fill="#fbbf24" />
+  <text class="tiny" x="978" y="571">Mobile dashboard</text>
+</svg>

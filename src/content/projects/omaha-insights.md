@@ -1,50 +1,46 @@
 ---
 title: "Omaha Insights"
-description: "A robust web application for financial performance monitoring, peer comparison, and scenario analysis-empowering finance professionals with actionable insights."
+description: "A finance analytics web app for KPI monitoring, peer comparison, valuation work, and investment screening."
 pubDatetime: 2025-06-10T09:00:00Z
 tags: ["nextjs", "typescript", "tailwind", "recharts", "gcp"]
 featured: true
 url: "https://omaha-insights.com"
+ogImage: "/assets/images/project-thumbs/omaha.jpg"
 ---
 
-As the lead developer for Omaha Insights, I'm building a next-generation financial data management and visualization platform tailored for finance professionals, analysts, and executives. My goal is to deliver actionable insights, robust analytics, and intuitive reporting tools-all within a seamless, modern user experience.
+Omaha Insights is a finance analytics platform for people who need to compare companies, track performance, and turn financial data into decisions.
+
+I worked on the product shape and the implementation: dashboards, charts, tables, peer comparison flows, screening tools, and the technical structure behind them.
 
 ![Omaha Insights](../../assets/images/omaha.png)
 
-## My Role & Contributions
+## What I built
 
-- **Product Design & Architecture**: Defined the user flows, and technical implementation.
-- **Full-Stack Development**: Implemented core features using Next.js, TypeScript, and Tailwind CSS, ensuring a scalable and maintainable codebase.
-- **Data Visualization**: Built interactive dashboards and charts with Recharts, enabling KPI tracking and historical analysis.
-- **UI/UX**: Leveraged Radix UI and Tailwind to deliver a consistent, accessible, and responsive interface across devices.
-- **Testing & Quality**: Established testing conventions and CI pipelines to ensure reliability and maintainability.
+- KPI dashboards with historical views and custom date ranges
+- Peer comparison screens for benchmarking companies against competitors
+- Valuation and sensitivity analysis interfaces
+- Data tables with sorting, filtering, and export-oriented workflows
+- Investment screening flows with reusable filter configurations
+- Authentication and session handling through Clerk
 
-## Key Features
+## Product decisions
 
-- **Financial Analysis Dashboard**: KPIs, historical data visualization, and custom date range selection.
-- **Peer Comparison**: Competitor benchmarking, industry-standard comparison, and performance gap analysis.
-- **Valuation & Sensitivity Analysis**: Scenario testing, risk assessment, and projection modeling.
-- **Data Tables & Reporting**: Customizable tables, export capabilities, sorting, filtering, and dynamic reporting.
-- **Investment Screening**: Advanced filters, watchlist management, and reusable screening configurations.
-- **Secure Authentication**: Role-based access control and session management via Clerk.
+Finance tools can become unreadable very quickly. The work was less about adding charts everywhere and more about making the next action obvious: compare, filter, inspect, export, or save.
 
-## Technical Stack & Implementation
+The UI needed to handle dense data without feeling like a spreadsheet clone. That meant reusable table patterns, consistent chart behavior, and enough spacing for the product to stay usable on smaller screens.
 
-- **Next.js**: Leveraged server-side rendering for fast load times and SEO optimization.
-- **TypeScript**: Ensured type safety and long-term maintainability.
-- **Tailwind CSS & Radix UI**: Enabled rapid, accessible, and consistent UI development.
-- **Recharts**: Powered interactive and insightful data visualizations.
-- **Clerk**: Provided robust authentication and access control.
+## What this shows recruiters
 
-## Challenges & Solutions
+- Product engineering for data-heavy B2B workflows
+- Strong frontend implementation with Next.js, TypeScript, Tailwind, and Recharts
+- Ability to design interfaces around business analysis, not only visual polish
+- Practical handling of authentication, user flows, and dashboard state
+- Comfort working close to finance and investment use cases
 
-- **Scalability**: Architected the platform to handle large datasets, real-time update and concurrent users efficiently.
-- **Data Security**: Implemented strict access controls and secure data handling practices.
-- **User Experience**: Focused on accessibility and responsiveness to ensure usability across all devices.
+## Stack
 
-## Future Enhancements
-
-- Expanding analytics and reporting capabilities.
-- Deeper integration with external financial data sources.
-- Advanced AI-driven insights and recommendations.
-- Enhanced customization and user preferences.
+- Next.js, TypeScript, Tailwind CSS
+- Radix UI for accessible components
+- Recharts for visualization
+- Clerk for authentication
+- GCP for deployment and infrastructure pieces
