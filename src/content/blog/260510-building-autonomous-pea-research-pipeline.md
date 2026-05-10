@@ -6,152 +6,148 @@ slug: building-autonomous-pea-research-pipeline
 featured: true
 draft: false
 tags: ["ai", "investing", "automation", "dashboard", "python"]
-description: "How an exploratory Hermes Agent project became a European equity research pipeline built around evidence trails, backtests, assumption checks, and a dashboard that can say no."
+description: "A European equity research pipeline built around audit trails, backtests, refusal points, and a dashboard that exposes what the agents did instead of hiding it."
 ogImage: "/assets/images/pea-research-pipeline.svg"
 ---
 
-I did not set out to build a trading bot. That sounds like a very efficient way to automate bad decisions.
+Most agent demos stop at the answer. That is the least interesting part.
 
-The better question was smaller: can Hermes Agent help run a research process without turning it into a black box?
+In equity research, a polished answer is close to useless unless the work behind it can be inspected. A model can write a plausible note on a European small cap. It can summarize a chart, invent a neat reason, and sound calm while doing it. None of that means the idea survives contact with data, costs, liquidity, or time.
 
-The answer so far is yes, but only if the system is forced to leave receipts. Every idea needs evidence. Every strategy needs a backtest. Every backtest needs diagnostics. Every rebalance needs a gate that can say no.
+This project started from a narrower question: what would an agentic research loop look like if the output was not a recommendation, but a trail of evidence?
 
-That is the project: a European equity research loop where agents do the tedious work, but the important decisions stay inspectable.
+The system pulls market data, generates candidates, turns them into strategy hypotheses, runs backtests, writes diagnostics, applies a pre-rebalance gate, tracks a paper portfolio, and publishes the current state to a static dashboard.
+
+The important part is not that agents are involved. The important part is that every stage leaves receipts. Every candidate should be rejectable. Every rebalance should be able to end in `proceed`, `hold`, or `abort`.
 
 ![Evidence trail for the autonomous research pipeline](../../assets/images/pea-research-pipeline.svg)
 
-## The thing I trust least is the thing I built first
+## The failure mode is fluent nonsense
 
-The first version was a normal automation pipeline. It collected market data, generated ideas, tested strategies, and published the results somewhere I could read them.
+The dangerous version of this system would be easy to build.
 
-Useful, but also dangerous in the way most agent projects are dangerous: the machine can look busy while quietly being wrong.
+Give an agent access to market data. Ask it for European equity ideas. Let it write a confident thesis. Add a dashboard. Call it autonomous research.
 
-A strategy can pass a backtest because the dispatch path is too generic. A ticker can look liquid because stale data is hiding the spread. A strategy can make sense historically and still be a bad trade today because the regime changed or earnings are tomorrow.
+That is exactly the shape I do not trust.
 
-So the project moved away from "let the agent trade" and toward something more boring:
+Finance punishes systems that confuse narrative with evidence. A strategy can look good because the backtest dispatch path is too generic. A ticker can look tradable because stale data hides a liquidity problem. A paper portfolio can appear stable because missing prices quietly understate exposure. A dashboard can be freshly generated while its inputs are old.
 
-- generate ideas
-- test them with costs
-- reject weak or unsupported strategies
-- log the evidence
-- block rebalances when assumptions break
-- publish the whole trail to a dashboard
+These are not exotic failures. They are normal failures. The point of the project is to make them harder to miss.
 
-That last part matters. If I cannot inspect the result from my phone in 30 seconds, I will not trust it when it runs without me.
+The pipeline is therefore built around refusal. A candidate is allowed to die at multiple points: unsupported strategy type, bad data, weak backtest, clone-like result, poor drawdown, stale inputs, earnings risk, regime mismatch, broken thesis, or a pre-rebalance gate that says the evidence is not good enough today.
 
-## Why Europe makes the problem more annoying
+A research system that cannot refuse to act is not a research system. It is a content engine.
 
-The investment universe is deliberately constrained: European equities and PEA eligible instruments.
+## Europe makes the toy problem disappear
 
-That constraint is useful because it keeps the system focused, but it also removes a lot of the easy mode you get with US-first tooling. European tickers are messier. Liquidity varies more. Some small caps look brilliant until you account for turnover, spreads, missing data, or the fact that the signal barely trades.
+The universe is deliberately constrained to European equities and PEA eligible instruments.
 
-The project cares more about names like ASML, Schneider Electric, LVMH, Hermes, Air Liquide, Vusion, or 2CRSI than another clean US mega-cap screen. It is also designed to handle speculative small-cap setups, but only if the system can separate a real signal from noise.
+That constraint matters. US-first tooling often makes the problem feel cleaner than it is. European tickers are messier. Exchange suffixes matter. Coverage is uneven. Liquidity can dominate the quality of a signal. Small caps can produce beautiful backtests that would be painful to trade. Corporate actions and missing history show up in annoying places.
 
-That is why the first filter is intentionally blunt. A strategy is not even considered viable unless it clears both:
+The pipeline cares about names like ASML, Schneider Electric, LVMH, Hermes, Air Liquide, Vusion, or 2CRSI more than another clean US mega-cap screen. It can also surface speculative small-cap setups, but only as candidates that have to survive the same evidence trail as everything else.
+
+The first viability gate is intentionally blunt:
 
 - Sharpe ratio above 0.5
 - Maximum drawdown better than -30%
 
-That does not prove the strategy is good. It just keeps the obvious garbage out of the room.
+That does not make a strategy good. It just removes the obvious waste before the system spends more attention on it.
 
-## The gate is the product
+The more interesting checks come later: transaction costs, turnover, bear-market behavior, market regime, earnings proximity, thesis health, sector exposure, data freshness, and whether a batch of strategies secretly produced the same result.
 
-The most important component is not the idea generator. Idea generation is cheap now.
+## The gate is more important than the generator
 
-The useful part is the pre-rebalance gate.
+Idea generation is cheap now. Refusal is the scarce part.
 
-Before the paper portfolio rebalances, the system asks whether the reason for the trade still exists. It checks strategy fitness, market regime, data freshness, earnings risk, thesis health, and sector rotation. The output is deliberately blunt: `proceed`, `hold`, or `abort`.
+The strongest component in the pipeline is the pre-rebalance gate. Before the paper portfolio changes positions, the system asks whether the reason for acting still exists.
+
+It checks strategy fitness, market regime, data freshness, earnings risk, thesis health, and sector rotation. The output is deliberately plain: `proceed`, `hold`, or `abort`.
 
 ![Pre-rebalance gate](../../assets/images/pea-pre-rebalance-gate.svg)
 
-That changes the feel of the whole project. It is no longer "find a strategy and follow it." It is closer to a small investment committee that has no patience for vibes.
+That small vocabulary changes the character of the whole project.
 
-The gate can block a trade even when the strategy was historically viable. That is the point. A backtest is evidence, not permission.
+Most automation has an action bias. It wants to produce a trade, a note, a chart, a recommendation. In research, doing nothing is often the highest quality output. `Hold` is not a failure case. `Abort` is not an error. They are part of the product.
 
-## The dashboard is not decoration
+A backtest is evidence, not permission. A good historical result can still be a bad action today if the assumptions have moved underneath it.
 
-The dashboard is where trust is built or lost.
+## The dashboard is a ledger
 
-Most automation projects hide the awkward parts in logs, which means the user sees the pretty output and misses the caveats. I wanted the opposite. The dashboard has to show signals, evidence, rejected ideas, agent logs, system health, and the reason a rebalance was blocked.
+The dashboard is not there to make the project look finished. It is there to expose state.
+
+It shows what ran, what changed, what passed, what failed, and what the system refused to do. Signals are only one page. The more important pages are evidence, agent logs, health, assumptions, diagnostics, rejected ideas, and stale-data warnings.
 
 The stack is intentionally boring:
 
 - Python for data collection, screening, backtesting, and report generation
-- Jinja2 for static dashboard templates
+- Jinja2 for static templates
 - Cron for scheduled runs
 - JSON and CSV files as system state
 - Caddy serving the private dashboard
 
-No database to babysit. No app server exposed to the internet. No heroic infrastructure. The pipeline writes files, the generator turns them into pages, and Caddy serves them.
+This is not minimalism for taste. It is an operational choice. A static dashboard has fewer moving parts than an app server. JSON artifacts are easy to diff, copy, inspect, and back up. If something matters, it should leave a file behind.
 
-That sounds low tech, but it has one big advantage: when something matters, it leaves a file behind.
+That makes the system less magical, which is exactly what I want.
 
 ## What actually runs
 
-The system is split into a few boring jobs instead of one clever monolith.
+The pipeline is a control loop, not a chatbot session.
 
-A data job refreshes prices and universe files. A discovery job adds new strategy hypotheses. A backtest job tests pending ideas and marks them viable only if they clear the risk gates. A selection job chooses candidates for the paper portfolio. A paper-trading job turns selected strategies into target positions. A dashboard job renders the current state into static pages.
+A data job refreshes prices and universe files. A discovery job adds strategy hypotheses. A backtest job tests pending ideas and marks them viable only if they clear the gates. A selection job chooses candidates for the paper portfolio. A paper-trading job turns selected strategies into target positions. A dashboard job renders the current state into static pages.
 
-The important detail is that each step writes an artifact the next step can inspect:
+Each step writes artifacts the next step can inspect:
 
 - strategy candidates live in a strategy pool
 - backtests write metrics, risk checks, and viability flags
+- batch diagnostics look for clone results and extreme outputs
 - the assumption checker writes a `proceed`, `hold`, or `abort` decision
 - paper trading writes target orders and portfolio state
 - the dashboard renders those files without inventing a story
 
-That makes debugging less romantic but much faster. When something looks wrong, I can usually trace it to a file rather than guessing what an agent "meant" to do.
+The design is less elegant than a single agent that "does research". It is also much easier to debug.
 
-## The bugs that made it better
+When something looks wrong, the question is not "what did the agent mean?" The question is "which artifact changed, and why?"
 
-The best improvements came from things breaking in suspicious ways.
+## The useful bugs were embarrassing
 
-Some early strategies produced identical backtest results. That can look like a breakthrough if you are not paying attention. It was not. Different strategy definitions were hitting the same generic dispatch logic, so the system was testing clones and pretending they were independent ideas.
+The best improvements came from results that looked good for the wrong reason.
 
-The fix was not just patching that bug. We added batch diagnostics after every strategy batch to catch clone results automatically.
+Early strategy variants sometimes produced identical backtest outputs. That could have been mistaken for robustness. It was not. Different definitions were falling into the same generic dispatch path, so the system was testing clones while pretending to test independent ideas.
 
-Other ideas could not be backtested properly. Fundamentals, intraday rules, and options logic do not fit the current daily-price engine. The wrong move would be to force them through anyway and get a clean-looking nonsense result. The system now detects and skips them.
+The fix was not just to patch the dispatch bug. The fix was to add batch diagnostics after every run so clone-like results become visible immediately.
 
-The dashboard had normal product bugs too: duplicated mobile sections, clipped tooltips, redundant pages, missing active states. Less glamorous, but just as important. If the interface becomes annoying, I stop using it. If I stop using it, the automation becomes theater.
+Another class of ideas could not be backtested honestly with the current engine. Fundamentals, intraday logic, and options strategies do not fit a daily-price backtester. Forcing them through would create clean-looking nonsense. The pipeline now detects unsupported strategy types and skips them instead of manufacturing precision.
 
-## What agents are actually good for here
+The dashboard had its own boring failures: duplicated mobile sections, clipped tooltips, missing active states, chart code pointing at absent containers, pages that were technically fresh while the underlying data was stale. These are product bugs, but they matter. If the interface hides uncertainty, the system becomes easier to overtrust.
 
-AI is not the strategy. It is the labor layer.
+Good automation should make bad states visible, not prettier.
 
-The agents help generate ideas, write code, inspect failures, add checks, and keep the pipeline moving. But they are useful only when their work is surrounded by evidence.
+## What the agents are allowed to be
 
-The pattern I trust looks like this:
+I do not think of the agents as portfolio managers. That gives them too much credit.
 
-1. Let agents do the repetitive work.
-2. Make every important output inspectable.
-3. Add diagnostics where silent failure would be expensive.
-4. Keep the final decision boring.
+They are closer to research operators. They gather data, expand candidate sets, draft hypotheses, run checks, inspect failures, and package outputs. They are useful because they are tireless, not because they are inherently trustworthy.
 
-The best agentic systems do not feel like magic. They feel like a junior analyst who works all night, writes everything down, and still needs review before anything touches money.
+Trust comes from the surrounding system: schemas, saved artifacts, diagnostics, gates, dashboards, and a workflow that is comfortable saying no.
 
-## What this project says about how I work
+The agent can propose. The pipeline has to preserve the evidence. The human still has to judge.
 
-This is probably the clearest example of the kind of work I like: messy data, product constraints, automation, and a UI that still has to be useful after the novelty wears off.
+## What this does not prove
 
-A few parts are representative:
+This project does not prove that agents can pick stocks.
 
-- I prefer inspectable systems over black boxes. The dashboard exposes logs, evidence, rejected ideas, and health checks.
-- I care about failure modes. The system has diagnostics for duplicate backtest results, stale data, unsupported strategy types, and blocked rebalances.
-- I build with boring infrastructure when boring is the right answer. Static files, JSON, cron, Jinja2, and Caddy are enough for this stage.
-- I use agents as leverage, not as an excuse to skip review. The more autonomy the system gets, the more visible its reasoning needs to be.
+It does not prove that a backtested signal will survive live trading. It does not remove liquidity risk, survivorship bias, corporate-action mess, overfitting, or the basic problem that markets change.
 
-## Where it is going
+That is the wrong standard anyway.
 
-The near-term work is mostly about making the loop harder to fool:
+The project is useful if it makes exploratory research repeatable enough to inspect. It should produce better questions, not pretend to produce final answers. It should make weak assumptions uncomfortable. It should turn a fluent thesis into a set of artifacts that can be checked, rejected, or watched over time.
 
-- better European data coverage
-- cleaner strategy classification
-- more realistic transaction cost and liquidity assumptions
-- stronger evidence pages for rejected strategies, not only winners
-- tighter paper-trading workflow before any real execution
+Paper trading is part of that discipline. It is a reality check, not a victory lap.
 
-Longer term, I want the system to become a research engine that keeps watch after the first signal. It should surface candidates, explain why they matter, test whether the idea has historical support, monitor whether the thesis is decaying, and show the evidence without me digging through logs.
+## The lesson
 
-The point is not to remove judgment.
+I started with a question about autonomous research. I ended up caring more about refusal.
 
-The point is to make judgment less random.
+The best part of the system is not that it can generate ideas. It is that it can preserve the work, expose the diagnostics, and sometimes decline to proceed.
+
+That is the standard I would apply to most agentic workflows now. Do not ask whether the agent can produce an answer. Ask whether it leaves enough behind for someone serious to inspect it.

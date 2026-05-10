@@ -1,6 +1,6 @@
 ---
 title: "Autonomous research pipeline"
-description: "An exploratory Hermes Agent project for European equities: screen ideas, generate strategies, backtest them, run pre-rebalance checks, and publish the evidence to a dashboard."
+description: "A Hermes Agent research loop for European equities that treats every output as provisional until it leaves evidence, passes diagnostics, and survives a pre-rebalance gate."
 pubDatetime: 2026-05-10T17:35:00Z
 tags: ["python", "ai", "investing", "automation", "dashboard"]
 featured: true
@@ -9,42 +9,70 @@ repository: ""
 ogImage: "/assets/images/project-thumbs/autonomous-research-pipeline.svg"
 ---
 
-This is the main project I am building around Hermes Agent: a research loop that goes from market data to ideas, from ideas to strategies, from strategies to backtests, and from backtests to a static dashboard.
+Most agent demos optimize for output. This project optimizes for auditability.
 
-The investment universe is deliberately constrained to European equities and PEA eligible instruments. That makes the problem more interesting. European tickers are messier than US tickers, liquidity matters more, and small caps can produce very misleading backtests if the system does not check its own assumptions.
+It is an exploratory Hermes Agent research loop for European equities and PEA eligible instruments. The system screens a constrained universe, generates strategy hypotheses, tests them with costs, applies diagnostics, tracks a paper portfolio, and publishes the evidence to a static dashboard.
+
+The point is not to make an agent sound like an investor. The point is to make every candidate leave enough evidence to be challenged.
 
 ![Autonomous research pipeline](../../assets/images/pea-research-pipeline.svg)
 
-## What I built
+## The constraint
 
-- A Python pipeline for screening European equities and ETFs
-- Strategy generation and batch backtesting
-- Viability filters based on Sharpe ratio and maximum drawdown
-- Transaction cost assumptions so results are not unrealistically clean
-- A paper portfolio with rebalance previews
-- A pre-rebalance assumption checker that can proceed, hold, or abort
-- Static dashboard pages for signals, evidence, agent logs, and system health
+European equity data is messy enough to expose lazy automation quickly.
 
-## The part that matters
+Ticker formats vary. Coverage is uneven. Liquidity matters. Small caps can produce attractive historical charts that would be difficult to trade. A clean-looking backtest can hide stale prices, thin samples, high turnover, or a strategy definition that accidentally falls through a generic code path.
 
-The most useful part is the pre-rebalance gate.
+That makes the domain useful for testing agentic research. The system has to preserve uncertainty instead of smoothing it away.
 
-A good-looking backtest can still be irrelevant today. The strategy may have decayed, the data may be stale, the market regime may have shifted, or the next earnings date may make the trade a bad idea. Before a paper rebalance, the system checks those assumptions instead of blindly following the latest signal.
+## System shape
+
+The pipeline runs as a control loop:
+
+- refresh market data and candidate universes
+- generate strategy hypotheses from research signals and factor conditions
+- backtest candidates with transaction costs
+- mark strategies viable only after risk filters
+- detect clone-like or unsupported backtests
+- select candidates for a paper portfolio
+- run a pre-rebalance gate before acting
+- publish signals, evidence, agent logs, and health checks to static pages
+
+The implementation is deliberately plain: Python, JSON artifacts, Jinja2 templates, cron, and Caddy. That is a feature. The fewer hidden services involved, the easier it is to inspect what happened after a run.
+
+## The skeptical part
+
+The pre-rebalance gate is the center of the project.
+
+Before the paper portfolio changes, the system checks whether the reason for acting still holds. It looks at strategy fitness, market regime, data freshness, earnings risk, thesis health, and sector rotation. The result is one of three states: `proceed`, `hold`, or `abort`.
 
 ![Pre-rebalance gate](../../assets/images/pea-pre-rebalance-gate.svg)
 
-## What it says about my work
+That matters because autonomous systems tend to have an action bias. They are built to produce something. In research, a good system should often refuse. `Hold` is not a failure. It is a safety feature.
 
-- Agentic workflow design: I am not only prompting agents, I am building guardrails, diagnostics, and evidence trails around them
-- Data engineering: the pipeline has to normalize messy European market data and survive scheduled runs
-- Product sense: the dashboard is mobile first because the useful output is a quick decision, not another complex terminal report
-- Risk awareness: the system can reject its own output before paper trading touches it
-- Pragmatism: static HTML, JSON files, Jinja2, cron, and Caddy are boring, but they are easy to audit and operate
+## Evidence trail
 
-## What I learned
+The dashboard is a ledger, not a showcase.
 
-The hard part is not making an agent generate ideas. That part is cheap.
+It exposes the artifacts that matter:
 
-The hard part is making the system notice when two strategies secretly use the same generic dispatch path, when a strategy cannot be backtested with daily prices, or when a valid historical result should not be traded today. The pipeline is becoming less like a bot and more like an analyst workbench: generate, test, reject, document, repeat.
+- generated hypotheses
+- backtest metrics and viability flags
+- rejected or unsupported strategy types
+- clone diagnostics
+- pre-rebalance decisions
+- paper orders and portfolio state
+- agent logs and health checks
+- stale-data warnings
+
+If a candidate survives, there should be a visible reason. If it fails, that failure should be visible too.
+
+## What still breaks
+
+The system is intentionally not presented as an alpha machine.
+
+Backtests can flatter weak ideas. European small-cap liquidity can dominate signal quality. Data coverage is uneven. Corporate actions and missing history still need attention. Paper trading is useful, but it is not proof of robustness.
+
+Those limitations are part of the design brief. The project is less about predicting returns and more about building a research process that makes weak assumptions visible before they become decisions.
 
 I wrote more about the build in [Agents are useful when they leave receipts](/posts/building-autonomous-pea-research-pipeline/).
