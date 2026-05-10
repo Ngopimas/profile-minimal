@@ -47,4 +47,4 @@ The hard part is not making an agent generate ideas. That part is cheap.
 
 The hard part is making the system notice when two strategies secretly use the same generic dispatch path, when a strategy cannot be backtested with daily prices, or when a valid historical result should not be traded today. The pipeline is becoming less like a bot and more like an analyst workbench: generate, test, reject, document, repeat.
 
-I wrote more about the build in [Building an autonomous research pipeline with Hermes Agent](/posts/building-autonomous-pea-research-pipeline/).
+I wrote more about the build in [Agents are useful when they leave receipts](/posts/building-autonomous-pea-research-pipeline/).
