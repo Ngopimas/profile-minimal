@@ -8,6 +8,7 @@ import ProjectCard from "@components/ProjectCard";
 import { SITE } from "@config";
 import type { Page } from "astro";
 import type { CollectionEntry } from "astro:content";
+import getEntrySlug from "@utils/getEntrySlug";
 
 export interface Props {
   page: Page<CollectionEntry<"projects">>;
@@ -21,8 +22,11 @@ const { page } = Astro.props;
   <Main pageTitle="Work" pageDesc="A bit of what I've worked on.">
     <ul class="grid grid-cols-1 gap-6">
       {
-        page.data.map(({ data, slug }) => (
-          <ProjectCard href={`/projects/${slug}/`} frontmatter={data} />
+        page.data.map(project => (
+          <ProjectCard
+            href={`/projects/${getEntrySlug(project)}/`}
+            frontmatter={project.data}
+          />
         ))
       }
     </ul>

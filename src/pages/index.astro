@@ -12,6 +12,7 @@ import ProjectCard from "@components/ProjectCard";
 import Image from "astro/components/Image.astro";
 import image from "@assets/images/romain.jpeg";
 import getReadingTime from "@utils/getReadingTime";
+import getEntrySlug from "@utils/getEntrySlug";
 
 const posts = await getCollection("blog");
 const projects = await getCollection("projects");
@@ -93,11 +94,11 @@ const socialCount = SOCIALS.filter(social => social.active).length;
           </div>
           <div class="grid gap-6">
             {featuredProjects.map(
-              ({ data, slug }, index) =>
+              (project, index) =>
                 index < SITE.postPerIndex && (
                   <ProjectCard
-                    href={`/projects/${slug}/`}
-                    frontmatter={data}
+                    href={`/projects/${getEntrySlug(project)}/`}
+                    frontmatter={project.data}
                     secHeading={false}
                   />
                 )
@@ -121,13 +122,13 @@ const socialCount = SOCIALS.filter(social => social.active).length;
           </div>
           <div class="grid gap-6">
             {sortedPosts.map(
-              ({ data, slug, body }, index) =>
+              (post, index) =>
                 index < SITE.postPerIndex && (
                   <Card
-                    href={`/posts/${slug}/`}
-                    frontmatter={data}
+                    href={`/posts/${getEntrySlug(post)}/`}
+                    frontmatter={post.data}
                     secHeading={false}
-                    readingTime={getReadingTime(body)}
+                    readingTime={getReadingTime(post.body)}
                   />
                 )
             )}

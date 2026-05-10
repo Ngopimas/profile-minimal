@@ -2,6 +2,7 @@
 import { type CollectionEntry, getCollection } from "astro:content";
 import PostDetails from "@layouts/PostDetails.astro";
 import getSortedPosts from "@utils/getSortedPosts";
+import getEntrySlug from "@utils/getEntrySlug";
 
 export interface Props {
   post: CollectionEntry<"blog">;
@@ -11,7 +12,7 @@ export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
 
   const postResult = posts.map(post => ({
-    params: { slug: post.slug || post.id.replace(/^blog\//, "") },
+    params: { slug: getEntrySlug(post) },
     props: { post },
   }));
 
