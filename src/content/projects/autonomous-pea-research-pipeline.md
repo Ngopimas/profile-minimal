@@ -40,6 +40,18 @@ The pipeline runs as a control loop:
 
 The implementation is deliberately plain: Python, JSON artifacts, Jinja2 templates, cron, and Caddy. That is a feature. The fewer hidden services involved, the easier it is to inspect what happened after a run.
 
+This is not a mockup. The running dashboard is generated from artifacts written by the pipeline.
+
+![Static dashboard ledger](../../assets/images/pea-dashboard-ledger.svg)
+
+## Stack
+
+- Python workers for data, strategy generation, backtesting, and paper trading
+- JSON and CSV artifacts as the system state
+- Jinja2 templates for static dashboard pages
+- Cron for scheduled runs
+- Caddy for serving the private dashboard
+
 ## The skeptical part
 
 The pre-rebalance gate is the center of the project.

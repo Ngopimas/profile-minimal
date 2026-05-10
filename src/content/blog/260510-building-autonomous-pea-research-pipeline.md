@@ -77,7 +77,11 @@ The dashboard is not there to make the project look finished. It is there to exp
 
 It shows what ran, what changed, what passed, what failed, and what the system refused to do. Signals are only one page. The more important pages are evidence, agent logs, health, assumptions, diagnostics, rejected ideas, and stale-data warnings.
 
-The stack is intentionally boring:
+![Static dashboard ledger](../../assets/images/pea-dashboard-ledger.svg)
+
+This is not a mockup. The running dashboard is generated from files written by the pipeline. The public image above is sanitized, but the shape is the same: JSON artifacts in, static pages out.
+
+The stack is intentionally plain:
 
 - Python for data collection, screening, backtesting, and report generation
 - Jinja2 for static templates
@@ -85,9 +89,7 @@ The stack is intentionally boring:
 - JSON and CSV files as system state
 - Caddy serving the private dashboard
 
-This is not minimalism for taste. It is an operational choice. A static dashboard has fewer moving parts than an app server. JSON artifacts are easy to diff, copy, inspect, and back up. If something matters, it should leave a file behind.
-
-That makes the system less magical, which is exactly what I want.
+A static dashboard has fewer moving parts than an app server. JSON artifacts are easy to diff, copy, inspect, and back up. If something matters, it should leave a file behind.
 
 ## What actually runs
 
@@ -112,13 +114,11 @@ When something looks wrong, the question is not "what did the agent mean?" The q
 
 The best improvements came from results that looked good for the wrong reason.
 
-Early strategy variants sometimes produced identical backtest outputs. That could have been mistaken for robustness. It was not. Different definitions were falling into the same generic dispatch path, so the system was testing clones while pretending to test independent ideas.
+Early strategy variants sometimes produced identical backtest outputs. That could have been mistaken for robustness. It was not. In one batch, separate variants came back with the same Sharpe, maximum drawdown, CAGR, and trade count. That was the tell: the strategy definitions were falling into the same generic dispatch path.
 
 The fix was not just to patch the dispatch bug. The fix was to add batch diagnostics after every run so clone-like results become visible immediately.
 
 Another class of ideas could not be backtested honestly with the current engine. Fundamentals, intraday logic, and options strategies do not fit a daily-price backtester. Forcing them through would create clean-looking nonsense. The pipeline now detects unsupported strategy types and skips them instead of manufacturing precision.
-
-The dashboard had its own boring failures: duplicated mobile sections, clipped tooltips, missing active states, chart code pointing at absent containers, pages that were technically fresh while the underlying data was stale. These are product bugs, but they matter. If the interface hides uncertainty, the system becomes easier to overtrust.
 
 Good automation should make bad states visible, not prettier.
 
@@ -143,6 +143,8 @@ That is the wrong standard anyway.
 The project is useful if it makes exploratory research repeatable enough to inspect. It should produce better questions, not pretend to produce final answers. It should make weak assumptions uncomfortable. It should turn a fluent thesis into a set of artifacts that can be checked, rejected, or watched over time.
 
 Paper trading is part of that discipline. It is a reality check, not a victory lap.
+
+The shorter project page is here: [Autonomous research pipeline](/projects/autonomous-pea-research-pipeline/).
 
 ## The lesson
 
