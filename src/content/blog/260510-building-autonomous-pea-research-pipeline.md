@@ -86,6 +86,22 @@ No database to babysit. No app server exposed to the internet. No heroic infrast
 
 That sounds low tech, but it has one big advantage: when something matters, it leaves a file behind.
 
+## What actually runs
+
+The system is split into a few boring jobs instead of one clever monolith.
+
+A data job refreshes prices and universe files. A discovery job adds new strategy hypotheses. A backtest job tests pending ideas and marks them viable only if they clear the risk gates. A selection job chooses candidates for the paper portfolio. A paper-trading job turns selected strategies into target positions. A dashboard job renders the current state into static pages.
+
+The important detail is that each step writes an artifact the next step can inspect:
+
+- strategy candidates live in a strategy pool
+- backtests write metrics, risk checks, and viability flags
+- the assumption checker writes a `proceed`, `hold`, or `abort` decision
+- paper trading writes target orders and portfolio state
+- the dashboard renders those files without inventing a story
+
+That makes debugging less romantic but much faster. When something looks wrong, I can usually trace it to a file rather than guessing what an agent "meant" to do.
+
 ## The bugs that made it better
 
 The best improvements came from things breaking in suspicious ways.
