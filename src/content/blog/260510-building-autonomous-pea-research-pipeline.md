@@ -1,21 +1,24 @@
 ---
 author: Romain C.
 pubDatetime: 2026-05-10T17:30:00Z
-title: "Building an autonomous research pipeline for my PEA"
+title: "Building an autonomous research pipeline with Hermes Agent"
 slug: building-autonomous-pea-research-pipeline
 featured: true
 draft: false
 tags: ["ai", "investing", "automation", "dashboard", "python"]
-description: "How I am building a private research system that finds European stock ideas, backtests strategies, checks assumptions before rebalancing, and turns the whole process into a small mobile dashboard."
+description: "How an exploratory Hermes Agent project grew into a research system that finds European stock ideas, backtests strategies, checks assumptions before rebalancing, and publishes the evidence to a small dashboard."
+ogImage: "/assets/images/pea-research-pipeline.svg"
 ---
 
-I started this project because my investing process had become too manual.
+I started this project as an excuse to push Hermes Agent beyond toy tasks.
 
-I would read an idea, check a few ratios, look at the chart, compare it with ETFs, maybe run a rough backtest, then forget half of the reasoning two weeks later. That is fine for casual investing. It is less fine when the goal is to build a repeatable process for a PEA portfolio, where the universe is mostly European equities and the interesting ideas are often small caps that do not show up in every obvious screen.
+The first version was simple: could an agent help maintain a small research workflow without me babysitting every step? Then the project grew. It started collecting data, generating ideas, running backtests, checking assumptions, and publishing the results to a dashboard.
 
-So we are building something more systematic: a private research pipeline that goes from market data to strategy ideas, from strategy ideas to backtests, from backtests to paper trades, and from paper trades to a dashboard I can check on my phone.
+The investing universe is deliberately narrow: European equities and PEA eligible instruments. That constraint makes the project more interesting. It forces the system to deal with messy tickers, uneven liquidity, and the kind of small cap names that do not show up cleanly in generic US first tooling.
 
-It is not meant to be a magic trading bot. If anything, the main goal is the opposite: make the process more boring, more inspectable, and less dependent on whatever I happened to read that morning.
+![Autonomous research pipeline](../../assets/images/pea-research-pipeline.svg)
+
+It is not meant to be a magic trading bot. If anything, the main goal is the opposite: make the process more boring, more inspectable, and less dependent on whatever idea happened to be interesting that morning.
 
 ## What the system does today
 
@@ -36,13 +39,13 @@ The dashboard matters more than it sounds. Most automation projects fail because
 
 ## Why PEA makes this harder
 
-A PEA is a nice wrapper, but it is not the easiest universe to automate.
+A PEA eligible universe is a useful constraint, but it is not the easiest one to automate.
 
 US data is clean, cheap, and everywhere. European equity data is messier. Tickers are less standardized. Liquidity varies a lot. Small caps can look statistically attractive until you account for spreads, turnover, and the fact that a backtest might be using stale or incomplete data.
 
-There is also a practical constraint: I do not want a generic global quant system. I want something that fits how I actually invest.
+There is also a practical constraint: this is not a generic global quant system. The point is to see whether Hermes Agent can run a focused research loop in a universe that is small enough to inspect.
 
-That means Europe first. PEA first. Stocks like ASML, Schneider Electric, LVMH, Hermes, Air Liquide, Vusion, and 2CRSI are more relevant to me than another US mega cap screen. I am also interested in small cap alpha and occasional pump and dump type setups, but only if the system can separate a real signal from noise.
+That means Europe first. Stocks like ASML, Schneider Electric, LVMH, Hermes, Air Liquide, Vusion, and 2CRSI are more relevant here than another US mega cap screen. I am also interested in small cap alpha and occasional pump and dump type setups, but only if the system can separate a real signal from noise.
 
 This is why the pipeline is built around checks rather than hype.
 
@@ -67,6 +70,8 @@ So before a paper trade rebalance, the system runs a gate with four checks:
 - Earnings risk: are we about to trade into an event we should avoid?
 
 The output is deliberately blunt: proceed, hold, or abort.
+
+![Pre-rebalance gate](../../assets/images/pea-pre-rebalance-gate.svg)
 
 This changes the feel of the project. It is no longer just "find a strategy and trade it." It is closer to a small investment committee that asks: "Does the reason for this trade still exist?"
 

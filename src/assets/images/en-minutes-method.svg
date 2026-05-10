@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">En Minutes calculation model</title>
+  <desc id="desc">A diagram showing raw prices and net salary data converted into minutes of work, then displayed as interactive charts and comparisons.</desc>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 L0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.8" opacity="0.7" />
+    </pattern>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#94a3b8" />
+    </marker>
+    <style>
+      .bg { fill: #020617; }
+      .panel { fill: #0f172a; stroke: #334155; stroke-width: 1.5; }
+      .title { fill: #e2e8f0; font: 700 30px Inter, ui-sans-serif, system-ui, sans-serif; }
+      .subtitle { fill: #94a3b8; font: 500 15px Inter, ui-sans-serif, system-ui, sans-serif; }
+      .label { fill: #f8fafc; font: 700 18px Inter, ui-sans-serif, system-ui, sans-serif; }
+      .small { fill: #cbd5e1; font: 500 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+      .tiny { fill: #94a3b8; font: 500 11px Inter, ui-sans-serif, system-ui, sans-serif; }
+      .price { fill: #082f49; stroke: #38bdf8; stroke-width: 1.8; }
+      .salary { fill: #064e3b; stroke: #34d399; stroke-width: 1.8; }
+      .formula { fill: #4c1d95; stroke: #a78bfa; stroke-width: 1.8; }
+      .output { fill: #78350f; stroke: #fbbf24; stroke-width: 1.8; }
+      .warn { fill: #451a03; stroke: #fb923c; stroke-width: 1.6; }
+      .line { fill: none; stroke: #94a3b8; stroke-width: 2.3; marker-end: url(#arrow); }
+      .chartLine { fill: none; stroke: #fbbf24; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+      .axis { stroke: #64748b; stroke-width: 1.5; }
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="675" />
+  <rect width="1200" height="675" fill="url(#grid)" opacity="0.55" />
+  <rect class="panel" x="52" y="42" width="1096" height="590" rx="28" />
+  <text class="title" x="92" y="98">En Minutes</text>
+  <text class="subtitle" x="92" y="127">Raw prices are noisy. Minutes of work make different decades easier to compare.</text>
+
+  <rect class="price" x="96" y="210" width="226" height="132" rx="20" />
+  <text class="label" x="132" y="252">Price history</text>
+  <text class="small" x="132" y="282">Baguette, rent, coffee</text>
+  <text class="small" x="132" y="306">Francs before 2002</text>
+
+  <rect class="salary" x="96" y="386" width="226" height="132" rx="20" />
+  <text class="label" x="132" y="428">Salary history</text>
+  <text class="small" x="132" y="458">Net SMIC, median, mean</text>
+  <text class="small" x="132" y="482">Hourly reference</text>
+
+  <path class="line" d="M322 276 C388 276 430 314 488 346" />
+  <path class="line" d="M322 452 C390 452 430 402 488 360" />
+
+  <rect class="formula" x="488" y="268" width="262" height="154" rx="22" />
+  <text class="label" x="532" y="312">Normalize</text>
+  <text class="small" x="532" y="344">price / salary per minute</text>
+  <text class="tiny" x="532" y="376">The denominator matters. Gross pay gave</text>
+  <text class="tiny" x="532" y="396">cleaner numbers, but the wrong story.</text>
+
+  <path class="line" d="M750 345 C812 345 840 345 900 345" />
+
+  <rect class="output" x="900" y="186" width="214" height="318" rx="24" />
+  <text class="label" x="944" y="230">Interactive app</text>
+  <line class="axis" x1="942" y1="432" x2="1074" y2="432" />
+  <line class="axis" x1="942" y1="288" x2="942" y2="432" />
+  <polyline class="chartLine" points="946,392 970,380 994,350 1018,356 1042,318 1068,300" />
+  <circle cx="946" cy="392" r="4" fill="#fbbf24" />
+  <circle cx="970" cy="380" r="4" fill="#fbbf24" />
+  <circle cx="994" cy="350" r="4" fill="#fbbf24" />
+  <circle cx="1018" cy="356" r="4" fill="#fbbf24" />
+  <circle cx="1042" cy="318" r="4" fill="#fbbf24" />
+  <circle cx="1068" cy="300" r="4" fill="#fbbf24" />
+  <text class="small" x="944" y="466">Minutes of work</text>
+  <text class="tiny" x="944" y="486">Charts, comparisons, index</text>
+
+  <rect class="warn" x="384" y="520" width="432" height="58" rx="18" />
+  <text class="small" x="422" y="555">The hard bug was not visual. It was choosing net salary over gross salary.</text>
+</svg>

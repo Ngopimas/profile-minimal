@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Pre-rebalance gate flow</title>
+  <desc id="desc">A diagram showing four checks before a rebalance: strategy fitness, market regime, data freshness, and earnings risk. The output is proceed, hold, or abort.</desc>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 L0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.8" opacity="0.7" />
+    </pattern>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#94a3b8" />
+    </marker>
+    <style>
+      .bg { fill: #020617; }
+      .card { fill: #0f172a; stroke: #334155; stroke-width: 1.5; }
+      .title { fill: #e2e8f0; font: 700 30px Inter, ui-sans-serif, system-ui, sans-serif; }
+      .subtitle { fill: #94a3b8; font: 500 15px Inter, ui-sans-serif, system-ui, sans-serif; }
+      .label { fill: #f8fafc; font: 700 17px Inter, ui-sans-serif, system-ui, sans-serif; }
+      .small { fill: #cbd5e1; font: 500 13px Inter, ui-sans-serif, system-ui, sans-serif; }
+      .tiny { fill: #94a3b8; font: 500 11px Inter, ui-sans-serif, system-ui, sans-serif; }
+      .check { fill: #111827; stroke: #38bdf8; stroke-width: 1.6; }
+      .warn { fill: #451a03; stroke: #f59e0b; stroke-width: 1.6; }
+      .stop { fill: #450a0a; stroke: #f87171; stroke-width: 1.6; }
+      .go { fill: #052e16; stroke: #4ade80; stroke-width: 1.6; }
+      .line { fill: none; stroke: #94a3b8; stroke-width: 2.2; marker-end: url(#arrow); }
+      .dash { fill: none; stroke: #fb7185; stroke-width: 2; stroke-dasharray: 7 7; marker-end: url(#arrow); }
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="675" />
+  <rect width="1200" height="675" fill="url(#grid)" opacity="0.55" />
+  <rect class="card" x="52" y="42" width="1096" height="590" rx="28" />
+  <text class="title" x="92" y="98">The pre-rebalance gate</text>
+  <text class="subtitle" x="92" y="127">A backtest is not enough. The system has to ask whether the trade still makes sense now.</text>
+
+  <rect class="check" x="86" y="228" width="198" height="104" rx="18" />
+  <text class="label" x="118" y="268">Strategy fitness</text>
+  <text class="small" x="118" y="298">Is performance still sane?</text>
+
+  <rect class="check" x="358" y="228" width="198" height="104" rx="18" />
+  <text class="label" x="390" y="268">Market regime</text>
+  <text class="small" x="390" y="298">Does the setup still fit?</text>
+
+  <rect class="check" x="630" y="228" width="198" height="104" rx="18" />
+  <text class="label" x="662" y="268">Data freshness</text>
+  <text class="small" x="662" y="298">Are inputs recent enough?</text>
+
+  <rect class="check" x="902" y="228" width="198" height="104" rx="18" />
+  <text class="label" x="934" y="268">Earnings risk</text>
+  <text class="small" x="934" y="298">Are we trading into news?</text>
+
+  <path class="line" d="M184 332 C184 390 358 410 500 420" />
+  <path class="line" d="M456 332 C456 384 504 402 548 420" />
+  <path class="line" d="M728 332 C728 384 678 402 632 420" />
+  <path class="line" d="M1000 332 C1000 390 822 410 680 420" />
+
+  <rect class="card" x="430" y="420" width="340" height="76" rx="18" />
+  <text class="label" x="516" y="453">Gate decision</text>
+  <text class="tiny" x="486" y="478">No silent rebalance. Every decision gets written to JSON.</text>
+
+  <path class="line" d="M510 496 L312 558" />
+  <path class="line" d="M600 496 L600 558" />
+  <path class="dash" d="M690 496 L888 558" />
+
+  <rect class="go" x="190" y="558" width="244" height="58" rx="18" />
+  <text class="label" x="276" y="593">Proceed</text>
+
+  <rect class="warn" x="478" y="558" width="244" height="58" rx="18" />
+  <text class="label" x="578" y="593">Hold</text>
+
+  <rect class="stop" x="766" y="558" width="244" height="58" rx="18" />
+  <text class="label" x="866" y="593">Abort</text>
+</svg>

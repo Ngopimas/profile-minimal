@@ -17,6 +17,8 @@ This post is about how I built [En Minutes](https://enminutes.fr) - a bilingual,
 
 ![En Minutes](../../assets/images/en-minutes.png)
 
+![How En Minutes works](../../assets/images/en-minutes-method.svg)
+
 ## The Core Idea
 
 The premise is simple: a baguette costs around 1.20€ today. But is that expensive? Compared to what?

@@ -6,6 +6,7 @@ tags: ["react", "typescript", "data-visualization", "economics"]
 featured: true
 url: "https://enminutes.fr"
 repository: "https://github.com/Ngopimas/enminutes"
+ogImage: "/assets/images/en-minutes.png"
 image: "../../assets/images/en-minutes.png"
 ---
 
@@ -14,6 +15,8 @@ En Minutes started from a simple question: what does something really cost if yo
 A baguette at 1.20€ today looks more expensive than a baguette in 1960. But raw prices are almost useless across decades. Inflation, francs, euros, salary growth, and taxes all get mixed together. Minutes of work are easier to understand.
 
 The app converts historical French prices into the number of minutes needed to earn them at a given salary level.
+
+![How En Minutes works](../../assets/images/en-minutes-method.svg)
 
 ![En Minutes](../../assets/images/en-minutes.png)
 
