@@ -33,7 +33,7 @@ A good-looking backtest can still be irrelevant today. The strategy may have dec
 
 ![Pre-rebalance gate](../../assets/images/pea-pre-rebalance-gate.svg)
 
-## What this shows recruiters
+## What it says about my work
 
 - Agentic workflow design: I am not only prompting agents, I am building guardrails, diagnostics, and evidence trails around them
 - Data engineering: the pipeline has to normalize messy European market data and survive scheduled runs

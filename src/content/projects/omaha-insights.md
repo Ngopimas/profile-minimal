@@ -29,7 +29,7 @@ Finance tools can become unreadable very quickly. The work was less about adding
 
 The UI needed to handle dense data without feeling like a spreadsheet clone. That meant reusable table patterns, consistent chart behavior, and enough spacing for the product to stay usable on smaller screens.
 
-## What this shows recruiters
+## What it says about my work
 
 - Product engineering for data-heavy B2B workflows
 - Strong frontend implementation with Next.js, TypeScript, Tailwind, and Recharts

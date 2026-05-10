@@ -32,7 +32,7 @@ If the question is "how long do I need to work to buy this?", the salary referen
 
 Fixing that meant rebuilding part of the dataset. Recent net SMIC data is available from INSEE, but older years required reconstructing historical social contribution rates and checking the old franc to new franc conversion carefully. A small-looking accounting detail changed the whole app.
 
-## What this shows recruiters
+## What it says about my work
 
 - Product thinking: the unit of measurement is the product, not just a chart setting
 - Data judgment: I corrected the gross/net salary methodology instead of keeping a cleaner but wrong story

@@ -35,7 +35,7 @@ The project needed to balance technical accuracy with public readability. Too mu
 
 The other challenge was performance. 3D models, terrain, and geospatial context can get heavy quickly, especially in a browser. I had to keep the scene fluid while preserving enough context for visitors to understand what they were looking at.
 
-## What this shows recruiters
+## What it says about my work
 
 - 3D web development with real constraints, not a decorative Three.js demo
 - Geospatial thinking with terrain, satellite imagery, and site positioning

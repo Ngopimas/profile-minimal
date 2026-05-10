@@ -28,7 +28,7 @@ Geoscience software has two problems at once: the data is heavy, and the domain 
 
 That meant working closely with domain experts, simplifying complex actions in the UI, and keeping the architecture flexible enough for different client setups.
 
-## What this shows recruiters
+## What it says about my work
 
 - Experience with domain-heavy B2B software
 - Ability to translate specialist workflows into usable web interfaces

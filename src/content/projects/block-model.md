@@ -29,7 +29,7 @@ The main constraint was performance. A block model can contain a huge number of 
 
 The UI also had to stay simple. Geological users need slicing, colors, and properties to be obvious. If the controls require a tutorial, the tool fails.
 
-## What this shows recruiters
+## What it says about my work
 
 - Practical 3D performance work in the browser
 - React and Three.js implementation on a data-heavy use case

@@ -30,7 +30,7 @@ The product had to hide cloud complexity without pretending it did not exist. Us
 
 That pushed the architecture toward workspace boundaries and least privilege access. Each app needed its own execution context, and the UI had to make technical states understandable to users who were not cloud engineers.
 
-## What this shows recruiters
+## What it says about my work
 
 - Full stack ownership across frontend, backend, auth, storage, and deployment workflows
 - Strong TypeScript and Next.js implementation on a real product, not a demo

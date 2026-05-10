@@ -28,7 +28,7 @@ The platform had to support users who were not necessarily technical, while stil
 
 The main engineering challenge was integrating new features into an existing codebase without making the interface harder to maintain.
 
-## What this shows recruiters
+## What it says about my work
 
 - Contractor experience with direct stakeholder communication
 - React implementation inside an existing product

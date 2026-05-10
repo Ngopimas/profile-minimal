@@ -24,7 +24,7 @@ The goal is not to impress with a heavy frontend. It is to keep the site fast, r
 - GitHub Pages deployment with a custom domain
 - Performance-focused Astro build with minimal client JavaScript
 
-## What this shows recruiters
+## What it says about my work
 
 - Care for performance and accessibility
 - Ability to keep a personal codebase clean and maintainable
