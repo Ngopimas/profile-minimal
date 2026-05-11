@@ -132,7 +132,7 @@ export default async () => {
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "baseline",
+            alignItems: "center",
             borderTop: "1px solid #1e1e22",
             paddingTop: "28px",
           }}
@@ -148,16 +148,22 @@ export default async () => {
           >
             {new URL(SITE.website).hostname}
           </p>
-          <p
+          <div
             style={{
-              fontSize: 14,
-              color: "#1e8c78",
+              display: "flex",
+              alignItems: "center",
+              background: "#1e8c78",
+              color: "#0a0a0e",
+              fontSize: 15,
               fontFamily: "IBM Plex Mono",
-              fontWeight: 400,
+              fontWeight: 700,
+              letterSpacing: "0.04em",
+              padding: "10px 22px",
+              borderRadius: "4px",
             }}
           >
             View work →
-          </p>
+          </div>
         </div>
       </div>
     </div>,

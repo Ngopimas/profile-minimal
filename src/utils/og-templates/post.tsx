@@ -127,7 +127,7 @@ export default async (post: CollectionEntry<"blog">) => {
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "baseline",
+            alignItems: "center",
             borderTop: "1px solid #1e1e22",
             paddingTop: "28px",
           }}
@@ -142,16 +142,22 @@ export default async (post: CollectionEntry<"blog">) => {
           >
             {post.data.author} · {pubDate}
           </p>
-          <p
+          <div
             style={{
-              fontSize: 14,
-              color: "#1e8c78",
+              display: "flex",
+              alignItems: "center",
+              background: "#1e8c78",
+              color: "#0a0a0e",
+              fontSize: 15,
               fontFamily: "IBM Plex Mono",
-              fontWeight: 400,
+              fontWeight: 700,
+              letterSpacing: "0.04em",
+              padding: "10px 22px",
+              borderRadius: "4px",
             }}
           >
             Read article →
-          </p>
+          </div>
         </div>
       </div>
     </div>,
