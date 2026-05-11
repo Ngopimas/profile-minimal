@@ -19,8 +19,8 @@ const { page } = Astro.props;
 
 <Layout title={`Projects | ${SITE.title}`}>
   <Header activeNav="projects" />
-  <Main pageTitle="Work" pageDesc="A bit of what I've worked on.">
-    <ul class="grid grid-cols-1 gap-6">
+  <Main pageTitle="Work" pageDesc="Systems, applications, and experiments.">
+    <ul class="divide-y divide-skin-line">
       {
         page.data.map(project => (
           <ProjectCard

@@ -1,16 +1,16 @@
 import type { Site, SocialObjects } from "./types";
 
 export const SITE: Site = {
-  website: "https://romaincoupey.com/", // replace this with your deployed domain
+  website: "https://romaincoupey.com/",
   author: "Romain Coupey",
   profile: "https://github.com/Ngopimas/",
-  desc: "Web Dev & Curious Tinkerer",
+  desc: "Software engineer building autonomous systems for research, data visualization, and web applications.",
   title: "Romain C.",
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,
   postPerIndex: 4,
   postPerPage: 5,
-  scheduledPostMargin: 15 * 60 * 1000, // 15 minutes
+  scheduledPostMargin: 15 * 60 * 1000,
   showArchives: false,
   editPost: {
     url: "https://github.com/Ngopimas/profile-minimal/edit/master/src/content/blog",

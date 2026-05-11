@@ -22,9 +22,9 @@ const { page } = Astro.props;
   <Header activeNav="posts" />
   <Main
     pageTitle="Writing"
-    pageDesc="Thoughts, tutorials and everything in between."
+    pageDesc="Notes on systems, data, and building things that expose their own reasoning."
   >
-    <ul class="grid grid-cols-1 gap-6">
+    <ul class="divide-y divide-skin-line">
       {
         page.data.map(post => (
           <Card

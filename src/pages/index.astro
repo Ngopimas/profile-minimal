@@ -6,11 +6,9 @@ import Footer from "@components/Footer.astro";
 import LinkButton from "@components/LinkButton.astro";
 import Card from "@components/Card";
 import Socials from "@components/Socials.astro";
+import ProjectCard from "@components/ProjectCard";
 import getSortedPosts from "@utils/getSortedPosts";
 import { SITE, SOCIALS } from "@config";
-import ProjectCard from "@components/ProjectCard";
-import Image from "astro/components/Image.astro";
-import image from "@assets/images/romain.jpeg";
 import getReadingTime from "@utils/getReadingTime";
 import getEntrySlug from "@utils/getEntrySlug";
 
@@ -26,73 +24,49 @@ const socialCount = SOCIALS.filter(social => social.active).length;
 
 <Layout>
   <Header />
-  <main id="main-content" class="">
-    <section id="hero" class="mx-auto max-w-3xl">
-      <h1 class="heading text-4xl md:text-5xl">Hi there! I'm Romain 👋</h1>
+  <main id="main-content">
+    <section id="hero" class="mx-auto max-w-4xl">
+      <h1 class="heading text-4xl font-medium md:text-5xl lg:text-6xl">
+        Building systems that leave evidence.
+      </h1>
       <div class="hero-container">
         <div class="hero-content">
-          <p>
-            Software engineer <span class="text-skin-accent">@</span><LinkButton
+          <p class="text-lg text-skin-base/80">
+            Software engineer at <LinkButton
               href="https://www.omaha-insights.com/"
               className="text-skin-accent underline-offset-4 hover:underline hover:opacity-80"
               title="Omaha Insights website"
-              aria-label="Omaha Insights website"
               target="_blank"
               rel="noopener noreferrer">Omaha Insights</LinkButton
-            >, with a passion for creating nice and functional web applications.
-            I love working with modern technologies and am always eager to learn
-            new things.
+            >. I design autonomous research pipelines, data visualizations, and web applications where the interesting part is not the output - it is the trace.
           </p>
-          <p>
-            <a
-              target="_blank"
-              href="/rss.xml"
-              class="text-skin-accent underline-offset-4 hover:underline hover:opacity-80"
-              aria-label="rss feed"
-              title="RSS Feed"
-            >
-              Follow along
-            </a>
-            as I continue to explore web development, AI, cloud architecture, and
-            interactive data visualizations.
+          <p class="text-skin-base/60">
+            Current focus: agentic systems for equity research, constraint-aware automation, and interfaces that expose uncertainty instead of hiding it.
           </p>
           {
             socialCount > 0 && (
-              <div class="flex items-center gap-2">
-                <span class="text-sm text-skin-base/70">Contact me:</span>
+              <div class="flex items-center gap-4 pt-2">
                 <Socials />
               </div>
             )
           }
-        </div>
-
-        <div class="hero-image">
-          <div class="image-container">
-            <Image
-              src={image}
-              alt="Romain"
-              class="profile-image"
-              loading="eager"
-            />
-            <div class="image-bg-decoration"></div>
-          </div>
         </div>
       </div>
     </section>
 
     {
       featuredProjects.length > 0 && (
-        <section class="mx-auto max-w-3xl py-12">
-          <div class="mb-8 flex items-center justify-between">
-            <h2 class="heading">Work</h2>
+        <section class="mx-auto max-w-4xl py-16">
+          <div class="mb-10 flex items-baseline justify-between">
+            <h2 class="font-display text-2xl font-medium tracking-tight">Selected Work</h2>
             <LinkButton
               href="/projects/"
-              className="text-sm text-skin-accent hover:opacity-80"
+              className="text-sm text-skin-base/50 hover:text-skin-accent transition-colors"
             >
-              View all projects →
+              View all
             </LinkButton>
           </div>
-          <div class="grid gap-6">
+          <div class="divide-y divide-skin-line">
             {featuredProjects.map(
               (project, index) =>
                 index < SITE.postPerIndex && (
@@ -110,17 +84,17 @@ const socialCount = SOCIALS.filter(social => social.active).length;
 
     {
       sortedPosts.length > 0 && (
-        <section class="mx-auto max-w-3xl pb-6 pt-12">
-          <div class="mb-8 flex items-center justify-between">
-            <h2 class="heading">Writing</h2>
+        <section class="mx-auto max-w-4xl py-16">
+          <div class="mb-10 flex items-baseline justify-between">
+            <h2 class="font-display text-2xl font-medium tracking-tight">Writing</h2>
             <LinkButton
               href="/posts/"
-              className="text-sm text-skin-accent hover:opacity-80"
+              className="text-sm text-skin-base/50 hover:text-skin-accent transition-colors"
             >
-              View all posts →
+              View all
             </LinkButton>
           </div>
-          <div class="grid gap-6">
+          <div class="divide-y divide-skin-line">
             {sortedPosts.map(
               (post, index) =>
                 index < SITE.postPerIndex && (
@@ -152,68 +126,19 @@ const socialCount = SOCIALS.filter(social => social.active).length;
   }
 
   .hero-container {
-    @apply flex flex-col items-center justify-between gap-8 md:flex-row-reverse;
+    @apply flex flex-col items-start justify-between gap-8;
     position: relative;
     z-index: 2;
   }
 
   #hero h1 {
-    @apply my-4 inline-block text-3xl font-bold sm:my-8 sm:text-5xl;
+    @apply mb-6 inline-block max-w-3xl;
   }
 
   .hero-content {
-    @apply flex-1;
+    @apply flex-1 max-w-2xl;
   }
   #hero p {
-    @apply my-2;
-  }
-  .social-wrapper {
-    @apply mt-4 flex flex-col sm:flex-row sm:items-center;
-  }
-  .social-links {
-    @apply mb-1 mr-2 whitespace-nowrap sm:mb-0;
-  }
-
-  .hero-image {
-    @apply flex-shrink-0;
-  }
-
-  .image-container {
-    position: relative;
-    width: 280px;
-    height: 280px;
-  }
-
-  .profile-image {
-    @apply rounded-lg object-cover;
-    width: 100%;
-    height: 100%;
-    position: relative;
-    z-index: 2;
-    border: 3px solid var(--color-bg);
-    box-shadow:
-      0 20px 25px -5px rgba(0, 0, 0, 0.1),
-      0 8px 10px -6px rgba(0, 0, 0, 0.1);
-  }
-
-  .image-bg-decoration {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 15px;
-    left: 15px;
-    background-color: var(--color-accent);
-    border-radius: 1rem;
-    z-index: 1;
-  }
-
-  /* ===== Featured & Recent Posts Sections ===== */
-  #featured,
-  #recent-posts {
-    @apply pb-6 pt-12;
-  }
-  #featured h2,
-  #recent-posts h2 {
-    @apply text-2xl font-semibold tracking-wide;
+    @apply my-3;
   }
 </style>

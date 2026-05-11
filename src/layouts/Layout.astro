@@ -107,11 +107,11 @@ const structuredData = {
       set:html={JSON.stringify(structuredData)}
     />
 
-    <!-- Inter Font -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
       rel="preload"
       as="style"
       onload="this.onload=null; this.rel='stylesheet';"
@@ -138,41 +138,6 @@ const structuredData = {
   </head>
   <body>
     <div class="flex min-h-screen flex-col">
-      <!-- Minimalist geometric composition -->
-      <div class="fixed inset-0 -z-10 overflow-hidden">
-        <!-- Top right composition -->
-        <div
-          class="geometric-circle dotted absolute right-[8%] top-[7%] h-36 w-36 opacity-20 md:h-48 md:w-48"
-        >
-        </div>
-        <div
-          class="geometric-box striped absolute right-[17%] top-[18%] size-20 opacity-15 md:h-24 md:w-24"
-        >
-        </div>
-
-        <!-- Top left composition -->
-        <div
-          class="geometric-diamond striped rotate-15 absolute left-[4%] top-[24%] h-28 w-28 opacity-15 md:h-32 md:w-32"
-        >
-        </div>
-
-        <!-- Center accent -->
-        <div
-          class="geometric-triangle dotted -rotate-15 absolute left-[42%] top-[35%] h-16 w-16 opacity-15 md:h-20 md:w-20"
-        >
-        </div>
-
-        <!-- Bottom composition -->
-        <div
-          class="geometric-triangle striped absolute bottom-[15%] right-[18%] h-32 w-32 opacity-15 md:h-40 md:w-40"
-        >
-        </div>
-        <div
-          class="geometric-circle dotted md:h-30 md:w-30 absolute bottom-[18%] left-[15%] h-24 w-24 rotate-6 opacity-20"
-        >
-        </div>
-      </div>
-
       <slot />
     </div>
   </body>

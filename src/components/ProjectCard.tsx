@@ -16,37 +16,35 @@ export default function ProjectCard({
 
   const headerProps = {
     style: { viewTransitionName: slugifyStr(title) },
-    className: "text-lg font-medium text-skin-accent hover:opacity-80",
+    className: "text-lg font-medium text-skin-base group-hover:text-skin-accent transition-colors",
   };
 
   const imageUrl = typeof ogImage === "string" ? ogImage : ogImage?.src;
 
   return (
-    <li className="card group rounded-lg">
-      <a href={href} className="grid w-full gap-2">
+    <article className="group py-8">
+      <a href={href} className="block">
         {imageUrl && (
-          <div className="mb-4 overflow-hidden rounded-sm border border-skin-line">
+          <div className="mb-5 overflow-hidden rounded-sm">
             <img
               src={imageUrl}
               alt={title}
-              className="h-48 w-full object-cover transition-transform duration-200 group-hover:scale-105"
+              className="h-56 w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
             />
           </div>
         )}
-        <ul className="flex flex-wrap gap-4 text-sm text-skin-base/70">
-          {tags.map(tag => (
-            <li>
-              #&nbsp;<span>{tag}</span>
-            </li>
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-skin-base/40 mb-3">
+          {tags.slice(0, 4).map(tag => (
+            <span key={tag}>{tag}</span>
           ))}
-        </ul>
+        </div>
         {secHeading ? (
           <h2 {...headerProps}>{title}</h2>
         ) : (
           <h3 {...headerProps}>{title}</h3>
         )}
-        <p className="text-skin-base/80">{description}</p>
+        <p className="mt-2 text-skin-base/70 leading-relaxed max-w-2xl">{description}</p>
       </a>
-    </li>
+    </article>
   );
 }

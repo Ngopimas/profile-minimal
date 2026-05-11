@@ -15,7 +15,7 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
-        display: ["Inter", "system-ui", "sans-serif"],
+        display: ["Space Grotesk", "Inter", "system-ui", "sans-serif"],
       },
       fontSize: {
         'title': ['4rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
@@ -46,6 +46,7 @@ module.exports = {
           inverted: withOpacity("color-text-base"),
           card: withOpacity("color-card"),
           "card-muted": withOpacity("color-card-muted"),
+          border: withOpacity("color-border"),
           success: withOpacity("color-success"),
           error: withOpacity("color-error"),
           warning: withOpacity("color-warning"),

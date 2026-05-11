@@ -1,5 +1,4 @@
 @import "./design-tokens.css";
-@import "./geometric-patterns.css";
 
 @tailwind base;
 @tailwind components;
@@ -15,7 +14,7 @@
     display: block;
   }
   body {
-    @apply flex min-h-[100svh] flex-col bg-skin-fill font-sans text-skin-base selection:bg-skin-accent/5 selection:text-skin-base;
+    @apply flex min-h-[100svh] flex-col bg-skin-fill font-sans text-skin-base selection:bg-skin-accent/10 selection:text-skin-accent;
     line-height: 1.6;
     letter-spacing: -0.01em;
   }
@@ -25,30 +24,30 @@
     @apply fill-current hover:text-skin-accent/80;
   }
 
-  /* Typography styles */
+  /* Typography styles - stronger hierarchy with display font */
   h1,
   .h1 {
-    @apply text-title font-light leading-tight tracking-tighter;
+    @apply font-display text-title font-medium leading-tight tracking-tighter;
   }
 
   h2,
   .h2 {
-    @apply text-heading font-light leading-snug tracking-tight;
+    @apply font-display text-heading font-medium leading-snug tracking-tight;
   }
 
   h3,
   .h3 {
-    @apply text-subheading font-normal leading-relaxed tracking-tight;
+    @apply font-display text-subheading font-medium leading-relaxed tracking-tight;
   }
 
   p {
     @apply mb-6 leading-relaxed;
-    max-width: 75ch;
+    max-width: 70ch;
   }
 
-  /* Section spacing */
+  /* Section spacing - wider layouts */
   section {
-    @apply mx-auto max-w-3xl px-6 py-12 sm:py-16 md:py-20;
+    @apply mx-auto max-w-4xl px-6 py-16 sm:py-20 md:py-24;
   }
 
   section + section {
@@ -56,12 +55,11 @@
   }
 
   footer {
-    @apply mx-auto max-w-3xl px-6 py-8 text-sm;
+    @apply mx-auto max-w-4xl px-6 py-8 text-sm;
   }
 
   a {
-    /* @apply text-skin-accent outline-2 outline-offset-1 outline-skin-fill transition-all duration-300 hover:text-skin-accent/80 focus-visible:no-underline focus-visible:outline-dashed; */
-    @apply outline-2 outline-offset-1 outline-skin-fill hover:text-skin-accent/80 focus-visible:no-underline focus-visible:outline-dashed;
+    @apply outline-2 outline-offset-1 outline-skin-fill hover:text-skin-accent focus-visible:no-underline focus-visible:outline-dashed;
   }
 
   svg {
@@ -78,7 +76,7 @@
 
   /* ===== Content styling ===== */
   .prose {
-    @apply prose-headings:!mb-4 prose-headings:!font-light prose-headings:!text-skin-base prose-h1:!text-3xl prose-h1:!font-light prose-h2:!text-2xl prose-h2:!font-light prose-p:!leading-relaxed prose-p:!text-skin-base prose-a:!text-skin-accent prose-a:!no-underline hover:prose-a:!text-skin-accent/80 prose-blockquote:!rounded-md prose-blockquote:!border-l-skin-accent prose-blockquote:!bg-skin-card prose-blockquote:!px-4 prose-blockquote:!py-2 prose-strong:!text-skin-base prose-code:!rounded-md prose-code:!bg-skin-card prose-code:!px-1.5 prose-code:!py-0.5 prose-code:!text-sm prose-code:before:!content-none prose-code:after:!content-none prose-ol:!text-skin-base prose-ul:!text-skin-base prose-li:!mb-2 prose-li:marker:!text-skin-accent prose-table:!text-skin-base prose-th:!border prose-th:!border-skin-line prose-td:!border prose-td:!border-skin-line prose-img:!rounded-md prose-img:!border-0 prose-img:!shadow-md;
+    @apply prose-headings:!mb-4 prose-headings:!font-display prose-headings:!font-medium prose-headings:!text-skin-base prose-h1:!text-3xl prose-h2:!text-2xl prose-p:!leading-relaxed prose-p:!text-skin-base prose-a:!text-skin-accent prose-a:!no-underline hover:prose-a:!text-skin-accent/80 prose-blockquote:!rounded-none prose-blockquote:!border-l-2 prose-blockquote:!border-skin-accent prose-blockquote:!bg-transparent prose-blockquote:!px-4 prose-blockquote:!py-2 prose-strong:!text-skin-base prose-code:!rounded prose-code:!bg-skin-card prose-code:!px-1.5 prose-code:!py-0.5 prose-code:!text-sm prose-code:before:!content-none prose-code:after:!content-none prose-ol:!text-skin-base prose-ul:!text-skin-base prose-li:!mb-2 prose-li:marker:!text-skin-accent prose-table:!text-skin-base prose-th:!border prose-th:!border-skin-line prose-td:!border prose-td:!border-skin-line prose-img:!rounded-sm prose-img:!border-0;
   }
 
   /* ===== scrollbar ===== */
@@ -88,7 +86,7 @@
 
   /* width */
   ::-webkit-scrollbar {
-    @apply w-3;
+    @apply w-2;
   }
 
   /* Track */
@@ -98,7 +96,7 @@
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    @apply bg-skin-card;
+    @apply rounded-full bg-skin-border;
   }
 
   /* Handle on hover */
@@ -132,16 +130,6 @@
       opacity: 1;
     }
   }
-
-  /* Apply Dark Theme (if multi-theme specified) */
-  html[data-theme="dark"] pre:has(code),
-  html[data-theme="dark"] pre:has(code) span {
-    color: var(--shiki-dark) !important;
-    background-color: var(--shiki-dark-bg) !important;
-    font-style: var(--shiki-dark-font-style) !important;
-    font-weight: var(--shiki-dark-font-weight) !important;
-    text-decoration: var(--shiki-dark-text-decoration) !important;
-  }
 }
 
 /* Override Tailwind prose plugin's styling for code blocks in dark mode */
@@ -158,18 +146,18 @@ html[data-theme="dark"] .prose pre code {
     @apply outline-2 outline-offset-1 outline-skin-fill focus-visible:no-underline focus-visible:outline-dashed;
   }
 
-  /* Card component with improved hover effect */
+  /* Editorial card - minimal, no box */
   .card {
-    @apply list-none rounded-md border border-skin-line bg-skin-card p-6 transition-all duration-300 hover:translate-y-[-2px] hover:border-skin-accent/20 hover:shadow-lg;
+    @apply list-none border-b border-skin-line py-8 transition-all duration-300 last:border-b-0;
   }
 
   /* Typography components */
   .heading {
-    @apply text-heading font-light sm:text-3xl;
+    @apply font-display text-heading font-medium sm:text-3xl;
   }
 
   .subheading {
-    @apply mb-6 text-lg font-light text-skin-base/70;
+    @apply mb-6 text-lg font-normal text-skin-base/60;
   }
 
   /* Buttons */
@@ -249,22 +237,7 @@ html[data-theme="dark"] .prose pre code {
     @apply transition-transform duration-300 hover:translate-y-[-2px];
   }
 
-  .fade-up {
-    @apply animate-[fadeUp_0.5s_ease-out];
-  }
-
-  @keyframes fadeUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Responsive container sizes */
+  /* Responsive container sizes - wider */
   .container-sm {
     @apply mx-auto max-w-2xl px-4 sm:px-6;
   }

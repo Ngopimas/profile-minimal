@@ -68,22 +68,28 @@ const nextPost =
 <Layout {...layoutProps}>
   <Header />
 
-  <div class="mx-auto flex w-full max-w-3xl justify-start px-2">
+  <div class="mx-auto flex w-full max-w-4xl justify-start px-6">
     <button
-      class="focus-outline group mb-2 mt-8 flex hover:text-skin-accent"
+      class="focus-outline group mb-2 mt-8 flex items-center gap-1 text-sm text-skin-base/50 hover:text-skin-accent transition-colors"
       onclick="(() => (history.length === 1) ? window.location = '/' : history.back())()"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        class="group-hover:fill-skin-accent"
-        ><path
-          d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"
-        ></path>
-      </svg><span>Go back</span>
+        class="h-4 w-4"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      <span>Back</span>
     </button>
   </div>
   <main id="main-content">
-    <h1 transition:name={slugifyStr(title)} class="post-title inline-block">
+    <h1 transition:name={slugifyStr(title)} class="post-title">
       {title}
     </h1>
     <Datetime
@@ -191,10 +197,10 @@ const nextPost =
 
 <style>
   main {
-    @apply mx-auto w-full max-w-3xl px-4 pb-12;
+    @apply mx-auto w-full max-w-4xl px-6 pb-12;
   }
   .post-title {
-    @apply text-2xl font-semibold text-skin-accent;
+    @apply text-3xl font-medium text-skin-base;
   }
 </style>
 
