@@ -90,8 +90,8 @@ export default function SearchBar({ searchList }: Props) {
           <span className="sr-only">Search</span>
         </span>
         <input
-          className="block w-full rounded border border-skin-fill/40 bg-skin-fill py-3 pl-10 pr-3 placeholder:italic focus:border-skin-accent focus:outline-none"
-          placeholder="Search for anything..."
+          className="block w-full rounded border border-skin-line/40 bg-skin-card py-3 pl-10 pr-3 placeholder:text-skin-base/30 focus:border-skin-accent focus:outline-none"
+          placeholder="Search articles..."
           type="text"
           name="search"
           value={inputVal}
@@ -103,12 +103,8 @@ export default function SearchBar({ searchList }: Props) {
       </label>
 
       {inputVal.length > 1 && (
-        <div className="mt-8">
-          Found {searchResults?.length}
-          {searchResults?.length && searchResults?.length === 1
-            ? " result"
-            : " results"}{" "}
-          for '{inputVal}'
+        <div className="mt-8 text-sm text-skin-base/50">
+          {searchResults?.length} {searchResults?.length === 1 ? "result" : "results"}
         </div>
       )}
 

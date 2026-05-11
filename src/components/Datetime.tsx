@@ -39,13 +39,13 @@ export default function Datetime({
         <path d="M5 22h14c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2h-2V2h-2v2H9V2H7v2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2zM19 8l.001 12H5V8h14z"></path>
       </svg>
       {modDatetime && modDatetime > pubDatetime ? (
-        <span className={`italic ${size === "sm" ? "text-sm" : "text-base"}`}>
-          Updated:
+        <span className={`text-sm text-skin-base/50 ${size === "sm" ? "" : "text-base"}`}>
+          Updated
         </span>
       ) : (
         <span className="sr-only">Published:</span>
       )}
-      <span className={`italic ${size === "sm" ? "text-sm" : "text-base"}`}>
+      <span className={`text-sm text-skin-base/50 ${size === "sm" ? "" : "text-base"}`}>
         <FormattedDatetime
           pubDatetime={pubDatetime}
           modDatetime={modDatetime}
@@ -112,7 +112,7 @@ const EditPost = ({ editPost, postId }: EditPostProps) => {
             <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
             <path d="M16 5l3 3" />
           </svg>
-          <span className="text-base italic">{editPostText}</span>
+          <span className="text-sm text-skin-base/50">{editPostText}</span>
         </a>
       </>
     )

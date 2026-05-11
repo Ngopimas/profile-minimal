@@ -6,84 +6,54 @@ export default async () => {
   return satori(
     <div
       style={{
-        background: "#fefbfb",
+        background: "#0a0a0e",
         width: "100%",
         height: "100%",
         display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        flexDirection: "column",
+        padding: "80px",
       }}
     >
       <div
         style={{
-          position: "absolute",
-          top: "-1px",
-          right: "-1px",
-          border: "4px solid #000",
-          background: "#ecebeb",
-          opacity: "0.9",
-          borderRadius: "4px",
-          display: "flex",
-          justifyContent: "center",
-          margin: "2.5rem",
-          width: "88%",
-          height: "80%",
+          width: "80px",
+          height: "4px",
+          background: "#1e8c78",
+          marginBottom: "48px",
         }}
       />
-
-      <div
+      <p
         style={{
-          border: "4px solid #000",
-          background: "#fefbfb",
-          borderRadius: "4px",
-          display: "flex",
-          justifyContent: "center",
-          margin: "2rem",
-          width: "88%",
-          height: "80%",
+          fontSize: 72,
+          fontWeight: 600,
+          color: "#e1e1e6",
+          letterSpacing: "-0.02em",
+          lineHeight: 1.1,
+          marginBottom: "24px",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            margin: "20px",
-            width: "90%",
-            height: "90%",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "90%",
-              maxHeight: "90%",
-              overflow: "hidden",
-              textAlign: "center",
-            }}
-          >
-            <p style={{ fontSize: 72, fontWeight: "bold" }}>{SITE.title}</p>
-            <p style={{ fontSize: 28 }}>{SITE.desc}</p>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              width: "100%",
-              marginBottom: "8px",
-              fontSize: 28,
-            }}
-          >
-            <span style={{ overflow: "hidden", fontWeight: "bold" }}>
-              {new URL(SITE.website).hostname}
-            </span>
-          </div>
-        </div>
-      </div>
+        {SITE.title}
+      </p>
+      <p
+        style={{
+          fontSize: 28,
+          color: "#88888c",
+          lineHeight: 1.4,
+          maxWidth: "800px",
+        }}
+      >
+        {SITE.desc}
+      </p>
+      <div style={{ flex: 1 }} />
+      <p
+        style={{
+          fontSize: 20,
+          color: "#55555a",
+          letterSpacing: "0.05em",
+        }}
+      >
+        {new URL(SITE.website).hostname}
+      </p>
     </div>,
     {
       width: 1200,

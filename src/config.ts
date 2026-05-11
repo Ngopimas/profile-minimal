@@ -6,7 +6,7 @@ export const SITE: Site = {
   profile: "https://github.com/Ngopimas/",
   desc: "Software engineer building autonomous systems for research, data visualization, and web applications.",
   title: "Romain C.",
-  ogImage: "astropaper-og.jpg",
+  ogImage: "",
   lightAndDarkMode: true,
   postPerIndex: 4,
   postPerPage: 5,
