@@ -132,13 +132,12 @@ export default async (post: CollectionEntry<"blog">) => {
           <p
             style={{
               fontSize: 13,
-              color: "#44444a",
-              letterSpacing: "0.06em",
+              color: "#1e8c78",
               fontFamily: "IBM Plex Mono",
               fontWeight: 400,
             }}
           >
-            {new URL(SITE.website).hostname}
+            Read article →
           </p>
         </div>
       </div>
@@ -148,7 +147,7 @@ export default async (post: CollectionEntry<"blog">) => {
       height: 630,
       embedFont: true,
       fonts: (await loadGoogleFonts(
-        "ARTICLE" + post.data.title + post.data.author + SITE.website + pubDate
+        "ARTICLERead article→" + post.data.title + post.data.author + SITE.website + pubDate
       )) as FontOptions[],
     }
   );

@@ -4,7 +4,7 @@ export const SITE: Site = {
   website: "https://romaincoupey.com/",
   author: "Romain Coupey",
   profile: "https://github.com/Ngopimas/",
-  desc: "Software engineer building autonomous systems for research, data visualization, and web applications.",
+  desc: "Software engineer building autonomous systems for quantitative research, data visualization, and web applications. Systems that show their work, expose their reasoning, and leave a trace.",
   title: "Romain C.",
   ogImage: "",
   lightAndDarkMode: true,

@@ -138,12 +138,12 @@ export default async () => {
           <p
             style={{
               fontSize: 13,
-              color: "#44444a",
+              color: "#1e8c78",
               fontFamily: "IBM Plex Mono",
               fontWeight: 400,
             }}
           >
-            {new Date().getFullYear()}
+            View work →
           </p>
         </div>
       </div>
@@ -153,7 +153,7 @@ export default async () => {
       height: 630,
       embedFont: true,
       fonts: (await loadGoogleFonts(
-        "PORTFOLIO" + SITE.title + SITE.desc + SITE.website + "RC" + new Date().getFullYear()
+        "PORTFOLIOView work→" + SITE.title + SITE.desc + SITE.website + "RC"
       )) as FontOptions[],
     }
   );
