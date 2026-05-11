@@ -21,7 +21,7 @@ export default async () => {
           position: "absolute",
           left: 0,
           top: 0,
-          width: "4px",
+          width: "6px",
           height: "100%",
           background: "#1e8c78",
         }}
@@ -32,7 +32,7 @@ export default async () => {
         style={{
           position: "absolute",
           inset: 0,
-          opacity: 0.04,
+          opacity: 0.06,
           backgroundImage:
             "radial-gradient(circle, #ffffff 1px, transparent 1px)",
           backgroundSize: "24px 24px",
@@ -47,7 +47,7 @@ export default async () => {
           right: "56px",
           fontSize: "140px",
           fontWeight: 700,
-          color: "#111114",
+          color: "#131316",
           letterSpacing: "-0.05em",
           fontFamily: "IBM Plex Mono",
           lineHeight: 1,
@@ -55,6 +55,19 @@ export default async () => {
       >
         RC
       </div>
+
+      {/* Subtle top-right ambient glow */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          right: 0,
+          width: "500px",
+          height: "500px",
+          background:
+            "radial-gradient(circle at top right, rgba(30,140,120,0.10) 0%, transparent 65%)",
+        }}
+      />
 
       {/* Content */}
       <div
@@ -76,11 +89,11 @@ export default async () => {
         >
           <p
             style={{
-              fontSize: 14,
+              fontSize: 13,
               color: "#1e8c78",
-              letterSpacing: "0.12em",
+              letterSpacing: "0.15em",
               textTransform: "uppercase",
-              marginBottom: "36px",
+              marginBottom: "40px",
               fontFamily: "IBM Plex Mono",
               fontWeight: 400,
             }}
@@ -89,12 +102,12 @@ export default async () => {
           </p>
           <p
             style={{
-              fontSize: 88,
+              fontSize: 92,
               fontWeight: 700,
-              color: "#e8e8ec",
+              color: "#f0f0f4",
               letterSpacing: "-0.03em",
               lineHeight: 1.05,
-              marginBottom: "28px",
+              marginBottom: "32px",
               maxWidth: "920px",
               fontFamily: "IBM Plex Mono",
             }}
@@ -104,9 +117,9 @@ export default async () => {
           <p
             style={{
               fontSize: 22,
-              color: "#66666a",
-              lineHeight: 1.5,
-              maxWidth: "680px",
+              color: "#77777a",
+              lineHeight: 1.55,
+              maxWidth: "640px",
               fontFamily: "IBM Plex Mono",
               fontWeight: 400,
             }}
@@ -120,14 +133,14 @@ export default async () => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "baseline",
-            borderTop: "1px solid #1a1a1e",
-            paddingTop: "24px",
+            borderTop: "1px solid #1e1e22",
+            paddingTop: "28px",
           }}
         >
           <p
             style={{
               fontSize: 13,
-              color: "#44444a",
+              color: "#55555a",
               letterSpacing: "0.06em",
               fontFamily: "IBM Plex Mono",
               fontWeight: 400,
@@ -137,7 +150,7 @@ export default async () => {
           </p>
           <p
             style={{
-              fontSize: 13,
+              fontSize: 14,
               color: "#1e8c78",
               fontFamily: "IBM Plex Mono",
               fontWeight: 400,
