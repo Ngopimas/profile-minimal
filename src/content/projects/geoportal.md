@@ -1,6 +1,6 @@
 ---
 title: "GeoPortal by DeepLime"
-description: "A cloud platform for geoscientists, focused on workflow automation, resource estimation, and 3D geological visualization."
+description: "A cloud data science platform for geoscientists, focused on workflow automation, resource estimation, and 3D geological visualization."
 pubDatetime: 2023-02-11T15:30:00Z
 tags: ["react", "cloud", "data-science", "python", "automation", "3d"]
 featured: true
@@ -14,15 +14,7 @@ The data is spatial, heavy, and domain specific. The workflows live in specialis
 
 ![GeoPortal](../../assets/images/geoportal.jpg)
 
-## The constraint
-
-A generic dashboard is not enough for geological work.
-
-A chart that ignores the underlying geology is decoration. A workflow runner that hides too much state is hard to trust when the output affects a resource statement or an operational decision worth tens of millions. Users need spatial context, processing state, data lineage, and results that still make sense to a domain expert who has been doing this work for twenty years.
-
-The product had to simplify the surface without flattening the domain.
-
-## Product shape
+## What the platform actually does
 
 A resource estimation job is not a small computation. A geologist starts from drillhole data, validates it, runs a variogram analysis, kriges grades onto a block model that may contain tens of millions of cells, and produces a report that eventually feeds into a regulated resource statement. Steps can run for hours. Intermediate artifacts are large. Each stage is auditable.
 
@@ -39,6 +31,14 @@ The bridge between the web product and the heavy Python tooling was the central 
 > "I am truly blown away by what you guys have created - I can't say it enough! To put it into some perspective for you, one person doing Grade Control models manually used to take around 6 weeks - 26 models would have taken 3 years to complete... without any holidays!"
 >
 > - Luke, Senior Resource Geologist at Alcoa
+
+## The constraint
+
+A generic dashboard is not enough for geological work.
+
+A chart that ignores the underlying geology is decoration. A workflow runner that hides too much state is hard to trust when the output affects a resource statement or an operational decision worth tens of millions. Users need spatial context, processing state, data lineage, and results that still make sense to a domain expert who has been doing this work for twenty years.
+
+The product had to simplify the surface without flattening the domain.
 
 ## The hard part
 
@@ -58,7 +58,7 @@ The geological processing libraries themselves were owned by the geoscience team
 
 ## Stack
 
-- React, Redux, TypeScript, and a WebGL-based 3D viewer for geological data
+- React, Redux, TypeScript, and Three.js for 3D geological visualization
 - Node.js backend services
 - Python for geological data processing and resource estimation
 - AWS and Azure depending on client context
