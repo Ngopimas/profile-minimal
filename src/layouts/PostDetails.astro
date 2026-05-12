@@ -73,18 +73,7 @@ const nextPost =
       class="focus-outline group mb-2 mt-8 flex items-center gap-1 text-sm text-skin-base/50 hover:text-skin-accent transition-colors"
       onclick="(() => (history.length === 1) ? window.location = '/' : history.back())()"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-4 w-4"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <path d="M19 12H5M12 19l-7-7 7-7"/>
-      </svg>
+      <span>←</span>
       <span>Back</span>
     </button>
   </div>
@@ -101,11 +90,11 @@ const nextPost =
       postId={post.id}
     />
     <span class="text-sm text-skin-base/70">{readingTime}</span>
-    <article id="article" class="prose mx-auto mt-8 max-w-3xl">
+    <article id="article" class="prose mx-auto mt-8 max-w-4xl ">
       <Content />
     </article>
 
-    <ul class="my-8">
+    <ul class="my-8 flex gap-2 wrap">
       {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} />)}
     </ul>
 
@@ -116,14 +105,7 @@ const nextPost =
         id="back-to-top"
         class="focus-outline group whitespace-nowrap py-1 hover:text-skin-accent"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="rotate-90 group-hover:fill-skin-accent"
-        >
-          <path
-            d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"
-          ></path>
-        </svg>
+        <span>↑</span>
         <span>Back to Top</span>
       </button>
 
@@ -140,21 +122,7 @@ const nextPost =
             href={`/posts/${prevPost.slug}`}
             class="flex w-full gap-1 hover:opacity-75"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left flex-none"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M15 6l-6 6l6 6" />
-            </svg>
+            <span class="flex-none">←</span>
             <div>
               <span>Previous Post</span>
               <div class="text-sm text-skin-accent/85">{prevPost.title}</div>
@@ -172,21 +140,7 @@ const nextPost =
               <span>Next Post</span>
               <div class="text-sm text-skin-accent/85">{nextPost.title}</div>
             </div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right flex-none"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M9 6l6 6l-6 6" />
-            </svg>
+            <span class="flex-none">→</span>
           </a>
         )
       }

@@ -26,7 +26,9 @@ const socialCount = SOCIALS.filter(social => social.active).length;
   <Header />
   <main id="main-content">
     <section id="hero" class="mx-auto max-w-4xl">
-      <h1 class="heading text-4xl font-medium md:text-5xl lg:text-6xl animate-slide-up">
+      <h1
+        class="heading animate-slide-up text-4xl font-medium md:text-5xl lg:text-6xl"
+      >
         Software that shows its work.
       </h1>
       <div class="hero-container">
@@ -38,10 +40,16 @@ const socialCount = SOCIALS.filter(social => social.active).length;
               title="Omaha Insights website"
               target="_blank"
               rel="noopener noreferrer">Omaha Insights</LinkButton
-            >. Autonomous research pipelines, data visualizations, and web applications.
+            >. Autonomous research pipelines, data visualizations, and web
+            applications.
           </p>
-          <p class="text-skin-base/50">
-            Current focus: agentic systems for equity research, backtest-driven strategy selection, and interfaces that expose their own reasoning.
+          <p class="mt-8 text-skin-base/75">
+            <span
+              class="mb-1 block text-xs font-semibold uppercase tracking-widest text-skin-base/40"
+              >Current focus</span
+            >
+            agentic systems for equity research, backtest-driven strategy selection,
+            and interfaces that expose their own reasoning.
           </p>
           {
             socialCount > 0 && (
@@ -58,7 +66,9 @@ const socialCount = SOCIALS.filter(social => social.active).length;
       featuredProjects.length > 0 && (
         <section class="mx-auto max-w-4xl py-16">
           <div class="mb-10 flex items-baseline justify-between">
-            <h2 class="font-display text-3xl font-medium tracking-tight">Selected Work</h2>
+            <h2 class="font-display text-3xl font-medium tracking-tight">
+              Selected Work
+            </h2>
             <LinkButton
               href="/projects/"
               className="text-sm text-skin-base/50 hover:text-skin-accent transition-colors"
@@ -86,7 +96,9 @@ const socialCount = SOCIALS.filter(social => social.active).length;
       sortedPosts.length > 0 && (
         <section class="mx-auto max-w-4xl py-16">
           <div class="mb-10 flex items-baseline justify-between">
-            <h2 class="font-display text-3xl font-medium tracking-tight">Writing</h2>
+            <h2 class="font-display text-3xl font-medium tracking-tight">
+              Writing
+            </h2>
             <LinkButton
               href="/posts/"
               className="text-sm text-skin-base/50 hover:text-skin-accent transition-colors"
@@ -136,7 +148,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
   }
 
   .hero-content {
-    @apply flex-1 max-w-2xl;
+    @apply max-w-2xl flex-1;
   }
   #hero p {
     @apply my-3;

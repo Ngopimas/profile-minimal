@@ -166,11 +166,11 @@ html[data-theme="dark"] .prose pre code {
   }
 
   .btn-primary {
-    @apply focus:ring-skin-accent bg-skin-accent text-white hover:bg-skin-accent/90;
+    @apply bg-skin-accent text-white hover:bg-skin-accent/90 focus:ring-skin-accent;
   }
 
   .btn-secondary {
-    @apply focus:ring-skin-accent/30 border border-skin-line bg-skin-card text-skin-base hover:border-skin-accent/20 hover:bg-skin-card-muted;
+    @apply border border-skin-line bg-skin-card text-skin-base hover:border-skin-accent/20 hover:bg-skin-card-muted focus:ring-skin-accent/30;
   }
 
   /* Spacing utilities */
@@ -243,7 +243,7 @@ html[data-theme="dark"] .prose pre code {
   }
 
   .container-md {
-    @apply mx-auto max-w-3xl px-4 sm:px-6;
+    @apply mx-auto max-w-4xl px-4 sm:px-6;
   }
 
   .container-lg {
