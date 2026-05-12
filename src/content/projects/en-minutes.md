@@ -49,6 +49,7 @@ Fixing that meant rebuilding part of the dataset. Recent net SMIC data is availa
 - Chart.js for interactive visualizations
 - Framer Motion for light transitions
 - GitHub Pages for static deployment
+- GitHub Actions workflow that fetches fresh salary and price data from INSEE every year
 
 ## What this does not prove
 
