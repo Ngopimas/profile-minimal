@@ -22,7 +22,7 @@ export default function ProjectCard({
   const imageUrl = typeof ogImage === "string" ? ogImage : ogImage?.src;
 
   return (
-    <article className="group py-8">
+    <article className="group py-8 -mx-4 px-4 rounded-sm transition-colors duration-300 hover:bg-skin-card">
       <a href={href} className="block">
         {imageUrl && (
           <div className="mb-5 overflow-hidden rounded-sm">
@@ -33,7 +33,7 @@ export default function ProjectCard({
             />
           </div>
         )}
-        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-skin-base/40 mb-3">
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-skin-base/50 mb-4">
           {tags.slice(0, 4).map(tag => (
             <span key={tag}>{tag}</span>
           ))}

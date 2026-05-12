@@ -11,6 +11,7 @@ import getSortedPosts from "@utils/getSortedPosts";
 import { SITE, SOCIALS } from "@config";
 import getReadingTime from "@utils/getReadingTime";
 import getEntrySlug from "@utils/getEntrySlug";
+import romaineImg from "@assets/images/romain.jpeg";
 
 const posts = await getCollection("blog");
 const projects = await getCollection("projects");
@@ -26,12 +27,19 @@ const socialCount = SOCIALS.filter(social => social.active).length;
   <Header />
   <main id="main-content">
     <section id="hero" class="mx-auto max-w-4xl">
-      <h1 class="heading text-4xl font-medium md:text-5xl lg:text-6xl">
+      <img
+        src={romaineImg.src}
+        alt="Romain Coupey"
+        width="56"
+        height="56"
+        class="mb-8 h-14 w-14 rounded-full object-cover ring-2 ring-skin-line"
+      />
+      <h1 class="heading text-4xl font-medium md:text-5xl lg:text-6xl animate-slide-up">
         Software that shows its work.
       </h1>
       <div class="hero-container">
-        <div class="hero-content">
-          <p class="text-lg text-skin-base/80">
+        <div class="hero-content stagger-appear">
+          <p class="text-lg text-skin-base">
             Software engineer at <LinkButton
               href="https://www.omaha-insights.com/"
               className="text-skin-accent underline-offset-4 hover:underline hover:opacity-80"
@@ -40,7 +48,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
               rel="noopener noreferrer">Omaha Insights</LinkButton
             >. Autonomous research pipelines, data visualizations, and web applications.
           </p>
-          <p class="text-skin-base/60">
+          <p class="text-skin-base/50">
             Current focus: agentic systems for equity research, backtest-driven strategy selection, and interfaces that expose their own reasoning.
           </p>
           {
@@ -58,7 +66,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
       featuredProjects.length > 0 && (
         <section class="mx-auto max-w-4xl py-16">
           <div class="mb-10 flex items-baseline justify-between">
-            <h2 class="font-display text-2xl font-medium tracking-tight">Selected Work</h2>
+            <h2 class="font-display text-3xl font-medium tracking-tight">Selected Work</h2>
             <LinkButton
               href="/projects/"
               className="text-sm text-skin-base/50 hover:text-skin-accent transition-colors"
@@ -86,7 +94,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
       sortedPosts.length > 0 && (
         <section class="mx-auto max-w-4xl py-16">
           <div class="mb-10 flex items-baseline justify-between">
-            <h2 class="font-display text-2xl font-medium tracking-tight">Writing</h2>
+            <h2 class="font-display text-3xl font-medium tracking-tight">Writing</h2>
             <LinkButton
               href="/posts/"
               className="text-sm text-skin-base/50 hover:text-skin-accent transition-colors"
@@ -122,7 +130,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
 
   /* ===== Hero Section ===== */
   #hero {
-    @apply pb-12 pt-8;
+    @apply pb-16 pt-12;
   }
 
   .hero-container {

@@ -8,17 +8,15 @@ export interface Props {
 const { tag, tagName, size = "sm" } = Astro.props;
 ---
 
-<li
-  class={`inline-block ${
-    size === "sm"
-      ? "my-1 text-skin-base/60"
-      : "my-3 mx-1"
-  }`}
->
+<li class={`inline-block ${size === "sm" ? "my-1" : "my-2 mx-1"}`}>
   <a
     href={`/tags/${tag}/`}
     transition:name={tag}
-    class={`${size === "sm" ? "text-sm" : "text-lg"} transition-colors hover:text-skin-accent`}
+    class={`inline-block border border-skin-line rounded transition-colors duration-200 text-skin-base/60 hover:border-skin-accent hover:text-skin-accent ${
+      size === "sm"
+        ? "text-xs px-2 py-0.5"
+        : "text-sm px-3 py-1"
+    }`}
   >
     {tagName}
   </a>

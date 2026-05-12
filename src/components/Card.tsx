@@ -23,7 +23,7 @@ export default function Card({
   };
 
   return (
-    <article className="group py-8">
+    <article className="group py-8 -mx-4 px-4 rounded-sm transition-colors duration-300 hover:bg-skin-card">
       <a href={href} className="block">
         <div className="flex items-center gap-3 text-sm text-skin-base/50 mb-3">
           <Datetime
@@ -32,7 +32,7 @@ export default function Card({
             className=""
           />
           {readingTime && (
-            <span>&middot; {readingTime}</span>
+            <span className="text-skin-secondary">&middot; {readingTime}</span>
           )}
         </div>
         {secHeading ? (
