@@ -22,9 +22,9 @@ const { page, tag, tagName } = Astro.props;
 <Layout title={`${tagName} | ${SITE.title}`}>
   <Header activeNav="tags" />
   <Main
-    pageTitle={[`Tag:`, `${tagName}`]}
+    pageTitle={[`Topic:`, `${tagName}`]}
     titleTransition={tag}
-    pageDesc={`Articles tagged "${tagName}".`}
+    pageDesc={`Articles about "${tagName}".`}
   >
     <ul class="divide-y divide-skin-line">
       {

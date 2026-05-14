@@ -70,7 +70,7 @@ const projectMeta = [type, role, status].filter(Boolean);
 ---
 
 <Layout {...layoutProps}>
-  <Header />
+  <Header activeNav="projects" />
 
   <div class="mx-auto flex w-full max-w-4xl justify-start px-6">
     <button
@@ -169,7 +169,7 @@ const projectMeta = [type, role, status].filter(Boolean);
 
     <hr class="my-6 border-dashed" />
 
-    <!-- Previous/Next Post Buttons -->
+    <!-- Previous/next project buttons -->
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
       {
         prevPost && (

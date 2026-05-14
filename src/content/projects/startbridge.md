@@ -4,6 +4,10 @@ description: "A marketplace platform connecting innovators and stakeholders, wit
 pubDatetime: 2022-07-01T09:00:00Z
 tags: ["react", "reactquery", "material-ui"]
 featured: false
+type: "Marketplace platform"
+role: "Frontend developer"
+status: "Client work"
+impact: "Turned evolving marketplace and feedback workflows into React interfaces for an early-stage innovation platform."
 url: "https://startbridge.io"
 ogImage: "/assets/images/project-thumbs/startbridge.jpg"
 ---

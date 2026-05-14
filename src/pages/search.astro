@@ -8,24 +8,58 @@ import Footer from "@components/Footer.astro";
 import SearchBar from "@components/Search";
 import getSortedPosts from "@utils/getSortedPosts";
 import getEntrySlug from "@utils/getEntrySlug";
+import { slugifyStr } from "@utils/slugify";
 
-// Retrieve all published articles
 const posts = await getCollection("blog", ({ data }) => !data.draft);
+const projects = await getCollection("projects", ({ data }) => !data.draft);
 const sortedPosts = getSortedPosts(posts);
+const sortedProjects = getSortedPosts(projects);
 
-// List of items to search in
-const searchList = sortedPosts.map(post => ({
+const postResults = sortedPosts.map(post => ({
+  kind: "post" as const,
   title: post.data.title,
   description: post.data.description,
   data: post.data,
   slug: getEntrySlug(post),
 }));
+
+const projectResults = sortedProjects.map(project => ({
+  kind: "project" as const,
+  title: project.data.title,
+  description: project.data.description,
+  data: project.data,
+  slug: getEntrySlug(project),
+}));
+
+const searchList = [...projectResults, ...postResults];
+
+const topicCounts = new Map<
+  string,
+  { tag: string; tagName: string; count: number }
+>();
+for (const post of posts) {
+  for (const tagName of post.data.tags) {
+    const tag = slugifyStr(tagName);
+    const existing = topicCounts.get(tag);
+    topicCounts.set(tag, {
+      tag,
+      tagName: existing?.tagName ?? tagName,
+      count: (existing?.count ?? 0) + 1,
+    });
+  }
+}
+
+const topics = [...topicCounts.values()]
+  .sort(
+    (tagA, tagB) => tagB.count - tagA.count || tagA.tag.localeCompare(tagB.tag)
+  )
+  .slice(0, 28);
 ---
 
 <Layout title={`Search | ${SITE.title}`}>
   <Header activeNav="search" />
-  <Main pageTitle="Search" pageDesc="Find articles by keyword.">
-    <SearchBar client:load searchList={searchList} />
+  <Main pageTitle="Search" pageDesc="Find work, articles, and topics.">
+    <SearchBar client:load searchList={searchList} topics={topics} />
   </Main>
   <Footer />
 </Layout>

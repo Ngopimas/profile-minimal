@@ -4,6 +4,10 @@ description: "A browser-based 3D tool for exploring mining block model data with
 pubDatetime: 2022-07-11T15:30:00Z
 tags: ["threejs", "react", "typescript"]
 featured: false
+type: "3D visualization"
+role: "Solo Builder"
+status: "Client work"
+impact: "Made dense geological block model data explorable in the browser through slicing, property coloring, and interactive 3D controls."
 url: "https://ngopimas.github.io/POC_BM_3D/"
 ogImage: "/assets/images/project-thumbs/block-model.jpg"
 # repository: "https://github.com/Ngopimas/POC_BM_3D"
