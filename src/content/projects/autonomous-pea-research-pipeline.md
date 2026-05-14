@@ -6,7 +6,7 @@ tags: ["python", "ai", "investing", "automation", "dashboard"]
 featured: true
 url: ""
 repository: ""
-ogImage: "/assets/images/project-thumbs/autonomous-research-pipeline.svg"
+ogImage: "/assets/images/project-thumbs/pea-agent-log-preview.png"
 ---
 
 Most agent demos optimize for output. This project optimizes for auditability.
@@ -42,7 +42,7 @@ The implementation is deliberately plain: Python, JSON artifacts, Jinja2 templat
 
 This is not a mockup. The running dashboard is generated from artifacts written by the pipeline.
 
-![Static dashboard ledger](../../assets/images/pea-dashboard-ledger.svg)
+![Agent activity ledger](../../assets/images/pea-agent-log-preview.png)
 
 ## Stack
 
