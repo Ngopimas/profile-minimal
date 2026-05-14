@@ -4,6 +4,10 @@ description: "A Hermes Agent research loop for European equities that treats eve
 pubDatetime: 2026-05-10T17:35:00Z
 tags: ["python", "ai", "investing", "automation", "dashboard"]
 featured: true
+type: "Research system"
+role: "Solo builder"
+status: "Exploratory"
+impact: "Turns agent output into evidence: backtests, diagnostics, refusal points, and a pre-rebalance gate before action."
 url: ""
 repository: ""
 ogImage: "/assets/images/project-thumbs/pea-agent-log-preview.png"

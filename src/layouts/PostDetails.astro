@@ -62,7 +62,9 @@ const currentPostIndex = allPosts.findIndex(a => a.slug === getEntrySlug(post));
 
 const prevPost = currentPostIndex !== 0 ? allPosts[currentPostIndex - 1] : null;
 const nextPost =
-  currentPostIndex !== allPosts.length ? allPosts[currentPostIndex + 1] : null;
+  currentPostIndex !== allPosts.length - 1
+    ? allPosts[currentPostIndex + 1]
+    : null;
 ---
 
 <Layout {...layoutProps}>
@@ -94,7 +96,7 @@ const nextPost =
       <Content />
     </article>
 
-    <ul class="my-8 flex gap-2 wrap">
+    <ul class="my-8 flex flex-wrap gap-2">
       {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} />)}
     </ul>
 

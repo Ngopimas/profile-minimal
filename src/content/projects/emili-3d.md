@@ -4,7 +4,11 @@ description: "A browser-based 3D platform for Imerys' lithium mining project, bu
 pubDatetime: 2024-03-11T15:30:00Z
 tags: ["threejs", "mapbox", "javascript"]
 featured: true
-url: "https://emili3d.imerys.com"
+type: "3D GIS public interface"
+role: "Frontend engineer"
+status: "Client work"
+impact: "Makes a complex industrial site easier to explore during public debate through map-based 3D context."
+url: "https://emili.imerys.com/visite-3d/"
 ogImage: "/assets/images/project-thumbs/emili.jpg"
 ---
 

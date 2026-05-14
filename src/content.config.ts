@@ -46,6 +46,10 @@ const projects = defineCollection({
       slug: z.string().optional(),
       featured: z.boolean().optional(),
       draft: z.boolean().optional(),
+      role: z.string().optional(),
+      type: z.string().optional(),
+      status: z.string().optional(),
+      impact: z.string().optional(),
       tags: z.array(z.string()).default(["others"]),
       ogImage: image()
         .refine(img => img.width >= 1200 && img.height >= 630, {
