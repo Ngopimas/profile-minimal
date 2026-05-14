@@ -4,6 +4,10 @@ description: "A fast Astro portfolio focused on writing, project pages, search, 
 pubDatetime: 2025-02-11T15:30:00Z
 tags: ["astro", "typescript", "tailwind", "react"]
 featured: false
+type: "Portfolio system"
+role: "Solo Builder"
+status: "Active"
+impact: "Keeps project pages, writing, search, and static deployment simple enough to maintain without hiding the work behind a heavy CMS."
 url: "https://romaincoupey.com"
 repository: "https://github.com/Ngopimas/profile-minimal"
 ogImage: "/assets/images/project-thumbs/profile-minimal.svg"

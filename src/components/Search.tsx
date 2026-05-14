@@ -1,17 +1,34 @@
 import Fuse from "fuse.js";
 import { useEffect, useRef, useState, useMemo, type FormEvent } from "react";
 import Card from "@components/Card";
+import ProjectCard from "@components/ProjectCard";
 import type { CollectionEntry } from "astro:content";
 
-export type SearchItem = {
-  title: string;
-  description: string;
-  data: CollectionEntry<"blog">["data"];
-  slug: string;
+export type SearchTopic = {
+  tag: string;
+  tagName: string;
+  count: number;
 };
+
+export type SearchItem =
+  | {
+      kind: "post";
+      title: string;
+      description: string;
+      data: CollectionEntry<"blog">["data"];
+      slug: string;
+    }
+  | {
+      kind: "project";
+      title: string;
+      description: string;
+      data: CollectionEntry<"projects">["data"];
+      slug: string;
+    };
 
 interface Props {
   searchList: SearchItem[];
+  topics: SearchTopic[];
 }
 
 interface SearchResult {
@@ -19,7 +36,7 @@ interface SearchResult {
   refIndex: number;
 }
 
-export default function SearchBar({ searchList }: Props) {
+export default function SearchBar({ searchList, topics }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputVal, setInputVal] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResult[] | null>(
@@ -33,10 +50,18 @@ export default function SearchBar({ searchList }: Props) {
   const fuse = useMemo(
     () =>
       new Fuse(searchList, {
-        keys: ["title", "description"],
+        keys: [
+          "title",
+          "description",
+          "data.tags",
+          "data.role",
+          "data.type",
+          "data.status",
+          "data.impact",
+        ],
         includeMatches: true,
         minMatchCharLength: 2,
-        threshold: 0.5,
+        threshold: 0.45,
       }),
     [searchList]
   );
@@ -71,14 +96,17 @@ export default function SearchBar({ searchList }: Props) {
     } else {
       history.replaceState(history.state, "", window.location.pathname);
     }
-  }, [inputVal]);
+  }, [inputVal, fuse]);
 
   useEffect(() => {
     // focus on text input when search bar is displayed
     if (inputRef.current) {
       inputRef.current.focus();
     }
-  }, [inputVal]);
+  }, []);
+
+  const hasQuery = inputVal.length > 1;
+  const hasNoResults = hasQuery && searchResults?.length === 0;
 
   return (
     <>
@@ -91,18 +119,17 @@ export default function SearchBar({ searchList }: Props) {
         </span>
         <input
           className="block w-full rounded border border-skin-line/40 bg-skin-card py-3 pl-10 pr-3 placeholder:text-skin-base/30 focus:border-skin-accent focus:outline-none"
-          placeholder="Search articles..."
+          placeholder="Search work and writing..."
           type="text"
           name="search"
           value={inputVal}
           onChange={handleChange}
           autoComplete="off"
-          // autoFocus
           ref={inputRef}
         />
       </label>
 
-      {inputVal.length > 1 && (
+      {hasQuery && (
         <div className="mt-8 text-sm text-skin-base/50">
           {searchResults?.length}{" "}
           {searchResults?.length === 1 ? "result" : "results"}
@@ -110,15 +137,52 @@ export default function SearchBar({ searchList }: Props) {
       )}
 
       <ul>
-        {searchResults &&
-          searchResults.map(({ item, refIndex }) => (
-            <Card
-              href={`/posts/${item.slug}/`}
-              frontmatter={item.data}
-              key={`${refIndex}-${item.slug}`}
-            />
-          ))}
+        {searchResults?.map(({ item, refIndex }) => (
+          <li key={`${refIndex}-${item.kind}-${item.slug}`}>
+            {item.kind === "post" ? (
+              <Card href={`/posts/${item.slug}/`} frontmatter={item.data} />
+            ) : (
+              <ProjectCard
+                href={`/projects/${item.slug}/`}
+                frontmatter={item.data}
+              />
+            )}
+          </li>
+        ))}
       </ul>
+
+      {(!hasQuery || hasNoResults) && topics.length > 0 && (
+        <section className="mt-12 rounded-sm border border-skin-line p-5">
+          <div className="mb-4">
+            <h2 className="font-display text-xl font-medium tracking-tight">
+              Browse topics
+            </h2>
+            <p className="mt-2 text-sm text-skin-base/60">
+              Use topics as a starting point when you do not have a specific
+              query.
+            </p>
+          </div>
+          <ul className="flex flex-wrap gap-2">
+            {topics.map(({ tag, tagName, count }) => (
+              <li key={tag}>
+                <a
+                  href={`/tags/${tag}/`}
+                  className="inline-flex items-center gap-1 rounded border border-skin-line px-2 py-1 text-xs text-skin-base/60 transition-colors hover:border-skin-accent hover:text-skin-accent"
+                >
+                  <span>{tagName}</span>
+                  <span className="text-skin-base/35">{count}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <a
+            href="/tags/"
+            className="mt-5 inline-block text-sm font-medium text-skin-base/60 transition-colors hover:text-skin-accent"
+          >
+            View all topics →
+          </a>
+        </section>
+      )}
     </>
   );
 }

@@ -19,7 +19,10 @@ const { page } = Astro.props;
 
 <Layout title={`Projects | ${SITE.title}`}>
   <Header activeNav="projects" />
-  <Main pageTitle="Work" pageDesc="Systems, applications, and experiments.">
+  <Main
+    pageTitle="Work"
+    pageDesc="AI systems, autonomous research tooling, data visualizations, and production web applications."
+  >
     <ul class="divide-y divide-skin-line">
       {
         page.data.map(project => (
