@@ -148,11 +148,7 @@ The shorter project page is here: [Autonomous research pipeline](/projects/auton
 
 This version was the first attempt. I stopped it after a large Jinja-to-Astro refactor, not because the idea was bad, but because the build had taught me enough to start again with a cleaner foundation.
 
-That second attempt became a more deliberate AI-build series:
-
-- [I wrote 76KB of docs before letting the AI build](/posts/spec-before-code-ai-build/)
-- [Why I made the AI stop before every commit](/posts/gates-as-design-opportunities/)
-- [When mocks lie](/posts/when-mocks-lie-integration-test-gap/)
+Those lessons led to a second attempt, built more deliberately. The rebuild notes start here: [I wrote 76KB of docs before letting the AI build](/posts/spec-before-code-ai-build/).
 
 ## The lesson
 
