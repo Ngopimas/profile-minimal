@@ -19,7 +19,8 @@ export default function Card({
 
   const headerProps = {
     style: { viewTransitionName: slugifyStr(title) },
-    className: "text-lg font-medium text-skin-base group-hover:text-skin-accent transition-colors",
+    className:
+      "text-lg font-medium text-skin-base group-hover:text-skin-accent transition-colors",
   };
 
   return (
@@ -40,7 +41,9 @@ export default function Card({
         ) : (
           <h3 {...headerProps}>{title}</h3>
         )}
-        <p className="mt-2 text-skin-base/70 leading-relaxed max-w-2xl">{description}</p>
+        <p className="mt-2 text-skin-base/70 leading-relaxed max-w-2xl">
+          {description}
+        </p>
       </a>
     </article>
   );
