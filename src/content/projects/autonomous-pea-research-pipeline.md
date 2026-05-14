@@ -6,12 +6,12 @@ tags: ["python", "ai", "investing", "automation", "dashboard"]
 featured: true
 url: ""
 repository: ""
-ogImage: "/assets/images/project-thumbs/autonomous-research-pipeline.svg"
+ogImage: "/assets/images/project-thumbs/pea-agent-log-preview.png"
 ---
 
-Most agent demos optimize for output. This project optimizes for auditability.
+Most agent demos show the answer. I wanted to see the mess behind the answer.
 
-It is an exploratory Hermes Agent research loop for European equities and PEA eligible instruments. The system screens a constrained universe, generates strategy hypotheses, tests them with costs, applies diagnostics, tracks a paper portfolio, and publishes the evidence to a static dashboard.
+This project is an exploratory Hermes Agent research loop for European equities, mostly in the kind of universe a French retail investor can actually access. It screens candidates, generates strategy hypotheses, tests them with costs, applies diagnostics, tracks a paper portfolio, and publishes the evidence to a static dashboard.
 
 The point is not to make an agent sound like an investor. The point is to make every candidate leave enough evidence to be challenged.
 
@@ -27,6 +27,8 @@ That makes the domain useful for testing agentic research. The system has to pre
 
 ## System shape
 
+The boring parts matter here. A candidate is not allowed to jump from signal to trade. It has to survive data refreshes, backtests with transaction costs, clone checks, viability thresholds, and a pre-rebalance gate.
+
 The pipeline runs as a control loop:
 
 - refresh market data and candidate universes
@@ -38,11 +40,13 @@ The pipeline runs as a control loop:
 - run a pre-rebalance gate before acting
 - publish signals, evidence, agent logs, and health checks to static pages
 
+One early run looked productive until the diagnostics showed several strategies returning identical results. The agent had not discovered several independent ideas. It had fallen through the same generic backtest path more than once. That bug is exactly the kind of thing the dashboard is meant to expose.
+
 The implementation is deliberately plain: Python, JSON artifacts, Jinja2 templates, cron, and Caddy. That is a feature. The fewer hidden services involved, the easier it is to inspect what happened after a run.
 
-This is not a mockup. The running dashboard is generated from artifacts written by the pipeline.
+This is not a mockup. The running dashboard is generated from artifacts written by the pipeline, including the agent log and health check views.
 
-![Static dashboard ledger](../../assets/images/pea-dashboard-ledger.svg)
+![Agent activity ledger](../../assets/images/pea-agent-log-preview.png)
 
 ## Stack
 
@@ -85,6 +89,6 @@ The system is intentionally not presented as an alpha machine.
 
 Backtests can flatter weak ideas. European small-cap liquidity can dominate signal quality. Data coverage is uneven. Corporate actions and missing history still need attention. Paper trading is useful, but it is not proof of robustness.
 
-Those limitations are part of the design brief. The project is less about predicting returns and more about building a research process that makes weak assumptions visible before they become decisions.
+Those limitations are part of the design brief. The useful part is not that the system finds ideas. The useful part is that it shows when an idea is too weak, too stale, too illiquid, or too convenient to trust.
 
 I wrote more about the build in [Agents are useful when they leave receipts](/posts/building-autonomous-pea-research-pipeline/).

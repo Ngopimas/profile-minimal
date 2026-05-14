@@ -166,7 +166,11 @@ export default async (post: CollectionEntry<"blog">) => {
       height: 630,
       embedFont: true,
       fonts: (await loadGoogleFonts(
-        "ARTICLERead article→" + post.data.title + post.data.author + SITE.website + pubDate
+        "ARTICLERead article→" +
+          post.data.title +
+          post.data.author +
+          SITE.website +
+          pubDate
       )) as FontOptions[],
     }
   );

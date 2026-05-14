@@ -16,7 +16,8 @@ export default function ProjectCard({
 
   const headerProps = {
     style: { viewTransitionName: slugifyStr(title) },
-    className: "text-lg font-medium text-skin-base group-hover:text-skin-accent transition-colors",
+    className:
+      "text-lg font-medium text-skin-base group-hover:text-skin-accent transition-colors",
   };
 
   const imageUrl = typeof ogImage === "string" ? ogImage : ogImage?.src;
@@ -43,7 +44,9 @@ export default function ProjectCard({
         ) : (
           <h3 {...headerProps}>{title}</h3>
         )}
-        <p className="mt-2 text-skin-base/70 leading-relaxed max-w-2xl">{description}</p>
+        <p className="mt-2 text-skin-base/70 leading-relaxed max-w-2xl">
+          {description}
+        </p>
       </a>
     </article>
   );

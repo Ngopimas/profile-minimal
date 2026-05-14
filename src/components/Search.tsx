@@ -104,7 +104,8 @@ export default function SearchBar({ searchList }: Props) {
 
       {inputVal.length > 1 && (
         <div className="mt-8 text-sm text-skin-base/50">
-          {searchResults?.length} {searchResults?.length === 1 ? "result" : "results"}
+          {searchResults?.length}{" "}
+          {searchResults?.length === 1 ? "result" : "results"}
         </div>
       )}
 
