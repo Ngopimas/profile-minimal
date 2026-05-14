@@ -77,9 +77,9 @@ The dashboard is not there to make the project look finished. It is there to exp
 
 It shows what ran, what changed, what passed, what failed, and what the system refused to do. Signals are only one page. The more important pages are evidence, agent logs, health, assumptions, diagnostics, rejected ideas, and stale-data warnings.
 
-![Static dashboard ledger](../../assets/images/pea-dashboard-ledger.svg)
+![Agent activity ledger](../../assets/images/pea-agent-log-preview.png)
 
-This is not a mockup. The running dashboard is generated from files written by the pipeline. The public image above is sanitized, but the shape is the same: JSON artifacts in, static pages out.
+This is not a mockup. The running dashboard is generated from files written by the pipeline. The cropped image above shows the kind of state the system exposes: agent activity, errors, timestamps, stale-data warnings, and recent logs. JSON artifacts in, static pages out.
 
 The stack is intentionally plain:
 
