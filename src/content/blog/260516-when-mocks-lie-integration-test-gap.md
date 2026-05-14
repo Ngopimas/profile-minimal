@@ -4,16 +4,16 @@ pubDatetime: 2026-05-16T10:00:00Z
 title: "When mocks lie"
 slug: when-mocks-lie-integration-test-gap
 featured: false
-draft: true
+draft: false
 tags: ["testing", "ai", "software-architecture", "python", "agents"]
-description: "A concrete integration bug from pea-pilot: both sides of a contract had passing unit tests, but the real components broke when they met."
+description: "A concrete integration bug from an AI-built research system: both sides of a contract had passing unit tests, but the real components broke when they met."
 ---
 
 The bug was boring.
 
 That is what made it useful.
 
-During the Phase 3 final gate for `pea-pilot`, Hermes found that `MarketDataRefresher` raised `DataUnavailableError` when all providers failed. The caller expected a failed `DatasetRefreshOutcome` instead.
+During the Phase 3 final gate, Hermes found that `MarketDataRefresher` raised `DataUnavailableError` when all providers failed. The caller expected a failed `DatasetRefreshOutcome` instead.
 
 Both sides had passing unit tests.
 
@@ -25,7 +25,7 @@ That is the kind of testing failure I trust, because it is not abstract. It is t
 
 ## The setup
 
-`pea-pilot` is an autonomous European equities research and paper trading system. Phase 3 was about the data layer: provider contracts, yfinance adapter, provider chain, normalized artifacts, data quality checks, market regime detection, and the first real DataAgent behavior.
+The system is an autonomous European equities research and paper trading project. Phase 3 was about the data layer: provider contracts, yfinance adapter, provider chain, normalized artifacts, data quality checks, market regime detection, and the first real DataAgent behavior.
 
 The standard tests were strict. Live network was blocked by default. External calls needed both a `@pytest.mark.live_network` marker and `RUN_LIVE_DATA_TESTS=1`. Unit tests used fixtures and fakes. Provider behavior was tested without accidentally hitting the internet.
 

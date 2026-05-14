@@ -4,7 +4,7 @@ pubDatetime: 2026-05-15T10:00:00Z
 title: "Gates are where the architecture got better"
 slug: gates-as-design-opportunities
 featured: false
-draft: true
+draft: false
 tags: ["ai", "software-architecture", "automation", "testing", "agents"]
 description: "What changed when checkpoint gates stopped being just approval steps and became the place where the architecture improved."
 ---
@@ -15,9 +15,9 @@ Give the agent the spec. Let it work. Come back to a pull request, a passing tes
 
 That is useful for chores. It is much less useful for architecture.
 
-The best parts of `pea-pilot` did not come from letting Hermes run for longer. They came from stopping it at the right moments.
+The best parts of the system did not come from letting Hermes run for longer. They came from stopping it at the right moments.
 
-`pea-pilot` is an autonomous European equities research and paper trading system. It is being built phase by phase with Hermes as the build agent and me as the reviewer. The process is intentionally slow: plan first, test first, implement, stop before commit, show evidence, wait for approval, commit one checkpoint, then stop again.
+The project is an autonomous European equities research and paper trading system, built phase by phase with Hermes as the build agent and me as the reviewer. The process is intentionally slow: plan first, test first, implement, stop before commit, show evidence, wait for approval, commit one checkpoint, then stop again.
 
 That sounds like bureaucracy until you see what happens at the gates.
 
@@ -183,4 +183,4 @@ The better instruction is: fix this, show evidence, commit if approved, then sto
 
 A gate is only useful if it is allowed to interrupt momentum.
 
-That is the lesson I keep taking from `pea-pilot`. The point of an AI build agent is not to remove all friction. Some friction is structural. Some friction is where the design gets better.
+That is the lesson I keep taking from this build. The point of an AI build agent is not to remove all friction. Some friction is structural. Some friction is where the design gets better.

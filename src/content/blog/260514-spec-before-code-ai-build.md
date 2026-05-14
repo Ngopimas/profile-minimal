@@ -4,7 +4,7 @@ pubDatetime: 2026-05-14T17:45:00Z
 title: "I wrote 76KB of docs before letting the AI build"
 slug: spec-before-code-ai-build
 featured: false
-draft: true
+draft: false
 tags: ["ai", "software-architecture", "automation", "python", "agents"]
 description: "Why I wrote a full spec pack before building an autonomous European equities research system with an AI agent, and why the docs were useful precisely because they were allowed to change."
 ---
@@ -13,13 +13,13 @@ Most AI coding demos start with a prompt.
 
 Mine started with 76KB of markdown.
 
-Before the first real line of code for `pea-pilot`, I wrote a spec pack: more than thirty documents covering the mission, architecture, agent contracts, schemas, orchestration, testing policy, security, risk policy, scoring rules, trading rules, dashboard behavior, Telegram behavior, and the build agent's own operating instructions.
+Before the first real line of code, I wrote a spec pack: more than thirty documents covering the mission, architecture, agent contracts, schemas, orchestration, testing policy, security, risk policy, scoring rules, trading rules, dashboard behavior, notifications, and the build agent's own operating instructions.
 
 That sounds excessive. In some projects it would be.
 
 For this one, it was the difference between "let an agent code until something exists" and "build a system I might eventually trust with money."
 
-`pea-pilot` is an autonomous European equities research and paper trading system. It is not supposed to be a chatbot that says whether ASML looks interesting. It is supposed to pull data, classify a PEA eligible universe, run research agents, preserve evidence, backtest ideas, refuse weak signals, update a paper portfolio, and expose the trail through a dashboard.
+The project is an autonomous European equities research and paper trading system. It is not supposed to be a chatbot that says whether ASML looks interesting. It is supposed to pull data, classify a European equity universe, run research agents, preserve evidence, backtest ideas, refuse weak signals, update a paper portfolio, and expose the trail through a dashboard.
 
 That kind of system has too many ways to look correct while being wrong.
 
@@ -128,7 +128,7 @@ The important part is that the spec was not sacred.
 
 It was a starting point, not a constitution.
 
-Some of the best architecture in `pea-pilot` came from moments where the spec was incomplete.
+Some of the best architecture came from moments where the spec was incomplete.
 
 In Phase 2.4, the run graph originally treated agents as the graph nodes. That sounds fine until `RiskAgent` appears twice in the daily run: once before allocation, once after paper trading.
 
@@ -178,11 +178,11 @@ Without it, every foundation looks incomplete until the end of the project. With
 
 A recurring theme in this project is refusal.
 
-The system should refuse weak strategies. It should refuse unsupported backtests. It should refuse live network calls in normal tests. It should refuse real trading unless several explicit gates are opened. It should refuse to guess PEA eligibility when domicile data is missing.
+The system should refuse weak strategies. It should refuse unsupported backtests. It should refuse live network calls in normal tests. It should refuse real trading unless several explicit gates are opened. It should refuse to guess when eligibility data is missing.
 
 The spec made refusal easier because refusal had already been written down.
 
-For example, missing PEA domicile does not become `excluded` internally. It becomes `unknown`, with `is_active=False`.
+For example, missing eligibility data does not become `excluded` internally. It becomes `unknown`, with `is_active=False`.
 
 That distinction matters.
 
