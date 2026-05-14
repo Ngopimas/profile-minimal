@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Verify redesign improve loop</title>
+  <desc id="desc">A loop diagram showing plan, red tests, implementation, gate, redesign, commit, and stop.</desc>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.6"/></pattern>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#94a3b8"/></marker>
+    <style>.bg{fill:#020617}.title{font:700 30px ui-monospace,Menlo,monospace;fill:#e2e8f0}.sub{font:500 14px ui-monospace,Menlo,monospace;fill:#94a3b8}.box{fill:#0f172a;stroke:#334155;stroke-width:1.5}.label{font:700 16px ui-monospace,Menlo,monospace;fill:#f8fafc}.small{font:500 12px ui-monospace,Menlo,monospace;fill:#cbd5e1}.tiny{font:500 11px ui-monospace,Menlo,monospace;fill:#94a3b8}.cyan{fill:rgba(8,51,68,.55);stroke:#22d3ee}.green{fill:rgba(6,78,59,.55);stroke:#34d399}.violet{fill:rgba(76,29,149,.55);stroke:#a78bfa}.amber{fill:rgba(120,53,15,.45);stroke:#fbbf24}.rose{fill:rgba(136,19,55,.5);stroke:#fb7185}.line{stroke:#94a3b8;stroke-width:2.5;fill:none;marker-end:url(#arrow)}.hot{stroke:#fb7185;stroke-width:3;fill:none;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect class="bg" width="1200" height="630"/><rect width="1200" height="630" fill="url(#grid)" opacity="0.55"/>
+  <text x="60" y="64" class="title">The gate is where the design changed</text><text x="60" y="92" class="sub">The agent did not just run faster. It stopped where better questions could be asked.</text>
+  <path class="line" d="M285 178 H445"/><path class="line" d="M610 178 H770"/><path class="hot" d="M930 210 C1030 260 1030 390 930 435"/><path class="line" d="M770 455 H610"/><path class="line" d="M445 455 H285"/><path class="line" d="M205 410 C120 330 120 260 205 215"/>
+  <rect x="105" y="130" width="180" height="96" rx="12" class="box cyan"/><text x="145" y="166" class="label">Plan</text><text x="128" y="194" class="small">questions first</text>
+  <rect x="445" y="130" width="180" height="96" rx="12" class="box rose"/><text x="488" y="166" class="label">RED</text><text x="472" y="194" class="small">tests fail first</text>
+  <rect x="770" y="130" width="180" height="96" rx="12" class="box green"/><text x="805" y="166" class="label">Implement</text><text x="807" y="194" class="small">make it green</text>
+  <rect x="960" y="270" width="165" height="110" rx="14" class="box amber"/><text x="1001" y="309" class="label">Gate</text><text x="986" y="337" class="small">evidence</text><text x="986" y="360" class="small">design question</text>
+  <rect x="770" y="407" width="180" height="96" rx="12" class="box violet"/><text x="808" y="443" class="label">Redesign</text><text x="798" y="471" class="small">better boundary</text>
+  <rect x="445" y="407" width="180" height="96" rx="12" class="box green"/><text x="492" y="443" class="label">Commit</text><text x="482" y="471" class="small">one checkpoint</text>
+  <rect x="105" y="407" width="180" height="96" rx="12" class="box rose"/><text x="152" y="443" class="label">Stop</text><text x="132" y="471" class="small">no auto-run</text>
+  <rect x="355" y="270" width="490" height="86" rx="14" class="box"/><text x="390" y="304" class="label">Examples that came from gates</text><text x="390" y="333" class="small">risk_preflight vs risk_post_trade   |   schemas outside execution   |   created_at vs started_at</text>
+</svg>

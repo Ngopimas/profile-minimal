@@ -23,6 +23,8 @@ The system only broke when the real components met.
 
 That is the kind of testing failure I trust, because it is not abstract. It is the normal, embarrassing kind.
 
+![When mocks lie](../../assets/images/when-mocks-lie.svg)
+
 ## The setup
 
 The system is an autonomous European equities research and paper trading project. Phase 3 was about the data layer: provider contracts, yfinance adapter, provider chain, normalized artifacts, data quality checks, market regime detection, and the first real DataAgent behavior.
@@ -181,6 +183,10 @@ If the question is "what does the provider chain actually return to the refreshe
 
 That sounds obvious. It is still easy to forget when the test suite is green and the agent has produced a convincing summary.
 
+The dangerous mock is not the one that returns fake data. It is the one that returns the contract you wish you had.
+
 The green check is not the artifact I trust most.
 
 I trust the boundary test where the real things meet.
+
+Previous in this series: [Why I made the AI stop before every commit](/posts/gates-as-design-opportunities/).

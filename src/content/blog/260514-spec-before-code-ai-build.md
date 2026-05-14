@@ -29,6 +29,8 @@ So I did the boring thing first.
 
 I wrote the contract.
 
+![Spec pack as control surface](../../assets/images/ai-spec-control-surface.svg)
+
 ## The docs were not ceremony
 
 The spec pack lived under `/docs/`.
@@ -100,7 +102,7 @@ A lot of those questions are annoying to answer before code exists.
 
 That is why they are useful.
 
-## The spec was a contract between me and the agent
+## The spec was a control surface
 
 The build process had a rule: no non-trivial checkpoint starts with code.
 
@@ -136,7 +138,12 @@ If the graph key is just `AgentName.RISK`, which RiskAgent run does another node
 
 That question came up at a checkpoint gate. The answer was to separate `node_key` from `agent_name`.
 
-A node could be called `risk_preflight` or `risk_post_trade` while both used the same underlying `RiskAgent`. Dependencies then point to node keys, not agent names.
+```python
+RunTemplateNode("risk_preflight", AgentName.RISK, ("backtest",))
+RunTemplateNode("risk_post_trade", AgentName.RISK, ("paper_trader",))
+```
+
+The same implementation can now appear twice in the graph without pretending it is the same node. Dependencies point to node keys, not agent names.
 
 That design is obviously better in hindsight. It was not in the first spec.
 
@@ -150,7 +157,7 @@ The lesson was not "write a perfect spec."
 
 The lesson was "write a spec precise enough that its gaps become visible."
 
-## Phase 0 was not glamorous
+## Foundation is not feature work
 
 Phase 0 did not produce an impressive dashboard.
 
@@ -249,3 +256,5 @@ And it did not make the agent trustworthy. That is too much to ask from a docume
 It made the agent's work inspectable.
 
 That is the standard I keep coming back to with AI systems. Do not ask whether the agent can produce a lot of code. Ask whether the surrounding process makes wrong code easier to catch before it becomes architecture.
+
+Next in this series: [Why I made the AI stop before every commit](/posts/gates-as-design-opportunities/).

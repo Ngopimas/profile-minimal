@@ -1,7 +1,7 @@
 ---
 author: Romain C.
 pubDatetime: 2026-05-15T10:00:00Z
-title: "Gates are where the architecture got better"
+title: "Why I made the AI stop before every commit"
 slug: gates-as-design-opportunities
 featured: false
 draft: false
@@ -22,6 +22,8 @@ The project is an autonomous European equities research and paper trading system
 That sounds like bureaucracy until you see what happens at the gates.
 
 The gates are where the system got better.
+
+![Verify redesign improve loop](../../assets/images/ai-gate-loop.svg)
 
 ## The loop
 
@@ -55,7 +57,7 @@ That is rare. During implementation, the agent is biased toward completing the c
 
 That is the sweet spot.
 
-## Phase 2.4: the duplicate RiskAgent problem
+## The duplicate RiskAgent problem
 
 The first run graph design was simple. Agents were the nodes.
 
@@ -67,11 +69,22 @@ In the daily graph, `RiskAgent` needs to run before allocation as a pre-flight c
 
 If the graph node is just `AgentName.RISK`, which one does another node depend on?
 
-That question came up at the Phase 2.4 gate. It was not some huge architectural revelation. It was a small naming problem. But small naming problems often reveal bad models.
+That question came up at the gate. It was not some huge architectural revelation. It was a small naming problem. But small naming problems often reveal bad models.
 
 The fix was to separate the node's identity from the agent implementation.
 
-A run template node now has a `node_key`, an `agent_name`, and `required_node_keys`.
+Before, the graph was implicitly saying this:
+
+```python
+AgentName.RISK
+```
+
+After, it said this:
+
+```python
+RunTemplateNode("risk_preflight", AgentName.RISK, ("backtest",))
+RunTemplateNode("risk_post_trade", AgentName.RISK, ("paper_trader",))
+```
 
 The same `RiskAgent` can appear as `risk_preflight` and `risk_post_trade`. Dependencies point to node keys, not agent names. The graph no longer needs special-casing for duplicate agents.
 
@@ -79,7 +92,7 @@ That design was not in the original spec.
 
 It emerged because the gate created enough friction for the question to be asked.
 
-## Phase 2.5: the import smell
+## The import smell
 
 Another gate changed where execution schemas live.
 
@@ -99,7 +112,7 @@ Again, this was not a dramatic rewrite. It was a small gate correction.
 
 But this is exactly where architecture lives: in the direction of imports, in what is allowed to know about what, in whether future code will be easy to place correctly or easy to place badly.
 
-## Phase 2.2: time semantics matter
+## Time semantics matter
 
 The `agent_runs` table originally had `started_at`.
 
@@ -184,3 +197,7 @@ The better instruction is: fix this, show evidence, commit if approved, then sto
 A gate is only useful if it is allowed to interrupt momentum.
 
 That is the lesson I keep taking from this build. The point of an AI build agent is not to remove all friction. Some friction is structural. Some friction is where the design gets better.
+
+Previous in this series: [I wrote 76KB of docs before letting the AI build](/posts/spec-before-code-ai-build/).
+
+Next in this series: [When mocks lie](/posts/when-mocks-lie-integration-test-gap/).

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Spec pack as control surface</title>
+  <desc id="desc">A diagram showing human intent flowing through a spec pack into agent plans, tests, implementation, gate evidence, and spec sync.</desc>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.6"/></pattern>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#94a3b8"/></marker>
+    <style>
+      .bg{fill:#020617}.card{fill:#0f172a;stroke:#334155;stroke-width:1.5}.title{font:700 30px ui-monospace, SFMono-Regular, Menlo, monospace;fill:#e2e8f0}.sub{font:500 14px ui-monospace, SFMono-Regular, Menlo, monospace;fill:#94a3b8}.label{font:700 17px ui-monospace, SFMono-Regular, Menlo, monospace;fill:#f8fafc}.small{font:500 12px ui-monospace, SFMono-Regular, Menlo, monospace;fill:#cbd5e1}.tiny{font:500 11px ui-monospace, SFMono-Regular, Menlo, monospace;fill:#94a3b8}.cyan{fill:rgba(8,51,68,.55);stroke:#22d3ee}.green{fill:rgba(6,78,59,.55);stroke:#34d399}.violet{fill:rgba(76,29,149,.55);stroke:#a78bfa}.amber{fill:rgba(120,53,15,.45);stroke:#fbbf24}.rose{fill:rgba(136,19,55,.45);stroke:#fb7185}.line{stroke:#94a3b8;stroke-width:2;fill:none;marker-end:url(#arrow)}.dash{stroke:#fb7185;stroke-width:2;fill:none;stroke-dasharray:6 6;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="630"/><rect width="1200" height="630" fill="url(#grid)" opacity="0.55"/>
+  <text x="60" y="64" class="title">The spec pack is the control surface</text>
+  <text x="60" y="92" class="sub">Not a frozen document. A shared operating contract for the human, the agent, and the gates.</text>
+  <path class="line" d="M220 285 H345"/><path class="line" d="M555 285 H680"/><path class="line" d="M890 285 H1010"/>
+  <path class="line" d="M1045 355 C1010 505 770 540 610 500 C475 466 430 410 430 365"/>
+  <rect x="62" y="190" width="210" height="190" rx="14" class="card cyan"/><text x="92" y="230" class="label">Human intent</text><text x="92" y="262" class="small">constraints</text><text x="92" y="286" class="small">risk appetite</text><text x="92" y="310" class="small">what must refuse</text><text x="92" y="334" class="small">review taste</text>
+  <rect x="350" y="150" width="245" height="270" rx="14" class="card violet"/><text x="382" y="190" class="label">76KB spec pack</text><text x="382" y="225" class="small">MISSION / ARCHITECTURE</text><text x="382" y="250" class="small">AGENT_CONTRACTS</text><text x="382" y="275" class="small">SCHEMAS</text><text x="382" y="300" class="small">LLM_POLICY</text><text x="382" y="325" class="small">TESTING_POLICY</text><text x="382" y="350" class="small">SECURITY / RISK</text><text x="382" y="382" class="tiny">Precise enough to expose gaps</text>
+  <rect x="690" y="190" width="210" height="190" rx="14" class="card green"/><text x="724" y="230" class="label">Hermes plan</text><text x="724" y="262" class="small">scope</text><text x="724" y="286" class="small">open questions</text><text x="724" y="310" class="small">tests first</text><text x="724" y="334" class="small">commit boundary</text>
+  <rect x="1015" y="190" width="125" height="190" rx="14" class="card amber"/><text x="1038" y="230" class="label">Gate</text><text x="1042" y="262" class="small">evidence</text><text x="1042" y="286" class="small">redesign</text><text x="1042" y="310" class="small">approve</text><text x="1042" y="334" class="small">stop</text>
+  <rect x="415" y="475" width="380" height="72" rx="12" class="card rose"/><text x="445" y="508" class="label">Spec sync</text><text x="445" y="532" class="small">New architecture gets written back before the next phase</text>
+</svg>
