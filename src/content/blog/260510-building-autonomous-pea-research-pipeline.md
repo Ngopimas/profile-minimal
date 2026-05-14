@@ -146,6 +146,12 @@ Paper trading is part of that discipline. It is a reality check, not a victory l
 
 The shorter project page is here: [Autonomous research pipeline](/projects/autonomous-pea-research-pipeline/).
 
+I also wrote a follow-up series on the build process behind the system:
+
+- [I wrote 76KB of docs before letting the AI build](/posts/spec-before-code-ai-build/)
+- [Why I made the AI stop before every commit](/posts/gates-as-design-opportunities/)
+- [When mocks lie](/posts/when-mocks-lie-integration-test-gap/)
+
 ## The lesson
 
 I started with a question about autonomous research. I ended up caring more about refusal.
