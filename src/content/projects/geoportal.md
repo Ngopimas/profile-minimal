@@ -4,7 +4,11 @@ description: "A cloud data science platform for geoscientists, focused on workfl
 pubDatetime: 2023-02-11T15:30:00Z
 tags: ["react", "cloud", "data-science", "python", "automation", "3d"]
 featured: true
-url: "https://deeplime.io/products#geoportal"
+type: "Data platform"
+role: "Fullstack engineer"
+status: "Client work"
+impact: "Gives geoscientists a browser workspace for resource estimation, automation, and 3D geological context."
+url: "https://www.deeplime.io/geoportal/"
 ogImage: "/assets/images/project-thumbs/geoportal.jpg"
 ---
 

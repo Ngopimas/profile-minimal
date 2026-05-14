@@ -65,16 +65,14 @@ const socialCount = SOCIALS.filter(social => social.active).length;
     {
       featuredProjects.length > 0 && (
         <section class="mx-auto max-w-4xl py-16">
-          <div class="mb-10 flex items-baseline justify-between">
+          <div class="mb-10">
             <h2 class="font-display text-3xl font-medium tracking-tight">
               Selected Work
             </h2>
-            <LinkButton
-              href="/projects/"
-              className="text-sm text-skin-base/50 hover:text-skin-accent transition-colors"
-            >
-              View all
-            </LinkButton>
+            <p class="mt-3 max-w-2xl text-skin-base/60">
+              Research tooling, finance dashboards, data visualizations, and
+              production web applications.
+            </p>
           </div>
           <div class="divide-y divide-skin-line">
             {featuredProjects.map(
@@ -88,6 +86,14 @@ const socialCount = SOCIALS.filter(social => social.active).length;
                 )
             )}
           </div>
+          <div class="mt-8">
+            <LinkButton
+              href="/projects/"
+              className="text-sm font-medium text-skin-base/60 hover:text-skin-accent transition-colors"
+            >
+              View all work →
+            </LinkButton>
+          </div>
         </section>
       )
     }
@@ -95,16 +101,14 @@ const socialCount = SOCIALS.filter(social => social.active).length;
     {
       sortedPosts.length > 0 && (
         <section class="mx-auto max-w-4xl py-16">
-          <div class="mb-10 flex items-baseline justify-between">
+          <div class="mb-10">
             <h2 class="font-display text-3xl font-medium tracking-tight">
               Writing
             </h2>
-            <LinkButton
-              href="/posts/"
-              className="text-sm text-skin-base/50 hover:text-skin-accent transition-colors"
-            >
-              View all
-            </LinkButton>
+            <p class="mt-3 max-w-2xl text-skin-base/60">
+              Field notes from building AI-assisted research systems,
+              dashboards, and production web apps.
+            </p>
           </div>
           <div class="divide-y divide-skin-line">
             {sortedPosts.map(
@@ -119,9 +123,43 @@ const socialCount = SOCIALS.filter(social => social.active).length;
                 )
             )}
           </div>
+          <div class="mt-8">
+            <LinkButton
+              href="/posts/"
+              className="text-sm font-medium text-skin-base/60 hover:text-skin-accent transition-colors"
+            >
+              Read all writing →
+            </LinkButton>
+          </div>
         </section>
       )
     }
+
+    <section class="mx-auto max-w-4xl py-16">
+      <div class="rounded-sm border border-skin-line p-6 sm:p-8">
+        <p class="max-w-2xl text-lg text-skin-base">
+          Interested in research tooling, finance dashboards, or interfaces that
+          make complex systems easier to trust?
+        </p>
+        <div class="mt-5 flex flex-wrap gap-4 text-sm font-medium">
+          <LinkButton href="mailto:contact@romaincoupey.com">Email</LinkButton>
+          <LinkButton
+            href="https://www.linkedin.com/in/romain-coupey/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            LinkedIn
+          </LinkButton>
+          <LinkButton
+            href="https://github.com/Ngopimas/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub
+          </LinkButton>
+        </div>
+      </div>
+    </section>
   </main>
 
   <Footer />

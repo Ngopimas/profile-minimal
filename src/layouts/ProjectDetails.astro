@@ -2,6 +2,7 @@
 import Layout from "@layouts/Layout.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
+import Tag from "@components/Tag.astro";
 import { type CollectionEntry, render } from "astro:content";
 import { slugifyStr } from "@utils/slugify";
 import ShareLinks from "@components/ShareLinks.astro";
@@ -26,6 +27,10 @@ const {
   tags,
   repository,
   url,
+  role,
+  type,
+  status,
+  impact,
 } = post.data;
 
 const { Content } = await render(post);
@@ -58,7 +63,10 @@ const currentPostIndex = allPosts.findIndex(a => a.slug === getEntrySlug(post));
 
 const prevPost = currentPostIndex !== 0 ? allPosts[currentPostIndex - 1] : null;
 const nextPost =
-  currentPostIndex !== allPosts.length ? allPosts[currentPostIndex + 1] : null;
+  currentPostIndex !== allPosts.length - 1
+    ? allPosts[currentPostIndex + 1]
+    : null;
+const projectMeta = [type, role, status].filter(Boolean);
 ---
 
 <Layout {...layoutProps}>
@@ -78,19 +86,51 @@ const nextPost =
       {title}
     </h1>
 
-    <ul class="my-5 flex flex-wrap gap-x-4 gap-y-1 text-sm text-skin-base/50">
-      {tags.map(tag => <li>{tag}</li>)}
+    <ul class="my-5 flex flex-wrap gap-2">
+      {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} />)}
     </ul>
+
+    {
+      (projectMeta.length > 0 || impact) && (
+        <div class="my-6 rounded-sm border border-skin-line p-5 text-sm">
+          {projectMeta.length > 0 && (
+            <dl class="grid gap-4 sm:grid-cols-3">
+              {type && (
+                <div>
+                  <dt class="text-skin-base/40">Type</dt>
+                  <dd class="mt-1 font-medium text-skin-base">{type}</dd>
+                </div>
+              )}
+              {role && (
+                <div>
+                  <dt class="text-skin-base/40">Role</dt>
+                  <dd class="mt-1 font-medium text-skin-base">{role}</dd>
+                </div>
+              )}
+              {status && (
+                <div>
+                  <dt class="text-skin-base/40">Status</dt>
+                  <dd class="mt-1 font-medium text-skin-base">{status}</dd>
+                </div>
+              )}
+            </dl>
+          )}
+          {impact && <p class="mt-4 text-skin-base/75">{impact}</p>}
+        </div>
+      )
+    }
 
     <div class="my-2 grid gap-2 text-sm">
       {
         url && (
           <a
             title={url}
-            class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-skin-accent hover:opacity-75"
+            class="overflow-hidden text-ellipsis whitespace-nowrap rounded-sm border border-skin-line px-3 py-2 hover:border-skin-accent hover:text-skin-accent"
             href={url}
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            <span class="underline underline-offset-4">Live</span>: {url}
+            Live: {url}
           </a>
         )
       }
@@ -98,11 +138,12 @@ const nextPost =
         repository && (
           <a
             title={repository}
-            class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-skin-accent hover:opacity-75"
+            class="overflow-hidden text-ellipsis whitespace-nowrap rounded-sm border border-skin-line px-3 py-2 hover:border-skin-accent hover:text-skin-accent"
             href={repository}
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            <span class="underline underline-offset-4">Repository</span>:{" "}
-            {repository}
+            Repository: {repository}
           </a>
         )
       }
@@ -138,7 +179,7 @@ const nextPost =
           >
             <span class="flex-none">←</span>
             <div>
-              <span>Previous Post</span>
+              <span>Previous project</span>
               <div class="text-sm text-skin-accent/85">{prevPost.title}</div>
             </div>
           </a>
@@ -151,7 +192,7 @@ const nextPost =
             class="flex w-full justify-end gap-1 text-right hover:opacity-75 sm:col-start-2"
           >
             <div>
-              <span>Next Post</span>
+              <span>Next project</span>
               <div class="text-sm text-skin-accent/85">{nextPost.title}</div>
             </div>
             <span class="flex-none">→</span>

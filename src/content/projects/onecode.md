@@ -4,6 +4,10 @@ description: "A cloud platform for deploying Python applications from the OneCod
 pubDatetime: 2024-07-11T15:30:00Z
 tags: ["nextjs", "aws", "typescript", "python", "serverless"]
 featured: true
+type: "Cloud platform"
+role: "Lead developer"
+status: "Live"
+impact: "Turns Python workflows into deployable applications with workspace boundaries, permissions, logs, and cleanup."
 url: "https://www.onecode.rocks"
 repository: "https://github.com/deeplime-io/onecode"
 ogImage: "/assets/images/project-thumbs/onecode-cloud.jpg"

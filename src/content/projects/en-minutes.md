@@ -4,6 +4,10 @@ description: "A bilingual data visualization app that turns French prices into m
 pubDatetime: 2026-03-13T09:00:00Z
 tags: ["react", "typescript", "data-visualization", "economics"]
 featured: true
+type: "Public data app"
+role: "Solo builder"
+status: "Live"
+impact: "Reframes French purchasing power in minutes of work, with salary references and methodology choices visible."
 url: "https://enminutes.fr"
 repository: "https://github.com/Ngopimas/enminutes"
 ogImage: "/assets/images/project-thumbs/en-minutes.jpg"

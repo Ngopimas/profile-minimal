@@ -4,6 +4,10 @@ description: "A finance analytics web app for KPI monitoring, peer comparison, v
 pubDatetime: 2025-06-10T09:00:00Z
 tags: ["nextjs", "typescript", "tailwind", "recharts", "gcp"]
 featured: true
+type: "Finance product"
+role: "Lead developer"
+status: "Live"
+impact: "Makes KPI monitoring, peer comparison, valuation, and screening workflows easier to inspect and trust."
 url: "https://omaha-insights.com"
 ogImage: "/assets/images/project-thumbs/omaha.jpg"
 ---
