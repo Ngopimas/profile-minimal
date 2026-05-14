@@ -6,15 +6,23 @@ const currentUrlPath = Astro.url.pathname.replace(/\/+$/, "");
 // eg: /tags/tailwindcss => ['tags', 'tailwindcss']
 const breadcrumbList = currentUrlPath.split("/").slice(1);
 
-// if breadcrumb is Home > Posts > 1 <etc>
-// replace Posts with Posts (page number)
+const sectionLabels: Record<string, string> = {
+  projects: "Work",
+  posts: "Writing",
+  tags: "Topics",
+};
+
+// if breadcrumb is Home > Writing > 2 <etc>
+// replace Writing > page with Writing (page number)
 breadcrumbList[0] === "posts" &&
-  breadcrumbList.splice(0, 2, `Posts (page ${breadcrumbList[1] || 1})`);
+  breadcrumbList[1] &&
+  breadcrumbList.splice(0, 2, `Writing (page ${breadcrumbList[1]})`);
 
 breadcrumbList[0] === "projects" &&
-  breadcrumbList.splice(0, 2, `Work (page ${breadcrumbList[1] || 1})`);
+  breadcrumbList[1] &&
+  breadcrumbList.splice(0, 2, `Work (page ${breadcrumbList[1]})`);
 
-// if breadcrumb is Home > Tags > [tag] > [page] <etc>
+// if breadcrumb is Home > Topics > [tag] > [page] <etc>
 // replace [tag] > [page] with [tag] (page number)
 breadcrumbList[0] === "tags" &&
   !isNaN(Number(breadcrumbList[2])) &&
@@ -25,6 +33,18 @@ breadcrumbList[0] === "tags" &&
       Number(breadcrumbList[2]) === 1 ? "" : "(page " + breadcrumbList[2] + ")"
     }`
   );
+
+function getBreadcrumbLabel(breadcrumb: string) {
+  return sectionLabels[breadcrumb] ?? breadcrumb;
+}
+
+function getBreadcrumbHref(breadcrumb: string) {
+  const sectionEntry = Object.entries(sectionLabels).find(
+    ([, label]) => label === breadcrumb
+  );
+
+  return `/${sectionEntry?.[0] ?? breadcrumb}/`;
+}
 ---
 
 <nav class="breadcrumb" aria-label="breadcrumb">
@@ -41,13 +61,15 @@ breadcrumbList[0] === "tags" &&
               class={`${index > 0 ? "lowercase" : "capitalize"}`}
               aria-current="page"
             >
-              {/* make the last part lowercase in Home > Tags > some-tag */}
-              {decodeURIComponent(breadcrumb)}
+              {/* make the last part lowercase in Home > Topics > some-tag */}
+              {decodeURIComponent(getBreadcrumbLabel(breadcrumb))}
             </span>
           </li>
         ) : (
           <li>
-            <a href={`/${breadcrumb}/`}>{breadcrumb}</a>
+            <a href={getBreadcrumbHref(breadcrumb)}>
+              {getBreadcrumbLabel(breadcrumb)}
+            </a>
             <span aria-hidden="true">&raquo;</span>
           </li>
         )
