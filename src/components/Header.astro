@@ -49,7 +49,7 @@ const { activeNav } = Astro.props;
           <li>
             <LinkButton
               href="/search/"
-              className={`focus-outline p-2 ${
+              className={`focus-outline p-1.5 sm:p-2 ${
                 activeNav === "search" ? "active" : ""
               } icon-link flex`}
               ariaLabel="search"
@@ -68,7 +68,7 @@ const { activeNav } = Astro.props;
               <li>
                 <button
                   id="theme-btn"
-                  class="focus-outline icon-link p-2"
+                  class="focus-outline icon-link p-1.5 sm:p-2"
                   title="Toggles light & dark"
                   aria-label="auto"
                   aria-live="polite"
@@ -120,10 +120,10 @@ const { activeNav } = Astro.props;
     @apply flex items-center;
   }
   nav ul {
-    @apply flex items-center gap-2 sm:gap-3;
+    @apply flex items-center gap-1 sm:gap-3;
   }
   nav ul li a {
-    @apply px-3 py-2 text-sm font-medium text-skin-base/60 transition-colors hover:text-skin-accent;
+    @apply px-2 py-2 text-sm font-medium text-skin-base/60 transition-colors hover:text-skin-accent sm:px-3;
   }
   nav ul li a.active {
     @apply text-skin-base hover:text-skin-accent;
@@ -135,7 +135,7 @@ const { activeNav } = Astro.props;
   }
 
   #theme-btn {
-    @apply p-2;
+    @apply p-1.5 sm:p-2;
   }
   #theme-btn svg {
     @apply transition-opacity hover:opacity-70;
