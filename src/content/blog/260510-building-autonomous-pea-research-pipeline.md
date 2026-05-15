@@ -55,6 +55,10 @@ That does not make a strategy good. It just removes the obvious waste before the
 
 The more interesting checks come later: transaction costs, turnover, bear-market behavior, market regime, earnings proximity, thesis health, sector exposure, data freshness, and whether a batch of strategies secretly produced the same result.
 
+![Robustness checks for the autonomous research pipeline](../../assets/images/robustness-check.png)
+
+This is the kind of page I wanted the system to produce: not a victory chart, but a stress test. Transaction costs can erase the edge. Random stock selection can reveal whether the result depends on a few lucky names. Alternative strategy variants can show whether the simple version is actually stronger. Survivorship bias still needs to be called out instead of hidden behind a clean CAGR.
+
 ## The gate is more important than the generator
 
 Idea generation is cheap now. Refusal is the scarce part.
