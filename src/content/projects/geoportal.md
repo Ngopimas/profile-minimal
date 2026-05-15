@@ -6,7 +6,7 @@ tags: ["react", "cloud", "data-science", "python", "automation", "3d"]
 featured: true
 type: "Data platform"
 role: "Fullstack engineer"
-status: "Client work"
+status: "Live"
 impact: "Gives geoscientists a browser workspace for resource estimation, automation, and 3D geological context."
 url: "https://www.deeplime.io/geoportal/"
 ogImage: "/assets/images/project-thumbs/geoportal.jpg"

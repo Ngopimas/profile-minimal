@@ -6,7 +6,7 @@ tags: ["threejs", "react", "typescript"]
 featured: false
 type: "3D visualization"
 role: "Solo Builder"
-status: "Client work"
+status: "Exploratory"
 impact: "Made dense geological block model data explorable in the browser through slicing, property coloring, and interactive 3D controls."
 url: "https://ngopimas.github.io/POC_BM_3D/"
 ogImage: "/assets/images/project-thumbs/block-model.jpg"

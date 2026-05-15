@@ -63,5 +63,3 @@ The other constraint was language. The interface had to avoid turning a public e
 - [Learn more about the EMILI project](https://emili.imerys.com/)
 - [Public debate details](https://www.debatpublic.fr/mine-de-lithium-allier/le-dossier-du-maitre-douvrage-5411)
 - [Visit the current EMILI 3D platform](https://emili3d.imerys.com)
-
-<iframe src="https://emili3d.imerys.com" title="EMILI 3D Platform Demo" width="100%" height="400" allowfullscreen></iframe>

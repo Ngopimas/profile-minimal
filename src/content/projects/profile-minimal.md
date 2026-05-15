@@ -6,7 +6,7 @@ tags: ["astro", "typescript", "tailwind", "react"]
 featured: false
 type: "Portfolio system"
 role: "Solo Builder"
-status: "Active"
+status: "Live"
 impact: "Keeps project pages, writing, search, and static deployment simple enough to maintain without hiding the work behind a heavy CMS."
 url: "https://romaincoupey.com"
 repository: "https://github.com/Ngopimas/profile-minimal"
