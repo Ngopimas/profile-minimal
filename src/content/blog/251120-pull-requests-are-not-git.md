@@ -4,10 +4,20 @@ pubDatetime: 2025-11-20T11:15:00Z
 title: "Pull requests are not Git"
 slug: pull-requests-are-not-git
 featured: false
-draft: true
-tags: ["git", "github", "code-review", "software-engineering"]
+draft: false
+tags:
+  [
+    "git",
+    "github",
+    "code-review",
+    "software-engineering",
+    "github-from-first-principles",
+  ]
 description: "Git gives us branches, diffs, patches, and merges. A pull request is the collaboration object GitHub built around them."
+ogImage: "/assets/images/posts/pull-requests-are-not-git/pr-is-product-layer.svg"
 ---
+
+_Part 4 of 5 in [Tiny GitHub from first principles](/posts/github-is-just-a-remote-until-it-isnt/)._
 
 Pull requests feel so normal now that it is easy to forget they are not part of Git.
 

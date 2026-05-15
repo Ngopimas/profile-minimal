@@ -4,10 +4,20 @@ pubDatetime: 2025-09-18T16:20:00Z
 title: "The server gets a vote"
 slug: the-server-gets-a-vote
 featured: false
-draft: true
-tags: ["git", "github", "devops", "software-engineering"]
+draft: false
+tags:
+  [
+    "git",
+    "github",
+    "devops",
+    "software-engineering",
+    "github-from-first-principles",
+  ]
 description: "Server-side hooks turn a dumb Git remote into something that can enforce policy before history changes."
+ogImage: "/assets/images/posts/the-server-gets-a-vote/server-gets-a-vote.svg"
 ---
+
+_Part 3 of 5 in [Tiny GitHub from first principles](/posts/github-is-just-a-remote-until-it-isnt/)._
 
 A bare Git repository over SSH is already useful, but it is still a little too trusting.
 
@@ -121,13 +131,15 @@ while read oldrev newrev refname; do
 done
 ```
 
-Or block obvious secrets:
+Or block obvious secrets inside the same loop:
 
 ```bash
-git grep -n "AWS_SECRET_ACCESS_KEY" "$newrev" -- . && {
-  echo "Possible secret detected."
-  exit 1
-}
+while read oldrev newrev refname; do
+  if git grep -n "AWS_SECRET_ACCESS_KEY" "$newrev"; then
+    echo "Possible secret detected."
+    exit 1
+  fi
+done
 ```
 
 This is not a full security scanner. Please do not build your compliance program out of a blog post shell script.

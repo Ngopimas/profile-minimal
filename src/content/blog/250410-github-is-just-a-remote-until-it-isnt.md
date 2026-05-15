@@ -4,10 +4,20 @@ pubDatetime: 2025-04-10T10:30:00Z
 title: "GitHub is just a remote until it isn't"
 slug: github-is-just-a-remote-until-it-isnt
 featured: false
-draft: true
-tags: ["git", "github", "ssh", "software-architecture"]
+draft: false
+tags:
+  [
+    "git",
+    "github",
+    "ssh",
+    "software-engineering",
+    "github-from-first-principles",
+  ]
 description: "A small GitHub without GitHub: one Linux box, one bare repository, and the first useful boundary between Git and the product built around it."
+ogImage: "/assets/images/posts/github-is-just-a-remote-until-it-isnt/tiny-git-remote.svg"
 ---
+
+_Part 1 of 5 in [Tiny GitHub from first principles](/posts/github-is-just-a-remote-until-it-isnt/)._
 
 Most developers learn Git and GitHub at the same time, which is convenient and a little damaging.
 
@@ -46,8 +56,8 @@ A small Linux box is enough.
 
 ```bash
 ssh git@example.com
-mkdir -p /srv/git/demo.git
-cd /srv/git/demo.git
+mkdir -p demo.git
+cd demo.git
 git init --bare
 ```
 
@@ -69,7 +79,7 @@ cd demo
 printf "hello\n" > README.md
 git add README.md
 git commit -m "Initial commit"
-git remote add origin git@example.com:/srv/git/demo.git
+git remote add origin git@example.com:demo.git
 git push origin main
 ```
 
@@ -82,7 +92,7 @@ That is already enough to collaborate.
 Someone else can run:
 
 ```bash
-git clone git@example.com:/srv/git/demo.git
+git clone git@example.com:demo.git
 ```
 
 They get the repository. They can commit. They can push. If we both push incompatible histories, Git will complain in the same annoying way it does with GitHub.
@@ -110,7 +120,7 @@ A remote is not just storage. It is a place where trust decisions eventually acc
 This small setup can already handle the basic Git loop:
 
 ```bash
-git clone git@example.com:/srv/git/demo.git
+git clone git@example.com:demo.git
 # edit files
 git add .
 git commit -m "Change something"
@@ -136,13 +146,9 @@ GitHub makes the message nicer. The underlying idea is older.
 
 ## What this version cannot do
 
-It cannot show you a pull request.
+It cannot show you a pull request, store review comments, or run CI and put a green check next to a commit.
 
-It cannot store review comments.
-
-It cannot run CI and put a green check next to a commit.
-
-It cannot tell you that a dependency has a CVE. It cannot render Markdown beautifully. It cannot notify your team in Slack. It cannot search every repository in an organization. It cannot tell you who approved a production change three months ago.
+It cannot tell you that a dependency has a CVE. It cannot search every repository in an organization. It cannot tell you who approved a production change three months ago.
 
 Those things are not Git.
 

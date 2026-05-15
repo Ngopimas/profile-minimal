@@ -4,10 +4,20 @@ pubDatetime: 2026-01-22T10:00:00Z
 title: "What GitHub really sells"
 slug: what-github-really-sells
 featured: false
-draft: true
-tags: ["git", "github", "developer-tools", "software-engineering"]
+draft: false
+tags:
+  [
+    "git",
+    "github",
+    "developer-tools",
+    "software-engineering",
+    "github-from-first-principles",
+  ]
 description: "After stripping GitHub down to SSH and a bare repository, the product becomes clearer: GitHub sells the collaboration system around Git."
+ogImage: "/assets/images/posts/what-github-really-sells/github-layers.svg"
 ---
+
+_Part 5 of 5 in [Tiny GitHub from first principles](/posts/github-is-just-a-remote-until-it-isnt/)._
 
 The tiny GitHub experiment starts as a joke and ends as a decent product lesson.
 
@@ -132,27 +142,7 @@ That pattern repeats across GitHub. The primitive is often simple. The product w
 
 ## The boring features are the expensive ones
 
-Search.
-
-Notifications.
-
-Audit logs.
-
-Repository settings.
-
-Team management.
-
-Code owners.
-
-Release pages.
-
-Security advisories.
-
-Dependabot.
-
-APIs.
-
-Status pages.
+Search, notifications, audit logs, repository settings, team management, code owners, release pages, security advisories, Dependabot, APIs, status pages.
 
 None of these make a great conference demo by themselves. Together, they are why organizations stay.
 

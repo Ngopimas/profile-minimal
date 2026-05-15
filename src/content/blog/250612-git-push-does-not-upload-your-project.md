@@ -4,10 +4,20 @@ pubDatetime: 2025-06-12T09:45:00Z
 title: "git push does not upload your project"
 slug: git-push-does-not-upload-your-project
 featured: false
-draft: true
-tags: ["git", "github", "internals", "software-engineering"]
+draft: false
+tags:
+  [
+    "git",
+    "github",
+    "internals",
+    "software-engineering",
+    "github-from-first-principles",
+  ]
 description: "A push is not a folder upload. It is Git sending missing objects and asking the remote to move a branch reference."
+ogImage: "/assets/images/posts/git-push-does-not-upload-your-project/push-moves-refs.svg"
 ---
+
+_Part 2 of 5 in [Tiny GitHub from first principles](/posts/github-is-just-a-remote-until-it-isnt/)._
 
 The first misleading thing about `git push` is the verb.
 
