@@ -152,7 +152,7 @@ export default function SearchBar({ searchList, topics }: Props) {
       </ul>
 
       {(!hasQuery || hasNoResults) && topics.length > 0 && (
-        <section className="mt-12 rounded-sm border border-skin-line p-5">
+        <section className="mt-12 rounded-lg border border-skin-line bg-skin-card/30 p-5">
           <div className="mb-4">
             <h2 className="font-display text-xl font-medium tracking-tight">
               Browse topics

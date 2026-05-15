@@ -25,10 +25,10 @@ export default function ProjectCard({
   const meta = [type, role, status].filter(Boolean).join(" · ");
 
   return (
-    <article className="group py-8 -mx-4 px-4 rounded-sm transition-colors duration-300 hover:bg-skin-card">
+    <article className="group py-8 -mx-4 px-4 rounded-lg transition-colors duration-300 hover:bg-skin-card">
       <a href={href} className="block">
         {imageUrl && (
-          <div className="mb-5 overflow-hidden rounded-sm">
+          <div className="mb-5 overflow-hidden rounded-xl">
             <img
               src={imageUrl}
               alt={title}
