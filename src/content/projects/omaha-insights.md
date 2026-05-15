@@ -9,7 +9,7 @@ role: "Lead developer"
 status: "Live"
 impact: "Makes KPI monitoring, peer comparison, valuation, and screening workflows easier to inspect and trust."
 url: "https://omaha-insights.com"
-ogImage: "/assets/images/project-thumbs/omaha.jpg"
+ogImage: "/assets/images/project-thumbs/omaha.png"
 ---
 
 Finance software usually fails in one of two ways: it hides the model behind a pretty chart, or it exposes so much data that the user is back in a spreadsheet.
