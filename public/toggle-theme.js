@@ -46,8 +46,16 @@ function reflectPreference() {
   }
 }
 
+function reflectPreferenceOnDocument(doc) {
+  doc.documentElement.setAttribute("data-theme", themeValue);
+}
+
 // set early so no page flashes / CSS is made aware
 reflectPreference();
+
+document.addEventListener("astro:before-swap", event => {
+  reflectPreferenceOnDocument(event.newDocument);
+});
 
 window.onload = () => {
   function setThemeFeature() {

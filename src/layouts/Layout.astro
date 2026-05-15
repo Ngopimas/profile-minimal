@@ -58,6 +58,20 @@ const structuredData = {
 >
   <head>
     <meta charset="UTF-8" />
+    <script is:inline>
+      (() => {
+        const primaryColorScheme = "dark";
+        const storedTheme = localStorage.getItem("theme");
+        const theme =
+          storedTheme ||
+          primaryColorScheme ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <link rel="canonical" href={canonicalURL} />
@@ -134,7 +148,7 @@ const structuredData = {
 
     <ClientRouter />
 
-    <script is:inline src="/toggle-theme.js" async></script>
+    <script is:inline src="/toggle-theme.js"></script>
   </head>
   <body>
     <div class="flex min-h-screen flex-col">

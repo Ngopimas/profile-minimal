@@ -5,6 +5,10 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    background-color: rgb(var(--color-fill));
+  }
+
   #sun-svg,
   html[data-theme="dark"] #moon-svg {
     display: none;
@@ -15,6 +19,7 @@
   }
   body {
     @apply flex min-h-[100svh] flex-col bg-skin-fill font-sans text-skin-base selection:bg-skin-accent/10 selection:text-skin-accent;
+    background-color: rgb(var(--color-fill));
     line-height: 1.6;
     letter-spacing: -0.01em;
   }
@@ -128,6 +133,46 @@
     }
     to {
       opacity: 1;
+    }
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 160ms;
+    animation-timing-function: ease;
+    background-color: rgb(var(--color-fill));
+  }
+
+  ::view-transition-old(root) {
+    animation-name: page-fade-out;
+  }
+
+  ::view-transition-new(root) {
+    animation-name: page-fade-in;
+  }
+
+  @keyframes page-fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes page-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation-duration: 1ms;
     }
   }
 }
