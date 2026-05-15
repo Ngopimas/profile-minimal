@@ -17,7 +17,7 @@ Data science tools often stop one step before they become useful to the rest of 
 
 A Python workflow may run on a developer's machine, but that does not mean a business user can open it, share it, execute it safely, or understand why it failed. OneCode Cloud was built to close that gap: a web platform for deploying Python applications from the OneCode ecosystem without asking every team to become a cloud infrastructure team.
 
-![OneCode Cloud preview](../../assets/images/project-thumbs/onecode-cloud-preview.png)
+![OneCode Cloud preview](../../assets/images/projects/onecode/cloud-preview.png)
 
 ## The constraint
 

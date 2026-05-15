@@ -11,7 +11,7 @@ description: "My weekend project: a developer-themed platform game built on top 
 
 I found a neat Stick Hero clone on CodePen by Hunor Márton Borbély and spent a weekend turning it into something with a developer theme. The original is elegant: tap to extend a stick, release to drop it, try to bridge the gap to the next platform. Hunor even made a [YouTube tutorial](https://youtu.be/eue3UdFvwPo) walking through the build.
 
-![Code Connection](../../assets/images/code-connection.png)
+![Code Connection](../../assets/images/posts/bridging-the-gap-code-connection/code-connection.png)
 
 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 8px;">
  <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"

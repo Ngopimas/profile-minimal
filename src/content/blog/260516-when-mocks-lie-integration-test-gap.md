@@ -23,7 +23,7 @@ The system only broke when the real components met.
 
 That is the kind of testing failure I trust, because it is not abstract. It is the normal, embarrassing kind.
 
-![When mocks lie](../../assets/images/when-mocks-lie.svg)
+![When mocks lie](../../assets/images/posts/when-mocks-lie-integration-test-gap/when-mocks-lie.svg)
 
 ## The setup
 

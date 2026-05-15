@@ -11,7 +11,7 @@ impact: "Reframes French purchasing power in minutes of work, with salary refere
 url: "https://enminutes.fr"
 repository: "https://github.com/Ngopimas/enminutes"
 ogImage: "/assets/images/project-thumbs/en-minutes.jpg"
-image: "../../assets/images/project-thumbs/en-minutes-preview.png"
+image: "../../assets/images/projects/en-minutes/app-preview.png"
 ---
 
 Raw prices are a bad way to talk about purchasing power.
@@ -20,7 +20,7 @@ En Minutes starts from a smaller question: what does something cost if the unit 
 
 That is why the project is more about methodology than chart polish.
 
-![How En Minutes works](../../assets/images/en-minutes-method.svg)
+![How En Minutes works](../../assets/images/projects/en-minutes/method.svg)
 
 ## The constraint
 
@@ -36,7 +36,7 @@ The app lets users compare everyday French prices from the 1950s to today in min
 
 Users can switch between minimum wage, median salary, and mean salary. The chart recalculates in the browser, so the same product can tell different stories depending on the reference point. Some goods became meaningfully cheaper. Some did not. Some only look cheap when the salary reference is too generous.
 
-![En Minutes app preview](../../assets/images/project-thumbs/en-minutes-preview.png)
+![En Minutes app preview](../../assets/images/projects/en-minutes/app-preview.png)
 
 ## The useful mistake
 

@@ -24,13 +24,13 @@ Raw prices are deceiving. A baguette cost about 0.067€ (in equivalent francs) 
 
 By converting every price into minutes of work at a given salary, you get a universal unit that cuts through inflation, currency changes, and decades of economic shifts. It lets you compare a 1955 pack of cigarettes to a 2024 one in a way that actually means something.
 
-![How En Minutes works](../../assets/images/en-minutes-method.svg)
+![How En Minutes works](../../assets/images/projects/en-minutes/method.svg)
 
 ## What It Does
 
 The app tracks **30+ consumer products** - from baguettes and coffee to cinema tickets, electricity, and rent - across seven decades of data. You can browse interactive charts for each product, switch between minimum wage, median salary and mean salary to recalculate everything on the fly, compare two years side by side, or look at the aggregated purchasing power index with overlays for inflation, productivity, and presidential terms. Everything is bilingual and works in dark mode, because I like my charts readable at 11pm.
 
-![En Minutes app preview](../../assets/images/project-thumbs/en-minutes-preview.png)
+![En Minutes app preview](../../assets/images/projects/en-minutes/app-preview.png)
 
 ## The Stack
 

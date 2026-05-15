@@ -19,7 +19,7 @@ This project is an exploratory Hermes Agent research loop for European equities,
 
 The point is not to make an agent sound like an investor. The point is to make every candidate leave enough evidence to be challenged.
 
-![Autonomous research pipeline](../../assets/images/pea-research-pipeline.svg)
+![Autonomous research pipeline](../../assets/images/projects/autonomous-pea-research-pipeline/research-pipeline.svg)
 
 ## The constraint
 
@@ -50,7 +50,7 @@ The implementation is deliberately plain: Python, JSON artifacts, Jinja2 templat
 
 This is not a mockup. The running dashboard is generated from artifacts written by the pipeline, including the agent log and health check views.
 
-![Agent activity ledger](../../assets/images/pea-agent-log-preview.png)
+![Agent activity ledger](../../assets/images/projects/autonomous-pea-research-pipeline/agent-log-preview.png)
 
 ## Stack
 
@@ -66,7 +66,7 @@ The pre-rebalance gate is the center of the project.
 
 Before the paper portfolio changes, the system checks whether the reason for acting still holds. It looks at strategy fitness, market regime, data freshness, earnings risk, thesis health, and sector rotation. The result is one of three states: `proceed`, `hold`, or `abort`.
 
-![Pre-rebalance gate](../../assets/images/pea-pre-rebalance-gate.svg)
+![Pre-rebalance gate](../../assets/images/projects/autonomous-pea-research-pipeline/pre-rebalance-gate.svg)
 
 That matters because autonomous systems tend to have an action bias. They are built to produce something. In research, a good system should often refuse. `Hold` is not a failure. It is a safety feature.
 

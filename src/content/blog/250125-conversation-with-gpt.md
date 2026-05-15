@@ -31,4 +31,4 @@ This made me wonder what my future self would say about the patterns I am buildi
 
 What is something you learned about yourself from an outside perspective?
 
-![GPT Conversation](../../assets/images/conversation-with-gpt.png)
+![GPT Conversation](../../assets/images/posts/conversation-with-gpt/conversation.png)

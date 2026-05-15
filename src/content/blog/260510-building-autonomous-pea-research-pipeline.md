@@ -20,7 +20,7 @@ The system pulls market data, generates candidates, turns them into strategy hyp
 
 The important part is not that agents are involved. The important part is that every stage leaves receipts. Every candidate should be rejectable. Every rebalance should be able to end in `proceed`, `hold`, or `abort`.
 
-![Evidence trail for the autonomous research pipeline](../../assets/images/pea-research-pipeline.svg)
+![Evidence trail for the autonomous research pipeline](../../assets/images/projects/autonomous-pea-research-pipeline/research-pipeline.svg)
 
 ## The failure mode is fluent nonsense
 
@@ -55,7 +55,7 @@ That does not make a strategy good. It just removes the obvious waste before the
 
 The more interesting checks come later: transaction costs, turnover, bear-market behavior, market regime, earnings proximity, thesis health, sector exposure, data freshness, and whether a batch of strategies secretly produced the same result.
 
-![Robustness checks for the autonomous research pipeline](../../assets/images/robustness-check.png)
+![Robustness checks for the autonomous research pipeline](../../assets/images/projects/autonomous-pea-research-pipeline/robustness-check.png)
 
 This is the kind of page I wanted the system to produce: not a victory chart, but a stress test. Transaction costs can erase the edge. Random stock selection can reveal whether the result depends on a few lucky names. Alternative strategy variants can show whether the simple version is actually stronger. Survivorship bias still needs to be called out instead of hidden behind a clean CAGR.
 
@@ -67,7 +67,7 @@ The strongest component in the pipeline is the pre-rebalance gate. Before the pa
 
 It checks strategy fitness, market regime, data freshness, earnings risk, thesis health, and sector rotation. The output is deliberately plain: `proceed`, `hold`, or `abort`.
 
-![Pre-rebalance gate](../../assets/images/pea-pre-rebalance-gate.svg)
+![Pre-rebalance gate](../../assets/images/projects/autonomous-pea-research-pipeline/pre-rebalance-gate.svg)
 
 That small vocabulary changes the character of the whole project.
 
@@ -81,7 +81,7 @@ The dashboard is not there to make the project look finished. It is there to exp
 
 It shows what ran, what changed, what passed, what failed, and what the system refused to do. Signals are only one page. The more important pages are evidence, agent logs, health, assumptions, diagnostics, rejected ideas, and stale-data warnings.
 
-![Agent activity ledger](../../assets/images/pea-agent-log-preview.png)
+![Agent activity ledger](../../assets/images/projects/autonomous-pea-research-pipeline/agent-log-preview.png)
 
 This is not a mockup. The running dashboard is generated from files written by the pipeline. The cropped image above shows the kind of state the system exposes: agent activity, errors, timestamps, stale-data warnings, and recent logs. JSON artifacts in, static pages out.
 

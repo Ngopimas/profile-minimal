@@ -23,7 +23,7 @@ That sounds like bureaucracy until you see what happens at the gates.
 
 The gates are where the system got better.
 
-![Verify redesign improve loop](../../assets/images/ai-gate-loop.svg)
+![Verify redesign improve loop](../../assets/images/posts/gates-as-design-opportunities/gate-loop.svg)
 
 ## The loop
 

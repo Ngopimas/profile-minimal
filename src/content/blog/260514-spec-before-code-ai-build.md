@@ -29,7 +29,7 @@ So I did the boring thing first.
 
 I wrote the contract.
 
-![Spec pack as control surface](../../assets/images/ai-spec-control-surface.svg)
+![Spec pack as control surface](../../assets/images/posts/spec-before-code-ai-build/spec-control-surface.svg)
 
 ## The docs were not ceremony
 

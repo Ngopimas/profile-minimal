@@ -17,7 +17,7 @@ A portfolio site has one job: stay out of the way.
 
 This site is a small Astro build for project pages, writing, tags, search, dark mode, and static deployment. It is deliberately plain. The point is not to prove that a personal site can be an application. The point is to keep work readable, fast, and easy to change.
 
-![Lighthouse Score](../../assets/images/lighthouse-score.svg)
+![Lighthouse Score](../../assets/images/projects/profile-minimal/lighthouse-score.svg)
 
 ## The constraint
 

@@ -11,7 +11,7 @@ description: "I built an endless runner where the obstacles are bugs and the pow
 
 I built [**Mac the Developer**](https://ngopimas.github.io/mac-the-dev/) over a few weekends - an endless runner where you play as a developer running from deadlines, jumping over bugs, and collecting coffee for speed boosts. It's built with vanilla JavaScript and HTML5 Canvas. No frameworks, no bundler, just a single HTML file and some JS.
 
-![Mac the Developer](../../assets/images/mac-the-developer.png)
+![Mac the Developer](../../assets/images/posts/mac-the-developer-game/game-preview.png)
 
 ## Why Pure JavaScript?
 

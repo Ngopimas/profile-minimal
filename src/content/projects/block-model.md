@@ -17,7 +17,7 @@ A block model is easy to store and hard to inspect.
 
 The data is a 3D grid of blocks, each carrying geological properties. In specialist desktop software, that makes sense. In a browser, a naive implementation turns into a wall of cubes and a dead frame rate. This project was a proof of concept for making that kind of model explorable from a web page.
 
-![Block Model Visualization](../../assets/images/bm.png)
+![Block Model Visualization](../../assets/images/projects/block-model/visualization.png)
 
 ## The constraint
 

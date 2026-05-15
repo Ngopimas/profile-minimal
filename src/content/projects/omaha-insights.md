@@ -16,7 +16,7 @@ Finance software usually fails in one of two ways: it hides the model behind a p
 
 Omaha Insights sits between those two failure modes. It is a finance analytics platform for monitoring KPIs, comparing companies, working through valuation scenarios, and screening investment ideas. The interface has to let users move from question to evidence without losing the shape of the analysis.
 
-![Omaha Insights](../../assets/images/omaha.png)
+![Omaha Insights](../../assets/images/projects/omaha-insights/hero.png)
 
 ## The constraint
 

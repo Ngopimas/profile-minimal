@@ -11,7 +11,7 @@ description: "Takeaways from Unit 1 of Hugging Face's AI Agents course, breaking
 
 Hugging Face recently released the first unit of their AI Agents course. I wanted to share some takeaways about how AI agents function.
 
-![Certificate of Achievement](../../assets/images/ai_agents_fundamentals.png)
+![Certificate of Achievement](../../assets/images/posts/huggingface-ai-agents-course-fundamentals/certificate.png)
 
 ## What is an AI Agent?
 

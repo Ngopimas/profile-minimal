@@ -16,7 +16,7 @@ Industrial projects are hard to explain with a PDF.
 
 The EMILI 3D platform is a browser-based visualization of Imerys' lithium mining project. It lets visitors explore the extraction site, concentration plant, transport platform, conversion plant, and surrounding terrain from a web page. The context matters because the project was part of a public debate. The interface had to help non-specialists understand the geography without pretending the infrastructure was simple.
 
-![EMILI 3D Visualization Platform](../../assets/images/emili.png)
+![EMILI 3D Visualization Platform](../../assets/images/projects/emili-3d/visualization.png)
 
 ## The constraint
 

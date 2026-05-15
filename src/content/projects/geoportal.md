@@ -16,7 +16,7 @@ Geoscience software has a translation problem.
 
 The data is spatial, heavy, and domain specific. The workflows live in specialist desktop tools or Python scripts that a geologist runs on a workstation overnight. GeoPortal brought that work into a corporate cloud platform, so mining and exploration teams could run heavy processing workflows - resource estimation, geostatistical simulation, block modeling - visualize the results in 3D, and share outputs without forcing every user into the same local setup.
 
-![GeoPortal](../../assets/images/geoportal.jpg)
+![GeoPortal](../../assets/images/projects/geoportal/hero.jpg)
 
 ## What the platform actually does
 

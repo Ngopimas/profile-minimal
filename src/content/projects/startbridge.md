@@ -16,7 +16,7 @@ Marketplace products are mostly coordination problems.
 
 StartBridge was a platform for innovation projects: users could create offers or project calls, collect feedback from a professional network, and prepare launches on the marketplace. My work as a contractor focused on turning changing business requirements into React interfaces that could survive real product iteration.
 
-![StartBridge](../../assets/images/startbridge.jpg)
+![StartBridge](../../assets/images/projects/startbridge/hero.jpg)
 
 ## The constraint
 
