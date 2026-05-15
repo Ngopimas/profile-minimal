@@ -17,7 +17,7 @@ description: "Server-side hooks turn a dumb Git remote into something that can e
 ogImage: "/assets/images/posts/the-server-gets-a-vote/server-gets-a-vote.svg"
 ---
 
-_Part 3 of 5 in [Tiny GitHub from first principles](/posts/github-is-just-a-remote-until-it-isnt/)._
+_Part 3 of 5 in [GitHub without the website](/posts/github-is-just-a-remote-until-it-isnt/): rebuilding just enough of GitHub to see where Git stops and the product begins._
 
 A bare Git repository over SSH is already useful, but it is still a little too trusting.
 
@@ -27,7 +27,7 @@ Sooner or later, someone pushes directly to `main`. Someone commits a secret. So
 
 This is where the remote stops being storage and starts having opinions.
 
-Git has had the primitive for years: hooks.
+The primitive is old and unglamorous: hooks.
 
 ![Server-side hook deciding a push](../../assets/images/posts/the-server-gets-a-vote/server-gets-a-vote.svg)
 
@@ -200,7 +200,7 @@ Then it validates code.
 
 Then it reacts to code.
 
-After that, it is hard to stay small.
+After that, staying small is a choice you have to keep making.
 
 ## The missing social object
 
@@ -210,9 +210,7 @@ But what happens after the branch exists?
 
 Git knows how to compare branches. Git knows how to merge. Git knows how to apply patches. It does not know how to host a conversation, request a review, record an approval, or put a big green button in front of a maintainer.
 
-That object is not Git.
-
-It is the pull request.
+That object is the pull request. It is the place where a branch stops being only a branch and becomes a proposed change.
 
 [Previous: `git push` does not upload your project](/posts/git-push-does-not-upload-your-project/)  
 [Next: Pull requests are not Git](/posts/pull-requests-are-not-git/)

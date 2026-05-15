@@ -17,11 +17,13 @@ description: "A push is not a folder upload. It is Git sending missing objects a
 ogImage: "/assets/images/posts/git-push-does-not-upload-your-project/push-moves-refs.svg"
 ---
 
-_Part 2 of 5 in [Tiny GitHub from first principles](/posts/github-is-just-a-remote-until-it-isnt/)._
+_Part 2 of 5 in [GitHub without the website](/posts/github-is-just-a-remote-until-it-isnt/): rebuilding just enough of GitHub to see where Git stops and the product begins._
 
 The first misleading thing about `git push` is the verb.
 
 "Push" sounds like uploading your project to a server. That is close enough for daily work, but it hides the part that explains most Git errors.
+
+The important part is not the upload. The important part is the negotiation.
 
 Git does not think in project folders. Git thinks in objects and references.
 
@@ -240,7 +242,7 @@ But a remote can do more than accept storage operations.
 
 It can run code before accepting a push. It can reject direct pushes to `main`. It can require commit messages to match a pattern. It can block large files. It can trigger CI.
 
-The moment the server gets to make policy decisions, the tiny GitHub starts to look like a platform.
+The moment the server gets to make policy decisions, the tiny GitHub stops being a passive remote and starts to look like a platform.
 
 [Previous: GitHub is just a remote until it isn't](/posts/github-is-just-a-remote-until-it-isnt/)  
 [Next: The server gets a vote](/posts/the-server-gets-a-vote/)

@@ -17,7 +17,7 @@ description: "A small GitHub without GitHub: one Linux box, one bare repository,
 ogImage: "/assets/images/posts/github-is-just-a-remote-until-it-isnt/tiny-git-remote.svg"
 ---
 
-_Part 1 of 5 in [Tiny GitHub from first principles](/posts/github-is-just-a-remote-until-it-isnt/)._
+_Part 1 of 5 in [GitHub without the website](/posts/github-is-just-a-remote-until-it-isnt/): rebuilding just enough of GitHub to see where Git stops and the product begins._
 
 Most developers learn Git and GitHub at the same time, which is convenient and a little damaging.
 
@@ -27,7 +27,9 @@ That is not Git.
 
 Git is much smaller and much stranger. GitHub is a product wrapped around it.
 
-I wanted a clean way to feel that boundary again, so I tried the dumbest version possible: no web UI, no issues, no pull requests, no organizations, no Actions. Just a Linux machine reachable over SSH and a bare repository sitting on disk.
+The best way I know to make that boundary obvious is to remove almost everything.
+
+No web UI, no issues, no pull requests, no organizations, no Actions. Just a Linux machine reachable over SSH and a bare repository sitting on disk.
 
 It is not a useful replacement for GitHub. That is not the point.
 
@@ -170,7 +172,7 @@ Above that, there is collaboration: pull requests, comments, review state, notif
 
 Above that, there is product: search, releases, projects, security alerts, APIs, UI.
 
-You do not need to rebuild all of that to understand the first layer. You only need a bare repository and one successful push.
+You do not need to rebuild all of that to understand the first layer. You only need a bare repository, SSH access, and one successful push.
 
 That is enough to make GitHub feel less magical.
 

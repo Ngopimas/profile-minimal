@@ -17,11 +17,13 @@ description: "Git gives us branches, diffs, patches, and merges. A pull request 
 ogImage: "/assets/images/posts/pull-requests-are-not-git/pr-is-product-layer.svg"
 ---
 
-_Part 4 of 5 in [Tiny GitHub from first principles](/posts/github-is-just-a-remote-until-it-isnt/)._
+_Part 4 of 5 in [GitHub without the website](/posts/github-is-just-a-remote-until-it-isnt/): rebuilding just enough of GitHub to see where Git stops and the product begins._
 
 Pull requests feel so normal now that it is easy to forget they are not part of Git.
 
 Git has commits. Git has branches. Git has diffs. Git has merges. Git has patches. Git can send work by email if you want to feel old or work on the Linux kernel.
+
+That is a lot. It is still not a pull request.
 
 But Git does not have a pull request object.
 
@@ -198,7 +200,9 @@ The short comment that explains why the weird code is intentional.
 
 Those things do not belong in the Git object database. They belong around it.
 
-That is why pull requests are not Git, and why they are still one of the most important parts of GitHub.
+That is why pull requests are not Git.
+
+It is also why they are one of the most important parts of GitHub. They give teams a place to decide whether a piece of Git history deserves to become shared history.
 
 [Previous: The server gets a vote](/posts/the-server-gets-a-vote/)  
 [Next: What GitHub really sells](/posts/what-github-really-sells/)

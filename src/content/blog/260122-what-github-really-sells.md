@@ -17,15 +17,15 @@ description: "After stripping GitHub down to SSH and a bare repository, the prod
 ogImage: "/assets/images/posts/what-github-really-sells/github-layers.svg"
 ---
 
-_Part 5 of 5 in [Tiny GitHub from first principles](/posts/github-is-just-a-remote-until-it-isnt/)._
+_Part 5 of 5 in [GitHub without the website](/posts/github-is-just-a-remote-until-it-isnt/): rebuilding just enough of GitHub to see where Git stops and the product begins._
 
 The tiny GitHub experiment starts as a joke and ends as a decent product lesson.
 
 Put a bare Git repository on a Linux box. Connect over SSH. Push a branch. Add a hook. Block direct pushes to `main`. Fake a pull request with a diff and a chat thread.
 
-You can get surprisingly far.
+You can get surprisingly far, which is the fun part.
 
-You also hit the wall quickly.
+You also hit the wall quickly, which is the useful part.
 
 That wall is where GitHub lives.
 
@@ -185,10 +185,12 @@ Some GitHub features are just polished wrappers around old Git mechanics. Some a
 
 That is a healthier mental model than treating GitHub as magic or treating Git as the entire story.
 
-Git is the database and protocol at the center.
+Git is the database and protocol at the center. GitHub is the collaboration system around it.
 
-GitHub is the collaboration system around it.
+That distinction sounds academic until something breaks: a rejected push, a blocked merge, a missing approval, a failed check that saves you from yourself.
 
-The difference matters every time a green button decides whether your code becomes shared history.
+Then the boundary matters.
+
+Git can tell you what history is. GitHub helps a team decide what history should become.
 
 [Previous: Pull requests are not Git](/posts/pull-requests-are-not-git/)
