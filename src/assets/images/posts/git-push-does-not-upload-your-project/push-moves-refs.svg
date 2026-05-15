@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+<title>Git push moves references</title>
+<desc>A push sends missing Git objects and asks the remote to move a branch reference.</desc>
+<rect width="1200" height="630" fill="#0f172a"/>
+<rect x="70" y="70" width="1060" height="490" rx="28" fill="#111827" stroke="#334155" stroke-width="2"/>
+<text x="95" y="125" class="label">git push does not upload your project</text>
+<rect x="125" y="220" width="330" height="230" rx="20" class="box"/>
+<text x="165" y="270" class="label">local</text>
+<circle cx="205" cy="345" r="24" fill="#38bdf8"/><circle cx="285" cy="345" r="24" fill="#38bdf8"/><circle cx="365" cy="345" r="24" fill="#38bdf8"/>
+<path d="M229 345 H261 M309 345 H341" class="dimline"/>
+<text x="167" y="405" class="small">main -&gt; c3</text>
+<rect x="745" y="220" width="330" height="230" rx="20" class="box"/>
+<text x="785" y="270" class="label">remote</text>
+<circle cx="825" cy="345" r="24" fill="#38bdf8"/><circle cx="905" cy="345" r="24" fill="#38bdf8"/>
+<path d="M849 345 H881" class="dimline"/>
+<text x="787" y="405" class="small">main -&gt; c2</text>
+<path d="M470 335 H720" class="line"/>
+<text x="500" y="306" class="small">send c3, move main</text>
+<style>
+.label { font: 700 30px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; fill: #e5e7eb; }
+.small { font: 500 22px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; fill: #94a3b8; }
+.tiny { font: 500 18px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; fill: #64748b; }
+.box { fill: #1e293b; stroke: #475569; stroke-width: 2; }
+.good { fill: #064e3b; stroke: #10b981; stroke-width: 2; }
+.warn { fill: #422006; stroke: #f59e0b; stroke-width: 2; }
+.bad { fill: #450a0a; stroke: #ef4444; stroke-width: 2; }
+.line { stroke: #38bdf8; stroke-width: 5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.dimline { stroke: #475569; stroke-width: 3; fill: none; stroke-linecap: round; }
+</style>
+</svg>

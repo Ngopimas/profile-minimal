@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+<title>Pull requests are not Git</title>
+<desc>A pull request combines Git primitives with review metadata, comments, checks, and permissions.</desc>
+<rect width="1200" height="630" fill="#0f172a"/>
+<rect x="70" y="70" width="1060" height="490" rx="28" fill="#111827" stroke="#334155" stroke-width="2"/>
+<text x="95" y="125" class="label">Pull requests are not Git</text>
+<rect x="125" y="210" width="360" height="255" rx="20" class="box"/>
+<text x="165" y="265" class="label">Git gives you</text>
+<text x="165" y="315" class="small">branches</text>
+<text x="165" y="355" class="small">diffs</text>
+<text x="165" y="395" class="small">merges</text>
+<rect x="705" y="185" width="370" height="305" rx="20" class="good"/>
+<text x="750" y="245" class="label">PR adds</text>
+<text x="750" y="295" class="small">conversation</text>
+<text x="750" y="335" class="small">review state</text>
+<text x="750" y="375" class="small">checks</text>
+<text x="750" y="415" class="small">merge policy</text>
+<path d="M505 335 H680" class="line"/>
+<text x="525" y="310" class="small">product layer</text>
+<style>
+.label { font: 700 30px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; fill: #e5e7eb; }
+.small { font: 500 22px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; fill: #94a3b8; }
+.tiny { font: 500 18px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; fill: #64748b; }
+.box { fill: #1e293b; stroke: #475569; stroke-width: 2; }
+.good { fill: #064e3b; stroke: #10b981; stroke-width: 2; }
+.warn { fill: #422006; stroke: #f59e0b; stroke-width: 2; }
+.bad { fill: #450a0a; stroke: #ef4444; stroke-width: 2; }
+.line { stroke: #38bdf8; stroke-width: 5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.dimline { stroke: #475569; stroke-width: 3; fill: none; stroke-linecap: round; }
+</style>
+</svg>
