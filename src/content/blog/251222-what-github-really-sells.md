@@ -1,6 +1,6 @@
 ---
 author: Romain C.
-pubDatetime: 2026-01-22T10:00:00Z
+pubDatetime: 2025-12-22T10:00:00Z
 title: "What GitHub really sells"
 slug: what-github-really-sells
 featured: false

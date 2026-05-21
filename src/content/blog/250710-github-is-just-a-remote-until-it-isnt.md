@@ -1,6 +1,6 @@
 ---
 author: Romain C.
-pubDatetime: 2025-04-10T10:30:00Z
+pubDatetime: 2025-07-10T10:30:00Z
 title: "GitHub is just a remote until it isn't"
 slug: github-is-just-a-remote-until-it-isnt
 featured: false
