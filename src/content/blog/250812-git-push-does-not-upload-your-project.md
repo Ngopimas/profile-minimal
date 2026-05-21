@@ -1,6 +1,6 @@
 ---
 author: Romain C.
-pubDatetime: 2025-06-12T09:45:00Z
+pubDatetime: 2025-08-12T09:45:00Z
 title: "git push does not upload your project"
 slug: git-push-does-not-upload-your-project
 featured: false

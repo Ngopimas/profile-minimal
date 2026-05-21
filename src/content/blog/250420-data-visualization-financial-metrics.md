@@ -1,6 +1,6 @@
 ---
 author: Romain C.
-pubDatetime: 2025-07-14T10:00:00Z
+pubDatetime: 2025-04-20T10:00:00Z
 title: "Making Financial Data Readable"
 slug: data-visualization-financial-metrics
 featured: false
