@@ -1,8 +1,8 @@
 ---
 author: Romain C.
 pubDatetime: 2026-05-31T14:00:00Z
-title: "Escaping the default basin: how bisociation changes what LLMs can imagine"
-slug: escaping-the-default-basin-bisociation-llm
+title: "Telling an LLM to 'be creative' is one of the worst things you can do"
+slug: telling-an-llm-be-creative-fails
 featured: false
 draft: false
 tags: ["ai", "creativity", "llm", "research", "agents"]
