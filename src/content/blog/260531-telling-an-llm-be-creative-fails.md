@@ -6,7 +6,7 @@ slug: telling-an-llm-be-creative-fails
 featured: false
 draft: false
 tags: ["ai", "creativity", "llm", "research", "agents"]
-description: "Why telling an LLM to 'be more creative' does not work, what Arthur Koestler's bisociation theory suggests instead, and how I adapted the Open-Collider method into a Hermes skill."
+description: "What Arthur Koestler's bisociation theory suggests, and how I ported the Open-Collider method into a Hermes skill."
 ---
 
 I asked GPT-5.5 to generate article ideas for this website. Five ideas came
