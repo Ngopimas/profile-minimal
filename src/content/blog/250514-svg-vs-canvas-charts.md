@@ -1,6 +1,6 @@
 ---
 author: Romain C.
-pubDatetime: 2025-05-20T10:00:00Z
+pubDatetime: 2025-05-14T10:00:00Z
 title: "Count the Marks, Not the Library Stars"
 slug: svg-vs-canvas-charts
 featured: false
