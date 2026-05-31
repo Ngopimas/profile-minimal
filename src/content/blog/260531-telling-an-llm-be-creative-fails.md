@@ -21,7 +21,7 @@ structurally distant knowledge domains into the prompt. The ideas were
 different. Not just different words. Different angles entirely.
 
 That pipeline comes from [Open-Collider](https://github.com/CL-ML/open-collider),
-a project by Cedric Lion at Oparine. The numbers behind it are striking.
+a project by Cédric Lion at [Oparine](https://oparine.ai). The numbers behind it are striking.
 
 ## What the research found
 
@@ -39,6 +39,10 @@ shift, D would match A. It does not: D's effect is 2.8 to 4 times smaller. If
 a "be original" push worked, C would match A. It does not: C's effect is 5.7 to
 13 times smaller. A beat all other conditions on geometric distance in 12 out of
 12 projects (p = 0.0002), using two different embedding models.
+
+Distance only proves the ideas are different. The blind judges prove they are
+better: three models (Claude Opus 4.6, GPT-4o, Gemini 2.5) preferred condition A
+on originality in 10 of 12 projects (62% mean preference, p = 0.019).
 
 The uncomfortable conclusion: telling an LLM to be creative is one of the least
 effective things you can do. Adding more in-domain context is the second least
@@ -86,8 +90,8 @@ ideas. The prompt forces the model to structurally use the domain mechanism, not
 just name-drop it. It also demands axiomatic inversions: ideas that flip an
 implicit assumption.
 
-**Scoring.** A 5-axis LLM judge evaluates each idea: originality, resistance to
-objection, thesis density, concrete grounding, cognitive load. Weighted sum.
+**Scoring.** A 5-axis LLM judge evaluates each idea: structural originality,
+resistance to objection, thesis density, concrete grounding, cognitive load. Weighted sum.
 Threshold at 4.2 out of 5, with an adaptive drift mechanism that lowers the
 threshold in 0.1 steps if too few ideas pass.
 
@@ -119,7 +123,7 @@ idea generation prompt is the same. The judge prompt with its 5 axes and
 calibration framework is the same. The intellectual content is Lion's.
 
 What changed is the runtime. Instead of asyncio with Anthropic SDK calls, the
-pipeline uses parallel agent calls instead. Instead of a Python
+pipeline uses parallel agent calls. Instead of a Python
 orchestrator managing concurrency with semaphores and retry logic, Hermes
 handles the parallelism natively. Instead of YAML state files with a full
 Python package managing iteration state, I use JSON files that the agent
@@ -231,4 +235,4 @@ collisions.
 
 - [Open-Collider](https://github.com/CL-ML/open-collider) - source code and pipeline
 - [Open-Collider research](https://github.com/CL-ML/open-collider-research) - empirical validation
-- [Why direct prompting pushes LLMs toward mediocrity](https://cdriclion.substack.com/p/why-directprompting-pushes-llms) - the conceptual foundation by Cedric Lion at [Oparine](https://oparine.ai)
+- [Why direct prompting pushes LLMs toward mediocrity](https://cdriclion.substack.com/p/why-direct-prompting-pushes-llms) - the conceptual foundation by Cédric Lion at [Oparine](https://oparine.ai)
