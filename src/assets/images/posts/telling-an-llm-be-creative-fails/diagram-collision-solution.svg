@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500" role="img" aria-labelledby="d2-title d2-desc">
+  <title id="d2-title">The collision solution: bisociation escapes the basin</title>
+  <desc id="d2-desc">A 2D diagram of idea space. A default basin sits at center-left. Two distant knowledge domains A and B create their own attractor fields. Where their gravitational fields collide outside the basin, a collision zone emerges with non-trivial ideas that inherit structure from both domains.</desc>
+  <defs>
+    <radialGradient id="basinFill2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#94a3b8" stop-opacity="0.20"/>
+      <stop offset="60%" stop-color="#94a3b8" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#94a3b8" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="domainAFill" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.22"/>
+      <stop offset="60%" stop-color="#f59e0b" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="domainBFill" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.22"/>
+      <stop offset="60%" stop-color="#8b5cf6" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="collisionFill2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.28"/>
+      <stop offset="55%" stop-color="#06b6d4" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
+    </radialGradient>
+    <marker id="arrowAmber" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#f59e0b"/>
+    </marker>
+    <marker id="arrowPurple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#8b5cf6"/>
+    </marker>
+    <marker id="arrowSlate" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="500" fill="#f8fafc"/>
+
+  <!-- Title -->
+  <text x="60" y="52" style="font:700 22px ui-sans-serif,system-ui,sans-serif;fill:#1e293b">The collision solution</text>
+  <text x="60" y="76" style="font:400 13px ui-sans-serif,system-ui,sans-serif;fill:#64748b">Distant domains create a basin escape route.</text>
+
+  <!-- Default basin (left-center) -->
+  <ellipse cx="280" cy="270" rx="150" ry="110" fill="url(#basinFill2)"/>
+  <ellipse cx="280" cy="270" rx="150" ry="110" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="5 4" opacity="0.4"/>
+
+  <!-- Idea dots in basin -->
+  <circle cx="250" cy="255" r="3.5" fill="#64748b" opacity="0.4"/>
+  <circle cx="290" cy="280" r="3.5" fill="#64748b" opacity="0.4"/>
+  <circle cx="270" cy="295" r="3.5" fill="#64748b" opacity="0.4"/>
+  <circle cx="310" cy="260" r="3.5" fill="#64748b" opacity="0.4"/>
+  <circle cx="240" cy="275" r="3.5" fill="#64748b" opacity="0.4"/>
+
+  <!-- Basin label -->
+  <text x="280" y="200" text-anchor="middle" style="font:700 13px ui-sans-serif,system-ui,sans-serif;fill:#94a3b8">default basin</text>
+
+  <!-- Distant Domain A (top-right) -->
+  <ellipse cx="710" cy="160" rx="95" ry="65" fill="url(#domainAFill)"/>
+  <ellipse cx="710" cy="160" rx="95" ry="65" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.6"/>
+  <text x="710" y="152" text-anchor="middle" style="font:700 16px ui-sans-serif,system-ui,sans-serif;fill:#b45309">A</text>
+  <text x="710" y="172" text-anchor="middle" style="font:500 11px ui-sans-serif,system-ui,sans-serif;fill:#d97706">distant domain</text>
+
+  <!-- A active principle -->
+  <rect x="620" y="78" width="180" height="44" rx="8" fill="#fffbeb" stroke="#fcd34d" stroke-width="1"/>
+  <text x="710" y="96" text-anchor="middle" style="font:600 10px ui-sans-serif,system-ui,sans-serif;fill:#92400e">Active principle</text>
+  <text x="710" y="111" text-anchor="middle" style="font:400 10px ui-sans-serif,system-ui,sans-serif;fill:#b45309">counter-intuitive mechanism</text>
+
+  <!-- Distant Domain B (bottom-right) -->
+  <ellipse cx="730" cy="380" rx="95" ry="65" fill="url(#domainBFill)"/>
+  <ellipse cx="730" cy="380" rx="95" ry="65" fill="none" stroke="#8b5cf6" stroke-width="1.5" opacity="0.6"/>
+  <text x="730" y="372" text-anchor="middle" style="font:700 16px ui-sans-serif,system-ui,sans-serif;fill:#6d28d9">B</text>
+  <text x="730" y="392" text-anchor="middle" style="font:500 11px ui-sans-serif,system-ui,sans-serif;fill:#7c3aed">distant domain</text>
+
+  <!-- B active principle -->
+  <rect x="640" y="422" width="180" height="44" rx="8" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1"/>
+  <text x="730" y="440" text-anchor="middle" style="font:600 10px ui-sans-serif,system-ui,sans-serif;fill:#5b21b6">Active principle</text>
+  <text x="730" y="455" text-anchor="middle" style="font:400 10px ui-sans-serif,system-ui,sans-serif;fill:#6d28d9">counter-intuitive mechanism</text>
+
+  <!-- Collision zone (center, between basin and domains) -->
+  <ellipse cx="500" cy="270" rx="85" ry="60" fill="url(#collisionFill2)"/>
+  <ellipse cx="500" cy="270" rx="85" ry="60" fill="none" stroke="#06b6d4" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.6"/>
+
+  <!-- Idea dots in collision zone (brighter, with sparkle) -->
+  <circle cx="475" cy="255" r="5" fill="#06b6d4" opacity="0.8"/>
+  <text x="475" y="252" text-anchor="middle" style="font-size:9px;fill:#0e7490">✦</text>
+  <circle cx="510" cy="280" r="5" fill="#06b6d4" opacity="0.8"/>
+  <text x="510" y="277" text-anchor="middle" style="font-size:9px;fill:#0e7490">✦</text>
+  <circle cx="535" cy="252" r="5" fill="#06b6d4" opacity="0.8"/>
+  <text x="535" y="249" text-anchor="middle" style="font-size:9px;fill:#0e7490">✦</text>
+  <circle cx="490" cy="300" r="5" fill="#06b6d4" opacity="0.8"/>
+  <text x="490" y="297" text-anchor="middle" style="font-size:9px;fill:#0e7490">✦</text>
+  <circle cx="530" cy="298" r="5" fill="#06b6d4" opacity="0.8"/>
+  <text x="530" y="295" text-anchor="middle" style="font-size:9px;fill:#0e7490">✦</text>
+
+  <!-- Collision zone label -->
+  <text x="500" y="348" text-anchor="middle" style="font:700 13px ui-sans-serif,system-ui,sans-serif;fill:#0e7490">collision zone</text>
+  <text x="500" y="364" text-anchor="middle" style="font:400 11px ui-sans-serif,system-ui,sans-serif;fill:#06b6d4">mechanism transfer</text>
+
+  <!-- Attractor arrows: A pulls toward collision zone -->
+  <path d="M635 195 C595 220 555 248 538 262" stroke="#f59e0b" stroke-width="1.8" fill="none" stroke-dasharray="6 5" marker-end="url(#arrowAmber)" opacity="0.65"/>
+
+  <!-- Attractor arrows: B pulls toward collision zone -->
+  <path d="M655 350 C615 325 570 300 545 282" stroke="#8b5cf6" stroke-width="1.8" fill="none" stroke-dasharray="6 5" marker-end="url(#arrowPurple)" opacity="0.65"/>
+
+  <!-- Weak basin gravity pull (thin, showing competing force toward mediocrity) -->
+  <path d="M470 245 C420 240 360 250 310 265" stroke="#94a3b8" stroke-width="1" fill="none" stroke-dasharray="3 4" opacity="0.25" marker-end="url(#arrowSlate)"/>
+
+  <!-- Insight callout -->
+  <rect x="560" y="208" width="200" height="40" rx="8" fill="#ecfeff" stroke="#67e8f9" stroke-width="1"/>
+  <text x="660" y="226" text-anchor="middle" style="font:500 11px ui-sans-serif,system-ui,sans-serif;fill:#0e7490">Hidden shared structure</text>
+  <text x="660" y="241" text-anchor="middle" style="font:400 10px ui-sans-serif,system-ui,sans-serif;fill:#155e75">makes the collision non-trivial</text>
+
+  <!-- Source note -->
+  <text x="60" y="485" style="font:400 10px ui-sans-serif,system-ui,sans-serif;fill:#cbd5e1">Inspired by Open-Collider / Cedric Lion</text>
+</svg>

@@ -70,6 +70,17 @@ dimension, a causal structure invisible from the surface. When that dimension
 exists, the collision transfers mechanism across domains and produces a
 non-trivial insight. When it does not exist, you get a decorative analogy.
 
+![The basin problem: why more context and "be creative" fail](../../assets/images/posts/telling-an-llm-be-creative-fails/diagram-basin-problem.svg)
+
+_More in-domain context increases local gravity, pulling responses deeper into
+the same basin. Telling the model to be creative barely moves the needle._
+
+![The collision solution: distant domains create a basin escape route](../../assets/images/posts/telling-an-llm-be-creative-fails/diagram-collision-solution.svg)
+
+_Open-Collider's core move: inject structurally distant domains that create
+attractors outside the default basin. Where their fields collide, non-trivial
+ideas emerge through mechanism transfer._
+
 The method needs volume because most collisions miss. It needs curation because
 the misses look similar to the hits. And it needs iteration because the first
 round of domains is usually too safe.

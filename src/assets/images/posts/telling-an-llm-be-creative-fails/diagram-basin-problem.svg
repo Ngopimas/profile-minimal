@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500" role="img" aria-labelledby="d1-title d1-desc">
+  <title id="d1-title">The basin problem: why more context fails</title>
+  <desc id="d1-desc">A 2D diagram of idea space with a large default basin at center. Ideas cluster inside it. Adding more in-domain context pulls responses deeper into the basin, not out of it. Telling the model to be creative barely moves the needle. The gravitational pull of training data keeps everything near the mediocre center.</desc>
+  <defs>
+    <radialGradient id="basinOuter" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#94a3b8" stop-opacity="0.25"/>
+      <stop offset="55%" stop-color="#94a3b8" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#94a3b8" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="basinInner" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#64748b" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#64748b" stop-opacity="0.05"/>
+    </radialGradient>
+    <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#ef4444"/>
+    </marker>
+    <marker id="arrowSlate" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="500" fill="#f8fafc"/>
+
+  <!-- Title -->
+  <text x="60" y="52" style="font:700 22px ui-sans-serif,system-ui,sans-serif;fill:#1e293b">The basin problem</text>
+  <text x="60" y="76" style="font:400 13px ui-sans-serif,system-ui,sans-serif;fill:#64748b">More context pulls deeper. "Be creative" barely moves.</text>
+
+  <!-- Default basin (large, center) -->
+  <ellipse cx="450" cy="280" rx="200" ry="140" fill="url(#basinOuter)"/>
+  <ellipse cx="450" cy="280" rx="130" ry="85" fill="url(#basinInner)"/>
+  <ellipse cx="450" cy="280" rx="130" ry="85" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="5 4" opacity="0.5"/>
+
+  <!-- Mediocrity center -->
+  <circle cx="450" cy="280" r="18" fill="#ef4444" opacity="0.15"/>
+  <circle cx="450" cy="280" r="6" fill="#ef4444" opacity="0.5"/>
+  <text x="450" y="310" text-anchor="middle" style="font:600 11px ui-sans-serif,system-ui,sans-serif;fill:#ef4444;letter-spacing:0.05em">MEDIOCRITY CENTER</text>
+
+  <!-- Idea dots clustered in basin -->
+  <circle cx="410" cy="260" r="4" fill="#64748b" opacity="0.5"/>
+  <circle cx="440" cy="290" r="4" fill="#64748b" opacity="0.5"/>
+  <circle cx="470" cy="255" r="4" fill="#64748b" opacity="0.5"/>
+  <circle cx="430" cy="300" r="4" fill="#64748b" opacity="0.5"/>
+  <circle cx="490" cy="280" r="4" fill="#64748b" opacity="0.5"/>
+  <circle cx="420" cy="240" r="4" fill="#64748b" opacity="0.5"/>
+  <circle cx="460" cy="310" r="4" fill="#64748b" opacity="0.5"/>
+  <circle cx="500" cy="260" r="4" fill="#64748b" opacity="0.5"/>
+  <circle cx="395" cy="280" r="4" fill="#64748b" opacity="0.5"/>
+
+  <!-- Basin label -->
+  <text x="450" y="200" text-anchor="middle" style="font:700 14px ui-sans-serif,system-ui,sans-serif;fill:#475569">default basin</text>
+  <text x="450" y="218" text-anchor="middle" style="font:400 12px ui-sans-serif,system-ui,sans-serif;fill:#94a3b8">safe, high-probability</text>
+
+  <!-- "More context" arrow pulling deeper -->
+  <path d="M450 170 C450 170 450 190 450 220" stroke="#ef4444" stroke-width="2" fill="none" stroke-dasharray="5 4" marker-end="url(#arrowRed)"/>
+  <rect x="340" y="138" width="220" height="30" rx="6" fill="#fef2f2" stroke="#fca5a5" stroke-width="1"/>
+  <text x="450" y="158" text-anchor="middle" style="font:500 12px ui-sans-serif,system-ui,sans-serif;fill:#dc2626">more in-domain context</text>
+
+  <!-- "Be creative" arrow (weak, barely moves) -->
+  <path d="M560 250 C555 260 548 270 540 278" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-dasharray="4 4" marker-end="url(#arrowSlate)"/>
+  <rect x="530" y="220" width="120" height="26" rx="6" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="590" y="237" text-anchor="middle" style="font:500 11px ui-sans-serif,system-ui,sans-serif;fill:#64748b">"be creative"</text>
+  <text x="600" y="268" text-anchor="middle" style="font:italic 11px ui-sans-serif,system-ui,sans-serif;fill:#94a3b8">barely moves</text>
+
+  <!-- Training data gravity label (bottom) -->
+  <text x="450" y="470" text-anchor="middle" style="font:500 12px ui-sans-serif,system-ui,sans-serif;fill:#94a3b8">Training data gravity pulls everything toward the center</text>
+
+  <!-- Source note -->
+  <text x="60" y="485" style="font:400 10px ui-sans-serif,system-ui,sans-serif;fill:#cbd5e1">Inspired by Open-Collider / Cédric Lion</text>
+</svg>
