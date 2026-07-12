@@ -1,18 +1,53 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
-  <title id="title">When mocks lie</title>
-  <desc id="desc">Two unit tests pass with incompatible assumptions, while the integration path fails where real components meet.</desc>
+  <title id="title">Both unit tests passed, but the real contract failed</title>
+  <desc id="desc">In isolation, the refresher unit test expects an exception and the DataAgent unit test uses a mock that returns a failed outcome. Both pass. When the real MarketDataRefresher connects to DataAgent, the exception and expected outcome contracts conflict.</desc>
   <defs>
-    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.6"/></pattern>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#94a3b8"/></marker>
-    <marker id="bad" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#fb7185"/></marker>
-    <style>.bg{fill:#020617}.title{font:700 30px ui-monospace,Menlo,monospace;fill:#e2e8f0}.sub{font:500 14px ui-monospace,Menlo,monospace;fill:#94a3b8}.box{fill:#0f172a;stroke:#334155;stroke-width:1.5}.label{font:700 16px ui-monospace,Menlo,monospace;fill:#f8fafc}.small{font:500 12px ui-monospace,Menlo,monospace;fill:#cbd5e1}.tiny{font:500 11px ui-monospace,Menlo,monospace;fill:#94a3b8}.green{fill:rgba(6,78,59,.55);stroke:#34d399}.violet{fill:rgba(76,29,149,.55);stroke:#a78bfa}.rose{fill:rgba(136,19,55,.5);stroke:#fb7185}.amber{fill:rgba(120,53,15,.45);stroke:#fbbf24}.cyan{fill:rgba(8,51,68,.55);stroke:#22d3ee}.line{stroke:#94a3b8;stroke-width:2;fill:none;marker-end:url(#arrow)}.fail{stroke:#fb7185;stroke-width:3;fill:none;marker-end:url(#bad)}.ok{fill:#34d399}.badfill{fill:#fb7185}</style>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0 L0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.7"/></pattern>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#94a3b8"/></marker>
+    <marker id="arrow-bad" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#fb7185"/></marker>
+    <style>
+      .mono{font-family:ui-monospace,"SFMono-Regular",Menlo,Monaco,Consolas,monospace}
+      .title{font-size:30px;font-weight:750;fill:#e2e8f0}.sub{font-size:15px;font-weight:500;fill:#94a3b8}
+      .label{font-size:22px;font-weight:750;fill:#f8fafc}.small{font-size:18px;font-weight:520;fill:#cbd5e1}
+      .caps{font-size:17px;font-weight:750;letter-spacing:2px}.card{fill:#0f172a;stroke:#334155;stroke-width:2}
+      .line{fill:none;stroke:#94a3b8;stroke-width:3;stroke-linecap:round;marker-end:url(#arrow)}
+      .fail{fill:none;stroke:#fb7185;stroke-width:4;stroke-linecap:round;marker-end:url(#arrow-bad)}
+    </style>
   </defs>
-  <rect class="bg" width="1200" height="630"/><rect width="1200" height="630" fill="url(#grid)" opacity="0.55"/>
-  <text x="60" y="64" class="title">Both unit tests passed. The contract did not.</text><text x="60" y="92" class="sub">The mock returned the contract the caller hoped for, not the one the real dependency implemented.</text>
-  <rect x="70" y="155" width="310" height="165" rx="14" class="box green"/><circle cx="104" cy="194" r="9" class="ok"/><text x="128" y="200" class="label">Refresher unit test</text><text x="104" y="236" class="small">provider fails</text><text x="104" y="264" class="small">MarketDataRefresher raises</text><text x="104" y="292" class="small">DataUnavailableError</text>
-  <rect x="70" y="375" width="310" height="165" rx="14" class="box green"/><circle cx="104" cy="414" r="9" class="ok"/><text x="128" y="420" class="label">Agent unit test</text><text x="104" y="456" class="small">mock refresher returns</text><text x="104" y="484" class="small">failed DatasetRefreshOutcome</text><text x="104" y="512" class="small">DataAgent persists it</text>
-  <rect x="495" y="225" width="230" height="180" rx="16" class="box violet"/><text x="535" y="265" class="label">Mock boundary</text><text x="528" y="302" class="small">looks compatible</text><text x="528" y="330" class="small">because the fake</text><text x="528" y="358" class="small">knows the desired</text><text x="528" y="386" class="small">contract</text>
-  <path class="line" d="M380 238 C430 238 450 268 495 292"/><path class="line" d="M380 456 C430 456 450 372 495 342"/>
-  <rect x="835" y="180" width="300" height="250" rx="16" class="box rose"/><circle cx="870" cy="222" r="9" class="badfill"/><text x="894" y="228" class="label">Real integration</text><text x="870" y="268" class="small">provider fails</text><path class="fail" d="M890 290 H1035"/><text x="870" y="330" class="small">refresher raises</text><text x="870" y="358" class="small">caller expected outcome</text><text x="870" y="386" class="small">contract drift exposed</text>
-  <text x="495" y="500" class="label">Rule kept</text><text x="495" y="530" class="small">Use mocks to test decisions. Use integration tests to test contracts.</text>
+
+  <rect width="1200" height="630" fill="#020617"/><rect width="1200" height="630" fill="url(#grid)" opacity="0.6"/>
+  <text x="60" y="62" class="mono title">Both unit tests passed. The contract did not.</text>
+  <text x="60" y="91" class="mono sub">Isolation let each side describe a different system.</text>
+
+  <text x="60" y="139" class="mono caps" fill="#34d399">ISOLATED UNIT TESTS</text>
+  <rect x="60" y="158" width="500" height="172" rx="18" fill="rgba(6,78,59,.48)" stroke="#34d399" stroke-width="2"/>
+  <circle cx="94" cy="193" r="10" fill="#34d399"/><path d="M89 193 L93 197 L101 187" fill="none" stroke="#020617" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="118" y="201" class="mono label">Refresher test passes</text>
+  <text x="94" y="245" class="mono small">Real MarketDataRefresher</text>
+  <rect x="94" y="266" width="430" height="42" rx="10" fill="#0f172a" stroke="#334155"/>
+  <text x="116" y="294" class="mono small">raises DataUnavailableError</text>
+
+  <rect x="640" y="158" width="500" height="172" rx="18" fill="rgba(6,78,59,.48)" stroke="#34d399" stroke-width="2"/>
+  <circle cx="674" cy="193" r="10" fill="#34d399"/><path d="M669 193 L673 197 L681 187" fill="none" stroke="#020617" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="698" y="201" class="mono label">DataAgent test passes</text>
+  <text x="674" y="245" class="mono small">Mock MarketDataRefresher</text>
+  <rect x="674" y="266" width="430" height="42" rx="10" fill="#0f172a" stroke="#334155"/>
+  <text x="696" y="294" class="mono small">returns failed Outcome</text>
+
+  <text x="60" y="391" class="mono caps" fill="#fb7185">REAL CONNECTION</text>
+  <rect x="60" y="415" width="328" height="104" rx="16" fill="rgba(8,51,68,.58)" stroke="#22d3ee" stroke-width="2"/>
+  <text x="88" y="457" class="mono label">MarketDataRefresher</text><text x="88" y="491" class="mono small">raises an exception</text>
+  <path d="M388 467 H527" class="fail"/>
+  <text x="417" y="442" class="mono small" fill="#fb7185">Error</text>
+
+  <circle cx="600" cy="467" r="42" fill="rgba(136,19,55,.7)" stroke="#fb7185" stroke-width="3"/>
+  <path d="M584 451 L616 483 M616 451 L584 483" stroke="#f8fafc" stroke-width="5" stroke-linecap="round"/>
+  <text x="522" y="541" class="mono small" fill="#fb7185">contract drift</text>
+
+  <path d="M812 467 H673" class="fail"/>
+  <text x="683" y="442" class="mono small" fill="#fb7185">Outcome</text>
+  <rect x="812" y="415" width="328" height="104" rx="16" fill="rgba(76,29,149,.58)" stroke="#a78bfa" stroke-width="2"/>
+  <text x="840" y="457" class="mono label">DataAgent</text><text x="840" y="491" class="mono small">expects a value</text>
+
+  <text x="60" y="588" class="mono small">Use mocks to test decisions. Use integration tests to test contracts.</text>
 </svg>
