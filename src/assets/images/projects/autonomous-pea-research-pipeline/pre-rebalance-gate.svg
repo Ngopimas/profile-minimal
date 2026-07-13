@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
   <title id="title">Pre-rebalance gate flow</title>
-  <desc id="desc">Four checks—strategy fitness, market regime, data freshness, and earnings risk—feed a recorded gate decision that can proceed, hold, or abort.</desc>
+  <desc id="desc">Four checks-strategy fitness, market regime, data freshness, and earnings risk-feed a recorded gate decision that can proceed, hold, or abort.</desc>
   <defs>
     <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0 L0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.8" opacity="0.7"/></pattern>
     <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#94a3b8"/></marker>
