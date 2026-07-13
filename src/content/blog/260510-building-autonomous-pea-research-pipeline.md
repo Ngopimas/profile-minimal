@@ -18,7 +18,7 @@ This project started from a narrower question: what would an agentic research lo
 
 The system pulls market data, generates candidates, turns them into strategy hypotheses, runs backtests, writes diagnostics, applies a pre-rebalance gate, tracks a paper portfolio, and publishes the current state to a static dashboard.
 
-The important part is not that agents are involved. The important part is that every stage leaves receipts. Every candidate should be rejectable. Every rebalance should be able to end in `proceed`, `hold`, or `abort`.
+The agents are the least interesting part. What matters is that every stage leaves receipts. Every candidate should be rejectable. Every rebalance should be able to end in `proceed`, `hold`, or `abort`.
 
 ![Evidence trail for the autonomous research pipeline](../../assets/images/projects/autonomous-pea-research-pipeline/research-pipeline.svg)
 
@@ -40,7 +40,7 @@ A research system that cannot refuse to act is not a research system. It is a co
 
 ## Europe makes the toy problem disappear
 
-The universe is deliberately constrained to European equities and PEA eligible instruments.
+The universe is deliberately constrained to European equities and PEA-eligible instruments.
 
 That constraint matters. US-first tooling often makes the problem feel cleaner than it is. European tickers are messier. Exchange suffixes matter. Coverage is uneven. Liquidity can dominate the quality of a signal. Small caps can produce beautiful backtests that would be painful to trade. Corporate actions and missing history show up in annoying places.
 
@@ -57,7 +57,7 @@ The more interesting checks come later: transaction costs, turnover, bear-market
 
 ![Robustness checks for the autonomous research pipeline](../../assets/images/projects/autonomous-pea-research-pipeline/robustness-check.png)
 
-This is the kind of page I wanted the system to produce: not a victory chart, but a stress test. Transaction costs can erase the edge. Random stock selection can reveal whether the result depends on a few lucky names. Alternative strategy variants can show whether the simple version is actually stronger. Survivorship bias still needs to be called out instead of hidden behind a clean CAGR.
+This is the kind of page I wanted the system to produce: a stress test. Transaction costs can erase the edge. Random stock selection can reveal whether the result depends on a few lucky names. Alternative strategy variants can show whether the simple version is actually stronger. Survivorship bias still needs to be called out instead of hidden behind a clean CAGR.
 
 ## The gate is more important than the generator
 
@@ -75,9 +75,11 @@ Most automation has an action bias. It wants to produce a trade, a note, a chart
 
 A backtest is evidence, not permission. A good historical result can still be a bad action today if the assumptions have moved underneath it.
 
+The run that convinced me came late in the project. The pipeline calculated eleven paper orders, checked the active strategy, found it had breached its drawdown limit, and placed nothing. The proposed orders and the reasons stayed on disk for review. Eleven trades the system wanted to make and refused to.
+
 ## The dashboard is a ledger
 
-The dashboard is not there to make the project look finished. It is there to expose state.
+The dashboard's job is to expose state, even when the state is embarrassing.
 
 It shows what ran, what changed, what passed, what failed, and what the system refused to do. Signals are only one page. The more important pages are evidence, agent logs, health, assumptions, diagnostics, rejected ideas, and stale-data warnings.
 
@@ -120,7 +122,7 @@ The best improvements came from results that looked good for the wrong reason.
 
 Early strategy variants sometimes produced identical backtest outputs. That could have been mistaken for robustness. It was not. In one batch, separate variants came back with the same Sharpe, maximum drawdown, CAGR, and trade count. That was the tell: the strategy definitions were falling into the same generic dispatch path.
 
-The fix was not just to patch the dispatch bug. The fix was to add batch diagnostics after every run so clone-like results become visible immediately.
+Patching the dispatch bug was the easy part. The lasting fix was batch diagnostics after every run, so clone-like results become visible immediately.
 
 Another class of ideas could not be backtested honestly with the current engine. Fundamentals, intraday logic, and options strategies do not fit a daily-price backtester. Forcing them through would create clean-looking nonsense. The pipeline now detects unsupported strategy types and skips them instead of manufacturing precision.
 
@@ -144,20 +146,20 @@ It does not prove that a backtested signal will survive live trading. It does no
 
 That is the wrong standard anyway.
 
-The project is useful if it makes exploratory research repeatable enough to inspect. It should produce better questions, not pretend to produce final answers. It should make weak assumptions uncomfortable. It should turn a fluent thesis into a set of artifacts that can be checked, rejected, or watched over time.
+The project is useful if it makes exploratory research repeatable enough to inspect. Its job is to produce better questions and to make weak assumptions uncomfortable. A fluent thesis should end up as a set of artifacts that can be checked, rejected, or watched over time.
 
-Paper trading is part of that discipline. It is a reality check, not a victory lap.
-
-The shorter project page is here: [Autonomous research pipeline](/projects/autonomous-pea-research-pipeline/).
-
-This version was the first attempt. I stopped it after a large Jinja-to-Astro refactor, not because the idea was bad, but because the build had taught me enough to start again with a cleaner foundation.
-
-Those lessons led to a second attempt, built more deliberately. The rebuild notes start here: [I wrote 76KB of docs before letting the AI build](/posts/spec-before-code-ai-build/).
+Paper trading is part of that discipline. It keeps the surviving ideas under observation instead of declaring them winners.
 
 ## The lesson
 
 I started with a question about autonomous research. I ended up caring more about refusal.
 
-The best part of the system is not that it can generate ideas. It is that it can preserve the work, expose the diagnostics, and sometimes decline to proceed.
+Generating ideas turned out to be the easy part. The system earns its keep by preserving the work, exposing the diagnostics, and sometimes declining to proceed.
 
 That is the standard I would apply to most agentic workflows now. Do not ask whether the agent can produce an answer. Ask whether it leaves enough behind for someone serious to inspect it.
+
+---
+
+This version was the first attempt. I stopped it after a large Jinja-to-Astro refactor, not because the idea was bad, but because the build had taught me enough to start again with a cleaner foundation.
+
+The shorter project page is here: [Autonomous research pipeline](/projects/autonomous-pea-research-pipeline/). The rebuild notes start with [I wrote 76KB of docs before letting the AI build](/posts/spec-before-code-ai-build/).
