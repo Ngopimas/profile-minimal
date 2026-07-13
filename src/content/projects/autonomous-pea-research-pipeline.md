@@ -1,6 +1,6 @@
 ---
 title: "Autonomous research pipeline"
-description: "A Hermes AI research loop that screens European equities, tests strategy ideas, diagnoses weak evidence, and can stop a paper rebalance before it happens."
+description: "A Hermes Agent research loop that screens European equities, tests strategy ideas, diagnoses weak evidence, and can stop a paper rebalance before it happens."
 pubDatetime: 2026-05-10T17:35:00Z
 tags: ["python", "ai", "investing", "automation", "dashboard"]
 featured: true
@@ -13,7 +13,7 @@ repository: ""
 ogImage: "/assets/images/project-thumbs/pea-agent-log-preview.png"
 ---
 
-I designed and built an autonomous European-equity research prototype on Hermes AI, an agent runtime similar to OpenClaw.
+I designed and built an autonomous European-equity research prototype wwith Hermes Agent, an agent runtime similar to OpenClaw.
 
 It screened PEA-eligible companies, generated strategy hypotheses, backtested them with costs, ran diagnostics, tracked a paper portfolio, and published each run to a static dashboard.
 
@@ -43,7 +43,7 @@ I built the route from candidate to portfolio as a series of explicit jobs:
 
 ![Evidence trail through the autonomous research pipeline](../../assets/images/projects/autonomous-pea-research-pipeline/research-pipeline.svg)
 
-I owned the job boundaries, artifact flow, backtests, diagnostics, gate rules, paper portfolio, dashboard, and deployment around Hermes AI.
+I owned the job boundaries, artifact flow, backtests, diagnostics, gate rules, paper portfolio, dashboard, and deployment around Hermes Agent.
 
 Each stage writes JSON or CSV artifacts that the next stage can inspect. Python runs the research jobs, Jinja2 renders the pages, cron schedules the loop, and Caddy serves the private dashboard.
 
