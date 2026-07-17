@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#070709" />
+    <meta
+      name="description"
+      content="A standalone experiment with WebGL 2, modern CSS, and the browser rendering pipeline."
+    />
+    <title>The Browser Is a Material — Romain C.</title>
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="./material.css" />
+    <script type="module" src="./material.js"></script>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#experience">Skip to the experience</a>
+
+    <div class="boot" aria-hidden="true">
+      <div class="boot__mark">RC<span>®</span></div>
+      <div class="boot__track"><i></i></div>
+      <p>Compiling matter</p>
+    </div>
+
+    <canvas id="material" aria-hidden="true"></canvas>
+    <div class="fallback-field" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="reticle" aria-hidden="true"><i></i><i></i></div>
+
+    <header class="rail">
+      <a
+        class="rail__identity"
+        href="#prologue"
+        aria-label="Return to the beginning"
+      >
+        <span>R/C</span>
+        <span>The browser<br />is a material</span>
+      </a>
+
+      <div class="rail__readout" aria-live="polite">
+        <span><i class="status-dot"></i><b id="renderer-label">GPU</b></span>
+        <span id="fps-label">-- FPS</span>
+        <span>JUL. 2026</span>
+      </div>
+
+      <button
+        class="rail__about"
+        type="button"
+        popovertarget="field-notes"
+        aria-label="Open field notes"
+      >
+        <span>Field notes</span>
+        <svg viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M10 3v14M3 10h14"></path>
+        </svg>
+      </button>
+    </header>
+
+    <div class="progress" aria-hidden="true"><i id="progress-bar"></i></div>
+    <div
+      class="sr-progress"
+      role="progressbar"
+      aria-label="Page progress"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="0"
+    >
+    </div>
+
+    <nav class="stage-nav" aria-label="Rendering stages">
+      <span class="stage-nav__title">Pipeline</span>
+      <div class="stage-nav__links">
+        <a href="#signal" data-index="01"><span>Signal</span></a>
+        <a href="#style" data-index="02"><span>Style</span></a>
+        <a href="#layout" data-index="03"><span>Layout</span></a>
+        <a href="#paint" data-index="04"><span>Paint</span></a>
+        <a href="#composite" data-index="05"><span>Composite</span></a>
+        <a href="#photon" data-index="06"><span>Photon</span></a>
+      </div>
+    </nav>
+
+    <aside id="field-notes" class="field-notes" popover>
+      <div class="field-notes__head">
+        <p>Field notes / 07.2026</p>
+        <button
+          type="button"
+          popovertarget="field-notes"
+          popovertargetaction="hide"
+        >
+          Close <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="field-notes__intro">
+        <span>One document.<br />Zero libraries.</span>
+        <p>
+          This page uses semantic HTML, modern CSS, and a WebGL 2 fragment
+          shader. Newer features are optional, so the text remains readable when
+          a browser does not support them.
+        </p>
+      </div>
+      <ol class="feature-ledger">
+        <li>
+          <b>01</b><span>WebGL 2</span><em>Realtime signed-distance field</em>
+        </li>
+        <li>
+          <b>02</b><span>Scroll timelines</span><em
+            >Compositor-linked progress</em
+          >
+        </li>
+        <li>
+          <b>03</b><span>Container queries</span><em
+            >Components own their breakpoints</em
+          >
+        </li>
+        <li>
+          <b>04</b><span>OKLCH color</span><em>Perceptual interpolation</em>
+        </li>
+        <li>
+          <b>05</b><span>Popover + anchor</span><em
+            >This native top-layer panel</em
+          >
+        </li>
+        <li>
+          <b>06</b><span>CSS shape & squircle</span><em
+            >Geometry beyond the rectangle</em
+          >
+        </li>
+        <li>
+          <b>07</b><span>Discrete transitions</span><em
+            >Entry and exit from display: none</em
+          >
+        </li>
+        <li>
+          <b>08</b><span>Adaptive motion</span><em
+            >Reduced-motion and power aware</em
+          >
+        </li>
+      </ol>
+      <div class="field-notes__foot">
+        <span>Built by Romain C.</span>
+        <a href="/posts/notes-from-a-web-gl-and-css-experiment/"
+          >Read the build notes ↗</a
+        >
+      </div>
+    </aside>
+
+    <main id="experience">
+      <section class="hero" id="prologue" aria-labelledby="hero-title">
+        <div class="hero__eyebrow">
+          <span>Essay / Experiment 002</span>
+          <span>Scroll through it</span>
+        </div>
+        <h1 id="hero-title" class="hero__title">
+          <span>The browser</span>
+          <span>is a <i>material.</i></span>
+        </h1>
+        <div class="hero__thesis">
+          <p>
+            I built this page to explore how a browser turns a document into
+            pixels. Scroll through six simplified stages while one shader
+            changes with the explanation.
+          </p>
+          <div class="scroll-cue" aria-hidden="true">
+            <span>Enter the pipeline</span><i></i>
+          </div>
+        </div>
+        <p class="hero__edition">
+          A rendering experiment<br />Romain C., 2026
+        </p>
+      </section>
+
+      <div class="interlude" aria-hidden="true">
+        <span>Input</span><i></i><span>Photon</span>
+      </div>
+
+      <section
+        class="chapter chapter--left is-active"
+        id="signal"
+        data-scene="0"
+        data-label="Signal"
+        aria-labelledby="signal-title"
+      >
+        <div class="chapter__body">
+          <p class="chapter__index">01 / Signal</p>
+          <h2 id="signal-title">Nothing begins<br />with a <i>pixel.</i></h2>
+          <p class="chapter__lede">
+            Interaction starts with input: a pointer moves, a key is pressed, or
+            data arrives. The browser turns those events into state the page can
+            use.
+          </p>
+          <p class="chapter__handoff">
+            The state has changed. Nothing has been drawn yet.
+          </p>
+          <dl class="chapter__facts">
+            <div>
+              <dt>Input</dt>
+              <dd>Events / bytes / time</dd>
+            </div>
+            <div>
+              <dt>Rate</dt>
+              <dd>1–1000 Hz</dd>
+            </div>
+            <div>
+              <dt>Output</dt>
+              <dd>State</dd>
+            </div>
+          </dl>
+          <p class="chapter__instruction">
+            <i></i> Move your pointer. The field remembers.
+          </p>
+        </div>
+        <p class="chapter__ghost" aria-hidden="true">EVENT</p>
+      </section>
+
+      <section
+        class="chapter chapter--right"
+        id="style"
+        data-scene="1"
+        data-label="Style"
+        aria-labelledby="style-title"
+      >
+        <div class="chapter__body">
+          <p class="chapter__index">02 / Style</p>
+          <h2 id="style-title">
+            Rules collide.<br />The cascade <i>decides.</i>
+          </h2>
+          <p class="chapter__lede">
+            CSS rules can conflict. The cascade compares origin, layer, scope,
+            specificity, and source order to choose the computed values for each
+            element.
+          </p>
+          <p class="chapter__handoff">
+            The rules are resolved. The elements still have no geometry.
+          </p>
+          <dl class="chapter__facts">
+            <div>
+              <dt>Input</dt>
+              <dd>Selectors / declarations</dd>
+            </div>
+            <div>
+              <dt>Operation</dt>
+              <dd>Match + cascade</dd>
+            </div>
+            <div>
+              <dt>Output</dt>
+              <dd>Computed styles</dd>
+            </div>
+          </dl>
+          <div class="cascade" aria-label="Cascade precedence diagram">
+            <span style="--weight: 1">user agent</span>
+            <span style="--weight: 2">author</span>
+            <span style="--weight: 3">scope</span>
+            <span style="--weight: 4">specificity</span>
+          </div>
+        </div>
+        <p class="chapter__ghost" aria-hidden="true">RULE</p>
+      </section>
+
+      <section
+        class="chapter chapter--left"
+        id="layout"
+        data-scene="2"
+        data-label="Layout"
+        aria-labelledby="layout-title"
+      >
+        <div class="chapter__body">
+          <p class="chapter__index">03 / Layout</p>
+          <h2 id="layout-title">
+            Constraints discover<br />their <i>geometry.</i>
+          </h2>
+          <p class="chapter__lede">
+            Layout calculates the size and position of each box from the
+            available space, intrinsic sizes, writing mode, grid tracks, and
+            flex rules.
+          </p>
+          <p class="chapter__handoff">
+            The boxes have geometry. They have not been painted.
+          </p>
+          <dl class="chapter__facts">
+            <div>
+              <dt>Input</dt>
+              <dd>Styled element tree</dd>
+            </div>
+            <div>
+              <dt>Operation</dt>
+              <dd>Constraint resolution</dd>
+            </div>
+            <div>
+              <dt>Output</dt>
+              <dd>Fragments + geometry</dd>
+            </div>
+          </dl>
+          <div
+            class="layout-solver"
+            aria-label="A three-column grid with 1.4, 0.7, and 1 fractional tracks"
+          >
+            <span><b>1.4fr</b><small>2 rows</small></span>
+            <span><b>0.7fr</b><small>row 1</small></span>
+            <span><b>1fr</b><small>row 1</small></span>
+            <span><b>0.7fr</b><small>row 2</small></span>
+            <span><b>1fr</b><small>row 2</small></span>
+          </div>
+        </div>
+        <p class="chapter__ghost" aria-hidden="true">SPACE</p>
+      </section>
+
+      <section
+        class="chapter chapter--right"
+        id="paint"
+        data-scene="3"
+        data-label="Paint"
+        aria-labelledby="paint-title"
+      >
+        <div class="chapter__body">
+          <p class="chapter__index">04 / Paint</p>
+          <h2 id="paint-title">Geometry acquires<br />a <i>skin.</i></h2>
+          <p class="chapter__lede">
+            Paint turns the layout into drawing commands for text, borders,
+            shadows, and gradients. Color spaces such as OKLCH and Display P3
+            allow a wider range of color.
+          </p>
+          <p class="chapter__handoff">
+            The drawing commands are ready. The layers still need assembling.
+          </p>
+          <dl class="chapter__facts">
+            <div>
+              <dt>Input</dt>
+              <dd>Layout fragments</dd>
+            </div>
+            <div>
+              <dt>Gamut</dt>
+              <dd>OKLCH / Display P3</dd>
+            </div>
+            <div>
+              <dt>Output</dt>
+              <dd>Display list</dd>
+            </div>
+          </dl>
+          <div class="spectrum" aria-label="Perceptual color spectrum">
+            <span></span><b>OKLCH</b><em>P3</em>
+          </div>
+        </div>
+        <p class="chapter__ghost" aria-hidden="true">COLOR</p>
+      </section>
+
+      <section
+        class="chapter chapter--left"
+        id="composite"
+        data-scene="4"
+        data-label="Composite"
+        aria-labelledby="composite-title"
+      >
+        <div class="chapter__body">
+          <p class="chapter__index">05 / Composite</p>
+          <h2 id="composite-title">
+            Flat things learn<br />how to <i>move.</i>
+          </h2>
+          <p class="chapter__lede">
+            Some painted content becomes GPU layers. The browser can move or
+            fade those layers without repeating layout and paint each time.
+          </p>
+          <p class="chapter__handoff">
+            The frame is assembled. The display has not shown it yet.
+          </p>
+          <dl class="chapter__facts">
+            <div>
+              <dt>Input</dt>
+              <dd>Paint chunks</dd>
+            </div>
+            <div>
+              <dt>Operation</dt>
+              <dd>Layerize + raster</dd>
+            </div>
+            <div>
+              <dt>Output</dt>
+              <dd>GPU textures</dd>
+            </div>
+          </dl>
+          <div class="layer-stack" aria-label="Composited layer stack">
+            <i></i><i></i><i></i><i></i>
+          </div>
+        </div>
+        <p class="chapter__ghost" aria-hidden="true">LAYER</p>
+      </section>
+
+      <section
+        class="chapter chapter--right"
+        id="photon"
+        data-scene="5"
+        data-label="Photon"
+        aria-labelledby="photon-title"
+      >
+        <div class="chapter__body">
+          <p class="chapter__index">06 / Photon</p>
+          <h2 id="photon-title">The model ends.<br />Light <i>begins.</i></h2>
+          <p class="chapter__lede">
+            The browser combines the layers and sends the frame to the display.
+            At 60 Hz, it has about 16.67 milliseconds before the next refresh.
+          </p>
+          <p class="chapter__handoff">
+            One frame appears, then the process continues.
+          </p>
+          <dl class="chapter__facts">
+            <div>
+              <dt>Budget at 60 Hz</dt>
+              <dd>16.67 ms</dd>
+            </div>
+            <div>
+              <dt>Typical display</dt>
+              <dd>8.3 million pixels</dd>
+            </div>
+            <div>
+              <dt>Output</dt>
+              <dd>Perception</dd>
+            </div>
+          </dl>
+          <button class="pulse-button" id="pulse-button" type="button">
+            <span>Emit one frame</span><i aria-hidden="true"></i>
+          </button>
+        </div>
+        <p class="chapter__ghost" aria-hidden="true">LIGHT</p>
+      </section>
+
+      <section
+        class="manifesto"
+        id="epilogue"
+        aria-labelledby="manifesto-title"
+      >
+        <p class="manifesto__kicker">End of the experiment</p>
+        <h2 id="manifesto-title">
+          <span>The result is</span>
+          <span>a sequence</span>
+          <span>of frames.</span>
+        </h2>
+        <div class="manifesto__grid">
+          <p>
+            The browser parsed the document, resolved its styles, laid out the
+            boxes, and produced paint commands. It repeated the work that
+            changed, then sent another frame to the display.
+          </p>
+          <blockquote>
+            A page is not one image.<br />It is a document being rendered.
+          </blockquote>
+        </div>
+        <div class="manifesto__credits">
+          <span>Small browser experiment<br /><b>Romain C.</b></span>
+          <span>Rendered locally<br /><b id="render-resolution">—</b></span>
+          <span>Source<br /><b>HTML / CSS / JavaScript</b></span>
+        </div>
+        <a class="restart" href="#prologue"><span>Run it again</span><i>↑</i></a
+        >
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Romain C. / Experimental web edition / 2026</p>
+      <p>A small study of how browsers turn documents into pixels.</p>
+    </footer>
+
+    <noscript>
+      <div class="noscript">
+        JavaScript is required for the live material. The essay remains
+        readable.
+      </div>
+    </noscript>
+  </body>
+</html>

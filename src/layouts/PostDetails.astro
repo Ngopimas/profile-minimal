@@ -36,7 +36,7 @@ const readingTime = getReadingTime(post.body);
 
 const ogImageUrl = typeof ogImage === "string" ? ogImage : ogImage?.src;
 const ogUrl = new URL(
-  ogImageUrl ?? `/posts/${slugifyStr(title)}.png`,
+  ogImageUrl ?? `/posts/${getEntrySlug(post)}/index.png`,
   Astro.url.origin
 ).href;
 

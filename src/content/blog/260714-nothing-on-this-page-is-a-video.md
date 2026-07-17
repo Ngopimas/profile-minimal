@@ -1,6 +1,6 @@
 ---
 author: Romain C.
-pubDatetime: 2026-07-17T10:00:00Z
+pubDatetime: 2026-07-14T10:00:00Z
 title: "Nothing on this page is a video"
 slug: nothing-on-this-page-is-a-video
 featured: true
