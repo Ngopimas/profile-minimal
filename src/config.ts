@@ -13,7 +13,7 @@ export const SITE: Site = {
   scheduledPostMargin: 15 * 60 * 1000,
   showArchives: false,
   editPost: {
-    url: "https://github.com/Ngopimas/profile-minimal/edit/master/src/content/blog",
+    url: "https://github.com/Ngopimas/profile-minimal/edit/master",
     text: "Suggest Changes",
     appendFilePath: true,
   },

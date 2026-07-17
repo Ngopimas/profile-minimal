@@ -3,7 +3,7 @@ title: "EMILI 3D Visualization Platform"
 description: "A browser-based 3D platform for Imerys' lithium mining project, built to make site infrastructure easier to explore during public debate."
 pubDatetime: 2024-03-11T15:30:00Z
 tags: ["threejs", "mapbox", "javascript"]
-featured: true
+featured: false
 type: "3D GIS public interface"
 role: "Frontend engineer"
 status: "Client work"

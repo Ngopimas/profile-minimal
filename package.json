@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "sync": "astro sync",
     "astro": "astro",
+    "test": "npm run build && node --test tests/*.test.mjs",
     "format:check": "prettier --check . --plugin=prettier-plugin-astro",
     "format": "prettier --write . --plugin=prettier-plugin-astro",
     "lint": "eslint ."

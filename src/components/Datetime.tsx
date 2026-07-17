@@ -8,7 +8,7 @@ interface DatetimesProps {
 
 interface EditPostProps {
   editPost?: CollectionEntry<"blog">["data"]["editPost"];
-  postId?: CollectionEntry<"blog">["id"];
+  sourceFilePath?: CollectionEntry<"blog">["filePath"];
 }
 
 interface Props extends DatetimesProps, EditPostProps {
@@ -22,7 +22,7 @@ export default function Datetime({
   size = "sm",
   className = "",
   editPost,
-  postId,
+  sourceFilePath,
 }: Props) {
   return (
     <div
@@ -54,7 +54,9 @@ export default function Datetime({
           pubDatetime={pubDatetime}
           modDatetime={modDatetime}
         />
-        {size === "lg" && <EditPost editPost={editPost} postId={postId} />}
+        {size === "lg" && (
+          <EditPost editPost={editPost} sourceFilePath={sourceFilePath} />
+        )}
       </span>
     </div>
   );
@@ -86,13 +88,20 @@ const FormattedDatetime = ({ pubDatetime, modDatetime }: DatetimesProps) => {
   );
 };
 
-const EditPost = ({ editPost, postId }: EditPostProps) => {
+const EditPost = ({ editPost, sourceFilePath }: EditPostProps) => {
   let editPostUrl = editPost?.url ?? SITE?.editPost?.url ?? "";
-  const showEditPost = !editPost?.disabled && editPostUrl.length > 0;
   const appendFilePath =
     editPost?.appendFilePath ?? SITE?.editPost?.appendFilePath ?? false;
-  if (appendFilePath && postId) {
-    editPostUrl += `/${postId}`;
+  const showEditPost =
+    !editPost?.disabled &&
+    editPostUrl.length > 0 &&
+    (!appendFilePath || Boolean(sourceFilePath));
+  if (appendFilePath && sourceFilePath) {
+    const encodedFilePath = sourceFilePath
+      .split("/")
+      .map(segment => encodeURIComponent(segment))
+      .join("/");
+    editPostUrl = `${editPostUrl.replace(/\/+$/, "")}/${encodedFilePath}`;
   }
   const editPostText = editPost?.text ?? SITE?.editPost?.text ?? "Edit";
 

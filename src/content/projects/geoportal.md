@@ -3,7 +3,7 @@ title: "GeoPortal by DeepLime"
 description: "A cloud data science platform for geoscientists, focused on workflow automation, resource estimation, and 3D geological visualization."
 pubDatetime: 2023-02-11T15:30:00Z
 tags: ["react", "cloud", "data-science", "python", "automation", "3d"]
-featured: true
+featured: false
 type: "Data platform"
 role: "Fullstack engineer"
 status: "Live"
