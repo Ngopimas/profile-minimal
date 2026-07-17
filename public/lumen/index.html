@@ -1,0 +1,1423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0d0c14">
+<title>LUMEN - a field study of light</title>
+<meta name="description" content="One ray of light, one piece of glass, five phenomena - raymarched live in WGSL on your GPU, staged entirely with 2026 CSS. Nothing on this page is a video.">
+<link rel="preload" href="../fonts/clash-display-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/general-sans-400.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* Self-hosted fonts - this page makes zero third-party requests */
+@font-face {
+  font-family: "Clash Display";
+  src: url("../fonts/clash-display-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "General Sans";
+  src: url("../fonts/general-sans-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "General Sans";
+  src: url("../fonts/general-sans-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Martian Mono";
+  src: url("../fonts/martian-mono-var-latin.woff2") format("woff2");
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+/* ============================================================
+   LUMEN - one ray of light, five phenomena
+   WebGPU/WGSL raymarcher + July-2026 CSS. One file, no assets.
+   ============================================================ */
+
+@layer reset, base, layout, chapters, ui, fx;
+
+/* -- registered property: scroll timelines animate it directly -- */
+@property --rail-p { syntax: "<number>"; inherits: true; initial-value: 0; }
+
+@layer reset {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    interpolate-size: allow-keywords;
+
+    /* palette - violet-tinted dark, full-spectrum accent, warm ink */
+    --void:     oklch(13.5% 0.030 285);
+    --bench:    oklch(20% 0.032 275);
+    --ink:      oklch(94% 0.014 95);
+    --dim:      oklch(71% 0.020 285);
+    --faint:    oklch(55% 0.018 285);
+    --hairline: oklch(from var(--ink) l c h / 0.13);
+    --paper:    oklch(96.5% 0.008 95);
+    --paper-ink: oklch(22% 0.02 285);
+
+    /* the accent is the whole visible spectrum */
+    --spectrum: linear-gradient(90deg in oklch longer hue,
+                oklch(78% 0.15 25), oklch(78% 0.15 385));
+
+    --font-display: "Clash Display", "Avenir Next", "Segoe UI", sans-serif;
+    --font-body: "General Sans", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+    --font-mono: "Martian Mono", "SF Mono", ui-monospace, monospace;
+
+    --measure: 34rem;
+    --gutter: clamp(1.25rem, 5vw, 5rem);
+    --ease-spring: linear(0, 0.006, 0.025 2.8%, 0.101 6.1%, 0.539 18.9%, 0.721 25.3%,
+                   0.849 31.5%, 0.937 38.1%, 0.968 41.8%, 0.991 45.7%, 1.006 50.1%,
+                   1.015 55%, 1.017 63.9%, 1.001 origin, 1);
+  }
+
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  body {
+    background: var(--void);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.0625rem);
+    line-height: 1.7;
+    font-weight: 400;
+    overflow-x: clip;
+    /* hoist chapter view-timelines so the fixed rail can read them */
+    timeline-scope: --ch1, --ch2, --ch3, --ch4, --ch5, --fin;
+  }
+
+  ::selection { background: oklch(78% 0.15 300 / 0.35); }
+
+  :focus-visible {
+    outline: 2px solid oklch(80% 0.12 300);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  h1, h2 { font-family: var(--font-display); font-weight: 600; }
+
+  .mono {
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-size: 0.6875rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+}
+
+@layer layout {
+  /* -- the instrument: fixed canvas behind everything ---------- */
+  #stage {
+    position: fixed;
+    inset: 0;
+    width: 100lvw;
+    height: 100lvh;
+    z-index: 0;
+    display: block;
+  }
+
+  /* poster shown before first GPU frame / if no GPU at all */
+  #poster {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background:
+      radial-gradient(120% 90% at 50% 110%, oklch(30% 0.05 290 / 0.8), transparent 60%),
+      radial-gradient(80% 60% at 70% 20%, oklch(26% 0.05 250 / 0.5), transparent 70%),
+      var(--void);
+    transition: opacity 1.2s ease 0.15s, visibility 1.2s allow-discrete;
+  }
+  body.live #poster { opacity: 0; visibility: hidden; }
+
+  main { position: relative; z-index: 2; }
+
+  section { position: relative; }
+
+  /* -- right rail: chapter index, pure-CSS active state -------- */
+  #rail {
+    position: fixed;
+    z-index: 5;
+    right: clamp(0.9rem, 2.5vw, 2.2rem);
+    top: 50%;
+    translate: 0 -50%;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  #rail .labels { display: flex; flex-direction: column; gap: 1.1rem; text-align: right; }
+  #rail a {
+    color: var(--faint);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  #rail a:hover { color: var(--ink); }
+  #rail .track {
+    width: 2px; height: 12.5rem;
+    background: var(--hairline);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+  #rail .thumb {
+    width: 100%; height: 100%;
+    background: var(--spectrum);
+    transform-origin: top;
+    scale: 1 var(--rail-p);
+    animation: rail-fill linear both;
+    animation-timeline: scroll(root);
+  }
+  @keyframes rail-fill { from { --rail-p: 0.02; } to { --rail-p: 1; } }
+
+  /* active-chapter highlight, no JS: each label listens to the
+     matching chapter's hoisted view-timeline */
+  #rail a          { animation: rail-on linear both; animation-range: cover 5% cover 95%; }
+  #rail a[href="#c1"] { animation-timeline: --ch1; }
+  #rail a[href="#c2"] { animation-timeline: --ch2; }
+  #rail a[href="#c3"] { animation-timeline: --ch3; }
+  #rail a[href="#c4"] { animation-timeline: --ch4; }
+  #rail a[href="#c5"] { animation-timeline: --ch5; }
+  @keyframes rail-on {
+    0%, 100% { color: var(--faint); }
+    12%, 88% { color: var(--ink); }
+  }
+
+  /* bow out as the finale arrives (reads the hoisted --fin timeline) */
+  #rail {
+    animation: rail-away linear both;
+    animation-timeline: --fin;
+    animation-range: entry 0% entry 50%;
+  }
+  @keyframes rail-away { to { opacity: 0; visibility: hidden; } }
+
+  @media (width < 900px) { #rail { display: none; } }
+}
+
+@layer chapters {
+  /* -- hero ---------------------------------------------------- */
+  #hero {
+    min-height: 100svh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: clamp(1.2rem, 3vh, 2.5rem) var(--gutter);
+  }
+  #hero .topline {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: var(--dim);
+  }
+  #hero .title-block {
+    align-self: center;
+    justify-self: center;
+    text-align: center;
+  }
+  #hero h1 {
+    font-size: clamp(4.5rem, 19vw, 15rem);
+    letter-spacing: 0.02em;
+    line-height: 1;
+    text-box: trim-both cap alphabetic;
+    /* the type interferes with the light behind it */
+    mix-blend-mode: plus-lighter;
+    color: oklch(88% 0.02 95 / 0.92);
+  }
+  #hero .deck {
+    max-width: 42ch;
+    margin: 1.8rem auto 0;
+    text-wrap: balance;
+    color: var(--dim);
+    font-weight: 500;
+  }
+  #hero .deck em { color: var(--ink); font-style: normal; }
+  #hero .bottomline {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1rem;
+    color: var(--dim);
+  }
+  #hero .hint { display: inline-flex; align-items: center; gap: 0.6rem; }
+  #hero .hint::after {
+    content: "";
+    width: 1px; height: 2.2rem;
+    background: linear-gradient(var(--ink), transparent);
+    animation: drip 2.2s var(--ease-spring) infinite;
+  }
+  @keyframes drip {
+    0% { transform: scaleY(0); transform-origin: top; }
+    45% { transform: scaleY(1); transform-origin: top; }
+    55% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  /* -- chapters ------------------------------------------------ */
+  .chapter { min-height: 175svh; }
+  .chapter#c1 { view-timeline: --ch1; }
+  .chapter#c2 { view-timeline: --ch2; }
+  .chapter#c3 { view-timeline: --ch3; }
+  .chapter#c4 { view-timeline: --ch4; }
+  .chapter#c5 { view-timeline: --ch5; }
+
+  /* sticky mono header; dresses itself when actually stuck */
+  .ch-head {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    container-type: scroll-state;
+  }
+  .ch-head > div {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.9rem var(--gutter);
+    color: var(--dim);
+    border-block-end: 1px solid transparent;
+    transition: background 0.4s, border-color 0.4s, backdrop-filter 0.4s;
+  }
+  @container scroll-state(stuck: top) {
+    .ch-head > div {
+      background: oklch(from var(--void) l c h / 0.35);
+      backdrop-filter: blur(14px) saturate(1.3);
+      border-block-end-color: var(--hairline);
+    }
+  }
+  .ch-head .no { color: var(--ink); }
+  .ch-head .rule {
+    flex: 1;
+    height: 1px;
+    align-self: center;
+    background: var(--hairline);
+  }
+
+  .ch-body {
+    min-height: calc(175svh - 4rem);
+    display: grid;
+    align-content: center;
+    padding: 12svh var(--gutter);
+  }
+
+  /* frosted veil: readable text over the render, no hard panel */
+  .veil {
+    position: relative;
+    max-width: var(--measure);
+    padding: 2.2rem 2.4rem 2.4rem;
+    border-radius: 22px;
+    corner-shape: squircle;
+    background: oklch(from var(--void) l c h / 0.30);
+    backdrop-filter: blur(20px) saturate(1.25) brightness(0.9);
+    border: 1px solid oklch(from var(--ink) l c h / 0.07);
+    /* entrance driven purely by scroll position */
+    animation: veil-in var(--ease-spring) both;
+    animation-timeline: view();
+    animation-range: entry 15% entry 75%;
+  }
+  @keyframes veil-in {
+    from { opacity: 0; translate: 0 3.5rem; }
+    to   { opacity: 1; translate: 0 0; }
+  }
+  .chapter:nth-of-type(even) .ch-body { justify-items: end; }
+  /* keep clear of the fixed rail + leave room for the numeral overhang */
+  @media (width >= 900px) {
+    .chapter:nth-of-type(even) .veil { margin-inline-end: min(12vw, 12rem); }
+  }
+
+  .veil .phen {
+    display: block;
+    color: var(--dim);
+    margin-bottom: 1.1rem;
+  }
+  .veil .phen b {
+    font-weight: 500;
+    background: var(--spectrum);
+    background-clip: text;
+    color: transparent;
+  }
+  .veil h2 {
+    font-size: clamp(1.9rem, 4.2vw, 3rem);
+    line-height: 1.04;
+    letter-spacing: 0.005em;
+    text-wrap: balance;
+    text-box: trim-start cap;
+    margin-bottom: 1.2rem;
+  }
+  .veil p { color: oklch(from var(--ink) l c h / 0.82); text-wrap: pretty; }
+  .veil p + p { margin-top: 0.8rem; }
+
+  /* huge chapter numeral, blended into the render */
+  .ch-num {
+    position: absolute;
+    z-index: -1;
+    inset-inline-start: -0.45em;
+    inset-block-start: -0.72em;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(7rem, 18vw, 15rem);
+    line-height: 1;
+    color: oklch(70% 0.03 290 / 0.5);
+    mix-blend-mode: plus-lighter;
+    pointer-events: none;
+    user-select: none;
+  }
+  .chapter:nth-of-type(even) .ch-num { inset-inline-start: auto; inset-inline-end: -0.35em; }
+
+  /* live instrument readouts */
+  .data {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.6rem;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.55em;
+    padding: 0.5em 0.85em;
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    corner-shape: squircle;
+    color: var(--dim);
+    white-space: nowrap;
+  }
+  .chip output {
+    color: var(--ink);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    min-width: 5ch;
+  }
+
+  /* defined terms -> anchored popovers */
+  .term {
+    color: var(--ink);
+    border-bottom: 1px dashed oklch(from var(--ink) l c h / 0.45);
+    padding-bottom: 0.06em;
+  }
+  .term:hover { border-bottom-style: solid; }
+
+  /* -- finale: the light leaves the glass ---------------------- */
+  #finale {
+    view-timeline: --fin;
+    position: relative;
+    z-index: 2;
+    min-height: 120svh;
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    text-align: center;
+    padding: 16svh var(--gutter) 8svh;
+    background: var(--paper);
+    color: var(--paper-ink);
+    --hairline: oklch(from var(--paper-ink) l c h / 0.16);
+    --dim: oklch(45% 0.02 285);
+    --faint: oklch(55% 0.015 285);
+  }
+  #finale::before {
+    /* soft top edge so the white slides over the render like a plate */
+    content: "";
+    position: absolute;
+    inset: -14svh 0 auto;
+    height: 14svh;
+    background: linear-gradient(transparent, var(--paper));
+    pointer-events: none;
+  }
+  #finale h2 {
+    font-size: clamp(2.2rem, 5.5vw, 4.2rem);
+    line-height: 1.02;
+    max-width: 18ch;
+    text-wrap: balance;
+    text-box: trim-both cap alphabetic;
+  }
+  #finale .out {
+    max-width: 46ch;
+    margin: 1.8rem 0 0;
+    text-wrap: pretty;
+    color: oklch(from var(--paper-ink) l c h / 0.85);
+  }
+  #finale .spectra {
+    width: min(22rem, 60vw);
+    height: 3px;
+    margin: 3rem 0 0;
+    border-radius: 2px;
+    background: var(--spectrum);
+  }
+
+  .colophon {
+    margin-top: 4.5rem;
+    max-width: 52ch;
+    color: var(--dim);
+    font-size: 0.9375rem;
+    text-wrap: pretty;
+  }
+  .colophon a { color: inherit; }
+
+  details.panel {
+    margin-top: 2.2rem;
+    width: min(40rem, 100%);
+    text-align: left;
+    border: 1px solid var(--hairline);
+    border-radius: 16px;
+    corner-shape: squircle;
+    background: oklch(from var(--paper) calc(l - 0.015) c h);
+  }
+  details.panel summary {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.95rem 1.2rem;
+    cursor: pointer;
+    color: var(--paper-ink);
+  }
+  details.panel summary::-webkit-details-marker { display: none; }
+  details.panel summary::after {
+    content: "+";
+    font-family: var(--font-mono);
+    transition: rotate 0.35s var(--ease-spring);
+  }
+  details.panel[open] summary::after { rotate: 45deg; }
+  details.panel::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition: block-size 0.5s var(--ease-spring), content-visibility 0.5s allow-discrete;
+  }
+  details.panel[open]::details-content { block-size: auto; }
+  .panel ul {
+    list-style: none;
+    padding: 0 1.2rem 1.1rem;
+  }
+  .panel li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 0.55rem 0;
+    border-top: 1px solid var(--hairline);
+    color: var(--dim);
+  }
+  .panel li b { color: var(--paper-ink); font-weight: 500; }
+  .panel li span { text-align: right; }
+
+  footer {
+    margin-top: 5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 2rem;
+    justify-content: center;
+    color: var(--faint);
+  }
+
+  @media (width < 700px) {
+    .veil { padding: 1.6rem 1.4rem 1.8rem; }
+    .chapter:nth-of-type(even) .ch-body { justify-items: start; }
+    .ch-num { font-size: 8rem; }
+    .ch-head .mono > span:last-child { display: none; } /* formula */
+  }
+}
+
+@layer ui {
+  /* -- anchored footnote popovers ------------------------------ */
+  .note {
+    position: fixed;
+    position-area: block-start;
+    position-try-fallbacks: flip-block, flip-inline;
+    margin: 0.6rem;
+    max-width: 30ch;
+    padding: 0.9rem 1.05rem;
+    border-radius: 14px;
+    corner-shape: squircle;
+    border: 1px solid oklch(from var(--ink) l c h / 0.14);
+    background: oklch(from var(--bench) l c h / 0.75);
+    backdrop-filter: blur(18px) saturate(1.3);
+    color: var(--ink);
+    font-size: 0.85rem;
+    line-height: 1.55;
+    text-align: left;
+    box-shadow: 0 18px 50px oklch(10% 0.03 285 / 0.5);
+    opacity: 0;
+    translate: 0 6px;
+    transition: opacity 0.3s, translate 0.3s var(--ease-spring),
+                display 0.3s allow-discrete, overlay 0.3s allow-discrete;
+  }
+  .note:popover-open { opacity: 1; translate: 0 0; }
+  @starting-style {
+    .note:popover-open { opacity: 0; translate: 0 6px; }
+  }
+  .note .mono { display: block; margin-bottom: 0.4rem; color: var(--dim); }
+  .note::backdrop { background: transparent; }
+}
+
+@layer fx {
+  @media (prefers-reduced-motion: reduce) {
+    .veil { animation: none; }
+    #hero .hint::after { animation: none; transform: none; }
+    .note { transition-duration: 0.01s; }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .veil, .note, .ch-head > div { backdrop-filter: none; background: oklch(from var(--void) l c h / 0.88); }
+  }
+}
+</style>
+</head>
+<body>
+
+<canvas id="stage" aria-hidden="true"></canvas>
+<div id="poster" aria-hidden="true"></div>
+
+<nav id="rail" aria-label="Chapters">
+  <div class="labels mono">
+    <a href="#c1">01 Refraction</a>
+    <a href="#c2">02 Caustics</a>
+    <a href="#c3">03 Dispersion</a>
+    <a href="#c4">04 Interference</a>
+    <a href="#c5">05 Absorption</a>
+  </div>
+  <div class="track"><div class="thumb"></div></div>
+</nav>
+
+<main>
+  <!-- ======================= HERO ======================= -->
+  <section id="hero">
+    <div class="topline mono">
+      <span>Optics bench · specimen 001</span>
+      <span id="gpu-chip">initialising gpu…</span>
+    </div>
+    <div class="title-block">
+      <h1>LUMEN</h1>
+      <p class="deck">A field study of one ray of light and one piece of glass.
+        Five phenomena, computed on your GPU as you read -
+        <em>nothing on this page is a video.</em></p>
+    </div>
+    <div class="bottomline mono">
+      <span class="hint">Scroll to bend the light</span>
+      <span>Jul 2026</span>
+    </div>
+  </section>
+
+  <!-- ==================== 01 REFRACTION ==================== -->
+  <section class="chapter" id="c1" aria-labelledby="h1-c1">
+    <div class="ch-head"><div class="mono">
+      <span class="no">01</span><span>Refraction</span><span class="rule"></span><span>n₁ sin θ₁ = n₂ sin θ₂</span>
+    </div></div>
+    <div class="ch-body">
+      <div class="veil">
+        <span class="ch-num" aria-hidden="true">01</span>
+        <span class="phen mono">Phenomenon · <b>the bend</b></span>
+        <h2 id="h1-c1">Light changes its mind at the surface.</h2>
+        <p>The moment light crosses into glass it slows to about two-thirds
+          of its vacuum speed, and its path bends to account for the loss.
+          <button class="term" popovertarget="note-snell" style="anchor-name: --t-snell">Snell's law</button>
+          fixes the new angle exactly. Everything else on this bench follows
+          from that single negotiation at the boundary.</p>
+        <div class="data mono">
+          <span class="chip">n₁ air <output>1.000</output></span>
+          <span class="chip">n₂ glass <output id="o-n2">1.458</output></span>
+          <span class="chip">θ₂ @ 35° <output id="o-theta">23.2°</output></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 02 CAUSTICS ==================== -->
+  <section class="chapter" id="c2" aria-labelledby="h1-c2">
+    <div class="ch-head"><div class="mono">
+      <span class="no">02</span><span>Caustics</span><span class="rule"></span><span>envelope of refracted rays</span>
+    </div></div>
+    <div class="ch-body">
+      <div class="veil">
+        <span class="ch-num" aria-hidden="true">02</span>
+        <span class="phen mono">Phenomenon · <b>the landing</b></span>
+        <h2 id="h1-c2">Bent light has to land somewhere.</h2>
+        <p>A curved surface bends every ray by a different amount, and the
+          floor collects the result: bright envelopes where paths pile up,
+          shadow where they were stolen from. The dancing net at the bottom
+          of a swimming pool is this figure, drawn by the sun through waves.</p>
+        <div class="data mono">
+          <span class="chip">envelope gain <output id="o-caus">0.21×</output></span>
+          <span class="chip">focus <output id="o-focus">under specimen</output></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 03 DISPERSION ==================== -->
+  <section class="chapter" id="c3" aria-labelledby="h1-c3">
+    <div class="ch-head"><div class="mono">
+      <span class="no">03</span><span>Dispersion</span><span class="rule"></span><span>n = n(λ)</span>
+    </div></div>
+    <div class="ch-body">
+      <div class="veil">
+        <span class="ch-num" aria-hidden="true">03</span>
+        <span class="phen mono">Phenomenon · <b>the sorting</b></span>
+        <h2 id="h1-c3">White light was never one thing.</h2>
+        <p>The bend depends on wavelength - violet turns harder than red.
+          Give the glass an edge and it sorts white light into a spectrum,
+          ranked by how hard each color brakes. The
+          <button class="term" popovertarget="note-abbe" style="anchor-name: --t-abbe">Abbe number</button>
+          of this specimen rates how widely it spreads them.</p>
+        <div class="data mono">
+          <span class="chip">Δn (F−C) <output id="o-dn">0.0071</output></span>
+          <span class="chip">ν_d <output>64.17</output></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================== 04 INTERFERENCE ================== -->
+  <section class="chapter" id="c4" aria-labelledby="h1-c4">
+    <div class="ch-head"><div class="mono">
+      <span class="no">04</span><span>Interference</span><span class="rule"></span><span>2nt cos θ = mλ</span>
+    </div></div>
+    <div class="ch-body">
+      <div class="veil">
+        <span class="ch-num" aria-hidden="true">04</span>
+        <span class="phen mono">Phenomenon · <b>the argument</b></span>
+        <h2 id="h1-c4">Thin enough, glass plays light against itself.</h2>
+        <p>At a few hundred nanometers, the reflection off the top of a film
+          meets the reflection off the bottom, and the two waves add or cancel
+          color by color. Soap bubbles and oil slicks get their rainbows here -
+          not from pigment, from arithmetic.</p>
+        <div class="data mono">
+          <span class="chip">film <output id="o-film">- nm</output></span>
+          <span class="chip">order m <output id="o-order">1–3</output></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== 05 ABSORPTION =================== -->
+  <section class="chapter" id="c5" aria-labelledby="h1-c5">
+    <div class="ch-head"><div class="mono">
+      <span class="no">05</span><span>Absorption</span><span class="rule"></span><span>I = I₀ e^(−σℓ)</span>
+    </div></div>
+    <div class="ch-body">
+      <div class="veil">
+        <span class="ch-num" aria-hidden="true">05</span>
+        <span class="phen mono">Phenomenon · <b>the toll</b></span>
+        <h2 id="h1-c5">The glass keeps a toll.</h2>
+        <p>No medium is perfectly honest. Each millimeter absorbs a fixed
+          fraction of what enters it -
+          <button class="term" popovertarget="note-beer" style="anchor-name: --t-beer">Beer–Lambert</button> -
+          and the color of deep glass is simply the wavelengths it failed to
+          steal. Look through the edge of any windowpane to see the debt.</p>
+        <div class="data mono">
+          <span class="chip">transmittance <output id="o-trans">100%</output></span>
+          <span class="chip">path ℓ <output id="o-path">0.0 mm</output></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FINALE ===================== -->
+  <section id="finale" aria-labelledby="h1-fin">
+    <span class="mono" style="color: var(--dim); margin-bottom: 1.4rem">06 · Transmission</span>
+    <h2 id="h1-fin">What leaves the glass is a record of the glass.</h2>
+    <p class="out">Bent, focused, sorted, phased, taxed - the ray that exits
+      carries every event as color and direction. That is all an image is:
+      light, annotated by matter.</p>
+    <div class="spectra" role="presentation"></div>
+
+    <p class="colophon">Built as one HTML file. The specimen is a signed-distance
+      field, sphere-traced in a WGSL fragment shader on WebGPU - per-wavelength
+      refraction, thin-film interference, Beer–Lambert extinction - with the same
+      scene carried by WebGL2 where WebGPU hasn't landed. The page around it is
+      CSS: scroll-driven timelines run the chapters, anchor positioning pins the
+      footnotes, scroll-state queries dress the sticky headers, and the corners
+      are true squircles. No frameworks, no images, no video. There is
+      <a href="/posts/nothing-on-this-page-is-a-video/">a write-up</a> of how
+      it was built.</p>
+
+    <details class="panel">
+      <summary><span class="mono">Full instrument panel</span></summary>
+      <ul class="mono">
+        <li><b>WebGPU / WGSL</b><span>raymarched SDF morph, live uniforms</span></li>
+        <li><b>WebGL2 GLSL ES 3.0</b><span>same scene, fallback path</span></li>
+        <li><b>scroll() / view() timelines</b><span>rail, reveals, chapter state</span></li>
+        <li><b>timeline-scope</b><span>rail reads chapter timelines</span></li>
+        <li><b>scroll-state(stuck)</b><span>sticky headers self-style</span></li>
+        <li><b>anchor positioning + popover</b><span>footnotes, with @starting-style</span></li>
+        <li><b>corner-shape: squircle</b><span>every rounded box on this page</span></li>
+        <li><b>text-box trim</b><span>cap-height-true display type</span></li>
+        <li><b>oklch + relative color</b><span>whole palette, spectrum in longer-hue</span></li>
+        <li><b>interpolate-size</b><span>this panel animating to auto</span></li>
+        <li><b>@property + linear() springs</b><span>typed scroll variables, spring easing</span></li>
+        <li><b>reduced motion / transparency</b><span>both respected</span></li>
+      </ul>
+    </details>
+
+    <footer class="mono">
+      <span>LUMEN · field notes on light</span>
+      <span id="stat-res">-</span>
+      <span id="stat-fps">-</span>
+    </footer>
+  </section>
+</main>
+
+<!-- anchored footnotes -->
+<div id="note-snell" class="note" popover style="position-anchor: --t-snell">
+  <span class="mono">Snell, 1621 · Ibn Sahl, 984</span>
+  n₁ sin θ₁ = n₂ sin θ₂ - the refraction law tying the angle of the bend to
+  the two refractive indices at the boundary.
+</div>
+<div id="note-abbe" class="note" popover style="position-anchor: --t-abbe">
+  <span class="mono">Ernst Abbe, c. 1870</span>
+  ν_d = (n_d − 1) / (n_F − n_C). Higher numbers disperse less: crown glass
+  ≈ 64, dense flint ≈ 30, diamond ≈ 55 - with fire to spare.
+</div>
+<div id="note-beer" class="note" popover style="position-anchor: --t-beer">
+  <span class="mono">Bouguer 1729 · Lambert 1760 · Beer 1852</span>
+  I = I₀ · e^(−σℓ) - intensity decays exponentially with path length ℓ
+  through an absorbing medium of extinction σ.
+</div>
+
+<script type="module">
+/* ============================================================
+   The instrument. WebGPU (WGSL) first, WebGL2 fallback.
+   One scene: a glass SDF whose shape and physics are driven by
+   scroll ("journey" 0→7 across hero, five chapters, finale).
+   ============================================================ */
+
+const canvas = document.getElementById('stage');
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- scroll → journey ---------- */
+const sections = ['hero','c1','c2','c3','c4','c5','finale']
+  .map(id => document.getElementById(id));
+let secTop = [], secH = [];
+function measure() {
+  secTop = sections.map(s => s.offsetTop);
+  secH   = sections.map(s => s.offsetHeight);
+}
+measure();
+addEventListener('resize', measure);
+
+window.LUMEN = { journey: null }; /* debug: force the journey uniform */
+function journeyNow() {
+  if (window.LUMEN.journey !== null) return window.LUMEN.journey;
+  const center = scrollY + innerHeight * 0.5;
+  let j = 0;
+  for (let i = 0; i < sections.length; i++)
+    j += Math.min(1, Math.max(0, (center - secTop[i]) / secH[i]));
+  return j;
+}
+
+/* ---------- pointer with inertia ---------- */
+const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
+addEventListener('pointermove', e => {
+  pointer.tx = (e.clientX / innerWidth) * 2 - 1;
+  pointer.ty = (e.clientY / innerHeight) * 2 - 1;
+}, { passive: true });
+
+/* ---------- shared scene source (WGSL) ---------- */
+const WGSL = /* wgsl */`
+struct U {
+  res     : vec2f,
+  ptr     : vec2f,
+  time    : f32,
+  journey : f32,
+  motion  : f32,
+  pad     : f32,
+};
+@group(0) @binding(0) var<uniform> u : U;
+
+const PI = 3.14159265;
+
+fn rotY(a: f32) -> mat3x3f {
+  let c = cos(a); let s = sin(a);
+  return mat3x3f(c,0,-s, 0,1,0, s,0,c);
+}
+fn rotX(a: f32) -> mat3x3f {
+  let c = cos(a); let s = sin(a);
+  return mat3x3f(1,0,0, 0,c,s, 0,-s,c);
+}
+
+/* phenomenon windows along the journey (chapter centers 1.5 … 5.5) */
+fn win(j: f32, c: f32) -> f32 {
+  return smoothstep(0.0, 1.0, 1.0 - abs(j - c) / 1.15);
+}
+
+/* ---- SDF primitives ---- */
+fn sdSphere(p: vec3f, r: f32) -> f32 { return length(p) - r; }
+fn sdLens(p: vec3f) -> f32 {
+  let d1 = length(p - vec3f(0,0, 0.62)) - 1.05;
+  let d2 = length(p + vec3f(0,0, 0.62)) - 1.05;
+  return max(d1, d2);
+}
+fn sdTriPrism(p: vec3f, h: vec2f) -> f32 {
+  let q = abs(p);
+  return max(q.z - h.y, max(q.x*0.866025 + p.y*0.5, -p.y) - h.x*0.5);
+}
+fn sdDisc(p: vec3f) -> f32 {
+  let d = vec2f(length(p.xz) - 0.92, abs(p.y) - 0.05);
+  return min(max(d.x, d.y), 0.0) + length(max(d, vec2f(0.0))) - 0.04;
+}
+fn sdBox(p: vec3f, b: vec3f) -> f32 {
+  let q = abs(p) - b;
+  return length(max(q, vec3f(0.0))) + min(max(q.x, max(q.y, q.z)), 0.0) - 0.06;
+}
+
+fn specimen(pIn: vec3f, j: f32, t: f32) -> f32 {
+  var p = pIn;
+  p.y -= 0.10 + 0.06 * sin(t * 0.6);
+  p = rotX(0.35 + 0.15 * sin(t * 0.23)) * (rotY(t * 0.22 + j * 0.9) * p);
+  /* chapter centers (1.5 … 5.5) land on pure shapes; morphs happen between */
+  let s = clamp(j - 1.5, 0.0, 4.0);
+  let i = floor(s);
+  let f = smoothstep(0.15, 0.85, fract(s));
+  var d0: f32; var d1: f32;
+  /* shape per chapter: sphere, lens, prism, thin disc, slab */
+  if (i < 0.5)      { d0 = sdSphere(p, 0.88);            d1 = sdLens(p); }
+  else if (i < 1.5) { d0 = sdLens(p);                    d1 = sdTriPrism(p, vec2f(0.95, 0.5)) - 0.05; }
+  else if (i < 2.5) { d0 = sdTriPrism(p, vec2f(0.95, 0.5)) - 0.05; d1 = sdDisc(p); }
+  else if (i < 3.5) { d0 = sdDisc(p);                    d1 = sdBox(p, vec3f(0.72, 0.55, 0.42)); }
+  else              { d0 = sdBox(p, vec3f(0.72, 0.55, 0.42)); d1 = sdBox(p, vec3f(0.72, 0.55, 0.42)); }
+  return mix(d0, d1, f);
+}
+
+fn normalAt(p: vec3f, j: f32, t: f32) -> vec3f {
+  let e = 0.0015;
+  let k = vec2f(1.0, -1.0);
+  return normalize(
+    k.xyy * specimen(p + k.xyy * e, j, t) +
+    k.yyx * specimen(p + k.yyx * e, j, t) +
+    k.yxy * specimen(p + k.yxy * e, j, t) +
+    k.xxx * specimen(p + k.xxx * e, j, t));
+}
+
+/* ---- environment: violet studio, one softbox, ground bounce ---- */
+fn env(rd: vec3f, lift: f32) -> vec3f {
+  var col = mix(vec3f(0.045, 0.04, 0.075), vec3f(0.10, 0.09, 0.16),
+                smoothstep(-0.6, 0.7, rd.y));
+  /* softbox key light up-right */
+  let l = normalize(vec3f(0.45, 0.72, 0.3));
+  let d = dot(rd, l);
+  col += vec3f(1.0, 0.97, 0.9) * 2.6 * smoothstep(0.955, 0.998, d);
+  col += vec3f(0.9, 0.85, 1.0) * 0.35 * smoothstep(0.75, 0.99, d);
+  /* cool rim opposite */
+  let l2 = normalize(vec3f(-0.7, 0.15, -0.5));
+  col += vec3f(0.45, 0.5, 0.95) * 0.5 * smoothstep(0.85, 0.995, dot(rd, l2));
+  /* ground bounce */
+  col += vec3f(0.06, 0.05, 0.10) * smoothstep(-0.1, -0.8, rd.y);
+  return mix(col, vec3f(1.12, 1.11, 1.08), lift);
+}
+
+/* ---- caustic figure on the bench ---- */
+fn caustic(q: vec2f, t: f32) -> f32 {
+  var p = q;
+  var acc = 0.0;
+  for (var i = 0; i < 3; i++) {
+    p += 0.32 * vec2f(cos(p.y * 2.6 + t * 0.7 + f32(i)), sin(p.x * 2.6 - t * 0.6));
+    acc += abs(sin(p.x * 4.0) * sin(p.y * 4.0));
+  }
+  acc /= 3.0;
+  return pow(clamp(1.0 - acc, 0.0, 1.0), 5.0);
+}
+
+fn floorCol(ro: vec3f, rd: vec3f, j: f32, t: f32, lift: f32) -> vec3f {
+  let fy = -1.18;
+  let dist = (fy - ro.y) / rd.y;
+  let hp = ro + rd * dist;
+  var col = mix(vec3f(0.055, 0.05, 0.09), vec3f(0.085, 0.08, 0.135),
+                smoothstep(4.0, 0.0, length(hp.xz)));
+  /* fine bench grid - analytic AA (derivatives are off-limits in
+     non-uniform control flow under WGSL's uniformity analysis) */
+  let lw = 0.008 + dist * 0.004;
+  let gg = abs(fract(hp.xz * 1.25 + 0.5) - 0.5);
+  let line = 1.0 - smoothstep(0.0, lw, min(gg.x, gg.y));
+  col += vec3f(0.5, 0.5, 0.7) * line * 0.06;
+  /* contact shadow under specimen */
+  let r = length(hp.xz);
+  let sh = 1.0 - 0.75 * smoothstep(1.9, 0.2, r);
+  col *= sh;
+  /* caustics live inside the shadow (physically: light stolen, then focused) */
+  let cw = 0.25 + 1.6 * win(j, 2.5);
+  let c = caustic(hp.xz * 1.4, select(j * 2.0, t, u.motion > 0.5));
+  col += vec3f(0.75, 0.85, 1.0) * c * cw * smoothstep(2.1, 0.35, r) * 0.85;
+  /* light pool from key */
+  col += vec3f(0.10, 0.09, 0.14) * smoothstep(3.4, 0.4, length(hp.xz - vec2f(0.9, -0.6)));
+  let fog = smoothstep(2.0, 14.0, dist);
+  col = mix(col, env(rd, lift) * 0.9, fog);
+  return mix(col, vec3f(1.05, 1.04, 1.02), lift * 0.92);
+}
+
+fn background(ro: vec3f, rd: vec3f, j: f32, t: f32, lift: f32) -> vec3f {
+  if (rd.y < -0.02) { return floorCol(ro, rd, j, t, lift); }
+  return env(rd, lift);
+}
+
+fn march(ro: vec3f, rd: vec3f, j: f32, t: f32) -> f32 {
+  var d = 0.0;
+  for (var i = 0; i < 80; i++) {
+    let h = specimen(ro + rd * d, j, t);
+    if (h < 0.0008 || d > 9.0) { break; }
+    d += h * 0.9;
+  }
+  return d;
+}
+
+/* march through the interior to the exit point */
+fn insideExit(p0: vec3f, rd: vec3f, j: f32, t: f32) -> vec4f {
+  var d = 0.02;
+  for (var i = 0; i < 28; i++) {
+    let h = -specimen(p0 + rd * d, j, t);
+    if (h < 0.001) { break; }
+    d += max(h * 0.9, 0.015);
+  }
+  return vec4f(p0 + rd * d, d);
+}
+
+fn spectral(x: f32) -> vec3f {
+  return 0.55 + 0.45 * cos(2.0 * PI * (x + vec3f(0.0, 0.33, 0.66)));
+}
+
+fn aces(x: vec3f) -> vec3f {
+  return clamp(x * (2.51 * x + 0.03) / (x * (2.43 * x + 0.59) + 0.14),
+               vec3f(0.0), vec3f(1.0));
+}
+
+fn hash21(p: vec2f) -> f32 {
+  var q = fract(p * vec2f(123.34, 456.21));
+  q += dot(q, q + 45.32);
+  return fract(q.x * q.y);
+}
+
+@vertex
+fn vs(@builtin(vertex_index) vi: u32) -> @builtin(position) vec4f {
+  let xy = vec2f(f32((vi << 1u) & 2u), f32(vi & 2u));
+  return vec4f(xy * 2.0 - 1.0, 0.0, 1.0);
+}
+
+@fragment
+fn fs(@builtin(position) frag: vec4f) -> @location(0) vec4f {
+  let uv = (frag.xy * 2.0 - u.res) / u.res.y * vec2f(1.0, -1.0);
+  let j = u.journey;
+  let t = select(j * 2.4, u.time, u.motion > 0.5);
+  let lift = smoothstep(5.85, 6.8, j);
+
+  /* camera: fixed bench view + pointer parallax */
+  let camA = u.ptr.x * 0.22;
+  let camB = 0.26 + u.ptr.y * 0.12;
+  let dist = 3.4 - 0.35 * win(j, 4.5);
+  let ro0 = vec3f(sin(camA) * dist, sin(camB) * 1.6 + 0.25, cos(camA) * dist);
+  let ta = vec3f(0.0, 0.05, 0.0);
+  let fw = normalize(ta - ro0);
+  let rt = normalize(cross(vec3f(0.0, 1.0, 0.0), fw));
+  let up = cross(fw, rt);
+  let rd0 = normalize(fw * 1.55 + uv.x * rt + uv.y * up);
+
+  let dispersion = 0.05 + 0.95 * win(j, 3.5);
+  let film = win(j, 4.5);
+  let absorb = win(j, 5.5);
+
+  var col: vec3f;
+  let d = march(ro0, rd0, j, t);
+
+  if (d < 9.0) {
+    let p = ro0 + rd0 * d;
+    let n = normalAt(p, j, t);
+    let fres = 0.04 + 0.96 * pow(1.0 - max(dot(-rd0, n), 0.0), 5.0);
+    let refl = env(reflect(rd0, n), lift);
+
+    /* per-wavelength refraction: R, G, B rays with offset IOR */
+    var trans = vec3f(0.0);
+    var pathLen = 0.0;
+    for (var c = 0; c < 3; c++) {
+      let off = (f32(c) - 1.0) * 0.055 * dispersion;
+      let ior = 1.458 + off + 0.06 * absorb;
+      var rdi = refract(rd0, n, 1.0 / ior);
+      if (length(rdi) < 0.5) { rdi = reflect(rd0, n); }
+      let exit = insideExit(p, rdi, j, t);
+      pathLen = exit.w;
+      let n2 = -normalAt(exit.xyz, j, t);
+      var rdo = refract(rdi, n2, ior);
+      if (length(rdo) < 0.5) { rdo = reflect(rdi, n2); }
+      let bg = background(exit.xyz, rdo, j, t, lift);
+      let ch = select(select(bg.b, bg.g, c == 1), bg.r, c == 0);
+      if (c == 0)      { trans.r = ch; }
+      else if (c == 1) { trans.g = ch; }
+      else             { trans.b = ch; }
+    }
+    /* Beer–Lambert toll, violet-transmitting glass */
+    let sigma = vec3f(1.15, 1.75, 0.55) * (absorb * 1.9 + 0.04);
+    trans *= exp(-sigma * pathLen);
+
+    col = mix(trans, refl, fres);
+
+    /* thin-film interference riding on the fresnel */
+    let cosv = max(dot(-rd0, n), 0.0);
+    let iri = spectral(4.6 * cosv + j * 0.4) * film;
+    col += iri * (fres + 0.18) * 2.1 * film;
+
+    /* inner glow so the glass reads on dark ground */
+    col += vec3f(0.05, 0.055, 0.10) * (1.0 - fres) * (1.0 - absorb);
+  } else {
+    col = background(ro0, rd0, j, t, lift);
+  }
+
+  /* grade: exposure dip in ch5, grain, vignette */
+  col *= 1.0 - 0.35 * absorb * (1.0 - lift);
+  col = aces(col * 1.12);
+  col = pow(col, vec3f(0.90, 0.92, 0.88));
+  let vig = smoothstep(1.9, 0.55, length(uv));
+  col *= 0.55 + 0.45 * vig;
+  col += (hash21(frag.xy + fract(t) * 100.0) - 0.5) * 0.035;
+  col = mix(col, vec3f(0.985, 0.98, 0.972), lift * lift);
+  return vec4f(col, 1.0);
+}
+`;
+
+/* ---------- WebGL2 twin (GLSL ES 3.0) ---------- */
+const GLSL_V = `#version 300 es
+void main() {
+  vec2 xy = vec2(float((gl_VertexID << 1) & 2), float(gl_VertexID & 2));
+  gl_Position = vec4(xy * 2.0 - 1.0, 0.0, 1.0);
+}`;
+const GLSL_F = `#version 300 es
+precision highp float;
+uniform vec2 uRes; uniform vec2 uPtr;
+uniform float uTime; uniform float uJourney; uniform float uMotion;
+out vec4 outCol;
+const float PI = 3.14159265;
+mat3 rotY(float a){float c=cos(a),s=sin(a);return mat3(c,0.,-s, 0.,1.,0., s,0.,c);}
+mat3 rotX(float a){float c=cos(a),s=sin(a);return mat3(1.,0.,0., 0.,c,s, 0.,-s,c);}
+float win(float j,float c){return smoothstep(0.,1.,1.-abs(j-c)/1.15);}
+float sdSphere(vec3 p,float r){return length(p)-r;}
+float sdLens(vec3 p){return max(length(p-vec3(0,0,.62))-1.05, length(p+vec3(0,0,.62))-1.05);}
+float sdTriPrism(vec3 p,vec2 h){vec3 q=abs(p);return max(q.z-h.y,max(q.x*.866025+p.y*.5,-p.y)-h.x*.5);}
+float sdDisc(vec3 p){vec2 d=vec2(length(p.xz)-.92,abs(p.y)-.05);return min(max(d.x,d.y),0.)+length(max(d,vec2(0)))-.04;}
+float sdBox(vec3 p,vec3 b){vec3 q=abs(p)-b;return length(max(q,vec3(0)))+min(max(q.x,max(q.y,q.z)),0.)-.06;}
+float specimen(vec3 p,float j,float t){
+  p.y -= .10 + .06*sin(t*.6);
+  p = rotX(.35+.15*sin(t*.23)) * (rotY(t*.22+j*.9) * p);
+  float s = clamp(j-1.5,0.,4.);
+  float i = floor(s), f = smoothstep(.15,.85,fract(s));
+  float d0,d1;
+  if(i<.5){d0=sdSphere(p,.88);d1=sdLens(p);}
+  else if(i<1.5){d0=sdLens(p);d1=sdTriPrism(p,vec2(0.95,.5))-.05;}
+  else if(i<2.5){d0=sdTriPrism(p,vec2(0.95,.5))-.05;d1=sdDisc(p);}
+  else if(i<3.5){d0=sdDisc(p);d1=sdBox(p,vec3(.72,.55,.42));}
+  else{d0=sdBox(p,vec3(.72,.55,.42));d1=d0;}
+  return mix(d0,d1,f);
+}
+vec3 normalAt(vec3 p,float j,float t){
+  const float e=.0015; const vec2 k=vec2(1.,-1.);
+  return normalize(k.xyy*specimen(p+k.xyy*e,j,t)+k.yyx*specimen(p+k.yyx*e,j,t)
+                  +k.yxy*specimen(p+k.yxy*e,j,t)+k.xxx*specimen(p+k.xxx*e,j,t));
+}
+vec3 env(vec3 rd,float lift){
+  vec3 col = mix(vec3(.045,.04,.075), vec3(.10,.09,.16), smoothstep(-.6,.7,rd.y));
+  vec3 l = normalize(vec3(.45,.72,.3)); float d = dot(rd,l);
+  col += vec3(1.,.97,.9)*2.6*smoothstep(.955,.998,d);
+  col += vec3(.9,.85,1.)*.35*smoothstep(.75,.99,d);
+  col += vec3(.45,.5,.95)*.5*smoothstep(.85,.995,dot(rd,normalize(vec3(-.7,.15,-.5))));
+  col += vec3(.06,.05,.10)*smoothstep(-.1,-.8,rd.y);
+  return mix(col, vec3(1.12,1.11,1.08), lift);
+}
+float caustic(vec2 p,float t){
+  float acc=0.;
+  for(int i=0;i<3;i++){
+    p += .32*vec2(cos(p.y*2.6+t*.7+float(i)), sin(p.x*2.6-t*.6));
+    acc += abs(sin(p.x*4.)*sin(p.y*4.));
+  }
+  return pow(clamp(1.-acc/3.,0.,1.),5.);
+}
+vec3 floorCol(vec3 ro,vec3 rd,float j,float t,float lift){
+  float dist=(-1.18-ro.y)/rd.y; vec3 hp=ro+rd*dist;
+  vec3 col=mix(vec3(.055,.05,.09),vec3(.085,.08,.135),smoothstep(4.,0.,length(hp.xz)));
+  vec2 g=abs(fract(hp.xz*1.25+.5)-.5)/(fwidth(hp.xz*1.25)+1e-4);
+  col += vec3(.5,.5,.7)*(1.-min(min(g.x,g.y),1.))*.06;
+  float r=length(hp.xz);
+  col *= 1.-.75*smoothstep(1.9,.2,r);
+  float cw=.25+1.6*win(j,2.5);
+  float c=caustic(hp.xz*1.4, uMotion>.5?t:j*2.);
+  col += vec3(.75,.85,1.)*c*cw*smoothstep(2.1,.35,r)*.85;
+  col += vec3(.10,.09,.14)*smoothstep(3.4,.4,length(hp.xz-vec2(.9,-.6)));
+  col = mix(col, env(rd,lift)*.9, smoothstep(2.,14.,dist));
+  return mix(col, vec3(1.05,1.04,1.02), lift*.92);
+}
+vec3 background(vec3 ro,vec3 rd,float j,float t,float lift){
+  return rd.y < -.02 ? floorCol(ro,rd,j,t,lift) : env(rd,lift);
+}
+float march(vec3 ro,vec3 rd,float j,float t){
+  float d=0.;
+  for(int i=0;i<80;i++){
+    float h=specimen(ro+rd*d,j,t);
+    if(h<.0008||d>9.) break;
+    d+=h*.9;
+  }
+  return d;
+}
+vec4 insideExit(vec3 p0,vec3 rd,float j,float t){
+  float d=.02;
+  for(int i=0;i<28;i++){
+    float h=-specimen(p0+rd*d,j,t);
+    if(h<.001) break;
+    d+=max(h*.9,.015);
+  }
+  return vec4(p0+rd*d,d);
+}
+vec3 spectral(float x){return .55+.45*cos(2.*PI*(x+vec3(0.,.33,.66)));}
+vec3 aces(vec3 x){return clamp(x*(2.51*x+.03)/(x*(2.43*x+.59)+.14),0.,1.);}
+float hash21(vec2 p){vec3 q=fract(p.xyx*vec3(123.34,456.21,123.34));q+=dot(q,q.yzx+45.32);return fract(q.x*q.y);}
+void main(){
+  vec2 uv=(gl_FragCoord.xy*2.-uRes)/uRes.y;
+  float j=uJourney;
+  float t=uMotion>.5?uTime:j*2.4;
+  float lift=smoothstep(5.85,6.8,j);
+  float camA=uPtr.x*.22, camB=.26+uPtr.y*.12;
+  float dist=3.4-.35*win(j,4.5);
+  vec3 ro0=vec3(sin(camA)*dist, sin(camB)*1.6+.25, cos(camA)*dist);
+  vec3 fw=normalize(vec3(0.,.05,0.)-ro0);
+  vec3 rt=normalize(cross(vec3(0,1,0),fw));
+  vec3 up=cross(fw,rt);
+  vec3 rd0=normalize(fw*1.55+uv.x*rt+uv.y*up);
+  float dispersion=.05+.95*win(j,3.5);
+  float film=win(j,4.5);
+  float absorb=win(j,5.5);
+  vec3 col;
+  float d=march(ro0,rd0,j,t);
+  if(d<9.){
+    vec3 p=ro0+rd0*d;
+    vec3 n=normalAt(p,j,t);
+    float fres=.04+.96*pow(1.-max(dot(-rd0,n),0.),5.);
+    vec3 refl=env(reflect(rd0,n),lift);
+    vec3 trans=vec3(0.); float pathLen=0.;
+    for(int c=0;c<3;c++){
+      float off=(float(c)-1.)*.055*dispersion;
+      float ior=1.458+off+.06*absorb;
+      vec3 rdi=refract(rd0,n,1./ior);
+      if(dot(rdi,rdi)<.25) rdi=reflect(rd0,n);
+      vec4 exit=insideExit(p,rdi,j,t);
+      pathLen=exit.w;
+      vec3 n2=-normalAt(exit.xyz,j,t);
+      vec3 rdo=refract(rdi,n2,ior);
+      if(dot(rdo,rdo)<.25) rdo=reflect(rdi,n2);
+      vec3 bg=background(exit.xyz,rdo,j,t,lift);
+      trans[c]=bg[c];
+    }
+    trans *= exp(-vec3(1.15,1.75,.55)*(absorb*1.9+.04)*pathLen);
+    col = mix(trans,refl,fres);
+    float cosv=max(dot(-rd0,n),0.);
+    col += spectral(4.6*cosv+j*.4)*(fres+.18)*2.1*film*film;
+    col += vec3(.05,.055,.10)*(1.-fres)*(1.-absorb);
+  } else col = background(ro0,rd0,j,t,lift);
+  col *= 1.-.35*absorb*(1.-lift);
+  col = aces(col*1.12);
+  col = pow(col,vec3(.90,.92,.88));
+  col *= .55+.45*smoothstep(1.9,.55,length(uv));
+  col += (hash21(gl_FragCoord.xy+fract(t)*100.)-.5)*.035;
+  col = mix(col, vec3(.985,.98,.972), lift*lift);
+  outCol = vec4(col,1.);
+}`;
+
+/* ---------- renderer bootstrap ---------- */
+const state = {
+  scale: Math.min(devicePixelRatio || 1, 2) * 0.8,
+  frameMs: [], lastT: performance.now(), fps: 60,
+};
+
+function fit() {
+  const w = Math.max(2, Math.round(innerWidth * state.scale));
+  const h = Math.max(2, Math.round(innerHeight * state.scale));
+  let changed = false;
+  if (canvas.width !== w || canvas.height !== h) {
+    canvas.width = w; canvas.height = h; changed = true;
+  }
+  return [w, h, changed];
+}
+
+/* rAF when the page is visible; timer watchdog for embedded panes that
+   report document.hidden forever and never tick rAF. If rAF has proven
+   alive, a hidden tab is genuinely hidden: render nothing, spend nothing. */
+function drive(render) {
+  let lastRun = 0, rafAlive = false;
+  const tick = viaRaf => { lastRun = performance.now(); render(lastRun, viaRaf); };
+  (function pump() {
+    requestAnimationFrame(() => { rafAlive = true; tick(true); pump(); });
+  })();
+  setInterval(() => {
+    if (rafAlive && document.hidden) return;
+    if (performance.now() - lastRun > 90) tick(false);
+  }, 30);
+}
+
+function adapt(dt) {
+  state.frameMs.push(dt);
+  if (state.frameMs.length < 40) return;
+  const avg = state.frameMs.reduce((a, b) => a + b) / state.frameMs.length;
+  state.frameMs.length = 0;
+  state.fps = Math.round(1000 / avg);
+  const cap = Math.min(devicePixelRatio || 1, 2);
+  if (avg > 19 && state.scale > 0.45) state.scale = Math.max(0.45, state.scale * 0.85);
+  else if (avg < 9 && state.scale < cap) state.scale = Math.min(cap, state.scale * 1.12);
+  const s = document.getElementById('stat-fps');
+  if (s) s.textContent = state.fps + ' fps · scale ' + state.scale.toFixed(2);
+}
+
+function tickCommon(now, viaRaf) {
+  const dt = now - state.lastT; state.lastT = now;
+  if (viaRaf && dt > 0 && dt < 250) adapt(dt);
+  pointer.x += (pointer.tx - pointer.x) * 0.06;
+  pointer.y += (pointer.ty - pointer.y) * 0.06;
+  updateReadouts();
+  return {
+    t: now / 1000,
+    j: journeyNow(),
+    px: pointer.x, py: pointer.y,
+    motion: reduceMotion ? 0 : 1,
+  };
+}
+
+async function startWebGPU() {
+  if (!navigator.gpu) return false;
+  const adapter = await navigator.gpu.requestAdapter();
+  if (!adapter) return false;
+  const device = await adapter.requestDevice();
+  const ctx = canvas.getContext('webgpu');
+  const format = navigator.gpu.getPreferredCanvasFormat();
+  ctx.configure({ device, format, alphaMode: 'opaque' });
+
+  let needConfig = false;
+  device.addEventListener?.('uncapturederror', e => {
+    needConfig = true; /* swapchain can die on a 0-size flap; reconfigure */
+    console.warn('WebGPU uncaptured:', e.error?.message);
+  });
+  const module = device.createShaderModule({ code: WGSL });
+  const ci = await module.getCompilationInfo();
+  if (ci.messages.some(m => m.type === 'error')) {
+    console.warn('WGSL failed to compile:', ci.messages);
+    return false;
+  }
+  const pipeline = device.createRenderPipeline({
+    layout: 'auto',
+    vertex: { module, entryPoint: 'vs' },
+    fragment: { module, entryPoint: 'fs', targets: [{ format }] },
+    primitive: { topology: 'triangle-list' },
+  });
+  const ubuf = device.createBuffer({ size: 32, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
+  const bind = device.createBindGroup({
+    layout: pipeline.getBindGroupLayout(0),
+    entries: [{ binding: 0, resource: { buffer: ubuf } }],
+  });
+  const data = new Float32Array(8);
+
+  let first = true;
+  drive((now, viaRaf) => {
+    if (innerWidth < 2 || innerHeight < 2) return;
+    const u = tickCommon(now, viaRaf);
+    const [w, h, changed] = fit();
+    if (changed || needConfig) {
+      ctx.configure({ device, format, alphaMode: 'opaque' });
+      needConfig = false;
+    }
+    data.set([w, h, u.px, u.py, u.t, u.j, u.motion, 0]);
+    device.queue.writeBuffer(ubuf, 0, data);
+    const enc = device.createCommandEncoder();
+    const pass = enc.beginRenderPass({
+      colorAttachments: [{
+        view: ctx.getCurrentTexture().createView(),
+        loadOp: 'clear', storeOp: 'store', clearValue: { r: 0, g: 0, b: 0, a: 1 },
+      }],
+    });
+    pass.setPipeline(pipeline);
+    pass.setBindGroup(0, bind);
+    pass.draw(3);
+    pass.end();
+    device.queue.submit([enc.finish()]);
+    if (first) { first = false; goLive('WebGPU · WGSL'); }
+  });
+  return true;
+}
+
+function startWebGL2() {
+  const gl = canvas.getContext('webgl2', { antialias: false, depth: false });
+  if (!gl) return false;
+  function compile(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src); gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS))
+      throw new Error(gl.getShaderInfoLog(s));
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, compile(gl.VERTEX_SHADER, GLSL_V));
+  gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, GLSL_F));
+  gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS))
+    throw new Error(gl.getProgramInfoLog(prog));
+  gl.useProgram(prog);
+  const U = n => gl.getUniformLocation(prog, n);
+  const uRes = U('uRes'), uPtr = U('uPtr'), uTime = U('uTime'),
+        uJourney = U('uJourney'), uMotion = U('uMotion');
+
+  let first = true;
+  drive((now, viaRaf) => {
+    const u = tickCommon(now, viaRaf);
+    const [w, h] = fit();
+    gl.viewport(0, 0, w, h);
+    gl.uniform2f(uRes, w, h);
+    gl.uniform2f(uPtr, u.px, u.py);
+    gl.uniform1f(uTime, u.t);
+    gl.uniform1f(uJourney, u.j);
+    gl.uniform1f(uMotion, u.motion);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    if (first) { first = false; goLive('WebGL2 · GLSL ES 3.0'); }
+  });
+  return true;
+}
+
+function goLive(label) {
+  document.body.classList.add('live');
+  const chip = document.getElementById('gpu-chip');
+  if (chip) chip.textContent = 'live render · ' + label;
+  const res = document.getElementById('stat-res');
+  if (res) res.textContent = canvas.width + '×' + canvas.height;
+}
+
+/* ---------- live instrument readouts ---------- */
+const $ = id => document.getElementById(id);
+const outs = {
+  n2: $('o-n2'), theta: $('o-theta'), caus: $('o-caus'),
+  dn: $('o-dn'), film: $('o-film'), trans: $('o-trans'), path: $('o-path'),
+};
+let lastRead = 0;
+function updateReadouts() {
+  const now = performance.now();
+  if (now - lastRead < 120) return;
+  lastRead = now;
+  const j = journeyNow();
+  const win = c => Math.min(1, Math.max(0, 1 - Math.abs(j - c) / 1.15));
+  const A = win(5.5), D = win(3.5), C = win(2.5), F = win(4.5);
+  const n2 = 1.458 + 0.06 * A;
+  if (outs.n2) outs.n2.textContent = n2.toFixed(3);
+  if (outs.theta) outs.theta.textContent =
+    (Math.asin(Math.sin(35 * Math.PI / 180) / n2) * 180 / Math.PI).toFixed(1) + '°';
+  if (outs.caus) outs.caus.textContent = (0.25 + 1.6 * C).toFixed(2) + '×';
+  if (outs.dn) outs.dn.textContent = (0.0071 + 0.0142 * D).toFixed(4);
+  if (outs.film) outs.film.textContent = F > 0.02
+    ? Math.round(180 + 420 * F) + ' nm' : '- nm';
+  if (outs.trans) outs.trans.textContent = Math.round(Math.exp(-A * 1.9) * 100) + '%';
+  if (outs.path) outs.path.textContent = (A * 8.4).toFixed(1) + ' mm';
+}
+
+/* ---------- go ---------- */
+(async () => {
+  try {
+    if (await startWebGPU()) return;
+  } catch (e) { console.warn('WebGPU failed, falling back:', e); }
+  try {
+    if (startWebGL2()) return;
+  } catch (e) { console.warn('WebGL2 failed:', e); }
+  const chip = document.getElementById('gpu-chip');
+  if (chip) chip.textContent = 'no gpu · static field notes';
+})();
+</script>
+</body>
+</html>

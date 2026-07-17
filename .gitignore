@@ -33,3 +33,4 @@ public/assets/video/
 !.yarn/sdks
 !.yarn/versions
 .pnp.*
+.gstack/

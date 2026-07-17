@@ -121,14 +121,19 @@ const structuredData = {
       set:html={JSON.stringify(structuredData)}
     />
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Fonts (self-hosted, declared in styles/base.css) -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap"
       rel="preload"
-      as="style"
-      onload="this.onload=null; this.rel='stylesheet';"
+      href="/fonts/inter-var-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/space-grotesk-var-latin.woff2"
+      as="font"
+      type="font/woff2"
       crossorigin
     />
 

@@ -73,7 +73,7 @@ The dashboard is built from the files written during each run. It shows what ran
 
 The prototype was never meant to prove that an agent can pick stocks. It tested whether autonomous research could remain inspectable enough to challenge, reject, or stop its own output.
 
-Backtests can flatter weak ideas, and in European small caps liquidity often matters more than signal quality. Data coverage, corporate actions, and survivorship bias limit what any result can prove. Paper trading does not solve those problems; its value here was narrower — exposing when an idea was too weak, too stale, or too convenient to trust.
+Backtests can flatter weak ideas, and in European small caps liquidity often matters more than signal quality. Data coverage, corporate actions, and survivorship bias limit what any result can prove. Paper trading does not solve those problems; its value here was narrower - exposing when an idea was too weak, too stale, or too convenient to trust.
 
 A large refactor made the cost of extending the original architecture clear. I retired the prototype and carried its artifact model, diagnostics, and approval gates into a cleaner second build.
 

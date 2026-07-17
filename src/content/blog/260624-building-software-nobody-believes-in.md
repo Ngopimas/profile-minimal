@@ -1,6 +1,6 @@
 ---
 author: Romain C.
-pubDatetime: 2026-07-24T10:00:00Z
+pubDatetime: 2026-06-24T10:00:00Z
 title: "Build software nobody believes in"
 slug: building-software-nobody-believes-in
 featured: false
