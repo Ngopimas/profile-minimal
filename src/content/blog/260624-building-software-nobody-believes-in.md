@@ -4,7 +4,7 @@ pubDatetime: 2026-06-24T10:00:00Z
 title: "Build software nobody believes in"
 slug: building-software-nobody-believes-in
 featured: false
-draft: false
+draft: true
 tags: ["design", "estimation", "uncertainty", "software-engineering", "ai"]
 description: "The best interface is honest about what it does not know. Trust comes from acknowledged pretense."
 ---

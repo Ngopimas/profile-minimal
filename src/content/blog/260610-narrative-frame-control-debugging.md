@@ -4,7 +4,7 @@ pubDatetime: 2026-06-10T10:00:00Z
 title: "The bug is not the bug"
 slug: narrative-frame-control-debugging
 featured: false
-draft: false
+draft: true
 tags: ["debugging", "root-cause-analysis", "incident-response", "software-engineering"]
 description: "Whoever defines the bug controls the investigation. The first plausible explanation is a trap."
 ---
