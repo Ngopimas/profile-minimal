@@ -171,9 +171,7 @@ export default async () => {
       width: 1200,
       height: 630,
       embedFont: true,
-      fonts: (await loadGoogleFonts(
-        "PORTFOLIOView work→" + SITE.title + SITE.desc + SITE.website + "RC"
-      )) as FontOptions[],
+      fonts: (await loadGoogleFonts()) as FontOptions[],
     }
   );
 };

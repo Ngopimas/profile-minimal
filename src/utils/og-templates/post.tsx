@@ -1,6 +1,5 @@
 import satori from "satori";
 import type { CollectionEntry } from "astro:content";
-import { SITE } from "@config";
 import loadGoogleFonts, { type FontOptions } from "../loadGoogleFont";
 
 export default async (post: CollectionEntry<"blog">) => {
@@ -165,13 +164,7 @@ export default async (post: CollectionEntry<"blog">) => {
       width: 1200,
       height: 630,
       embedFont: true,
-      fonts: (await loadGoogleFonts(
-        "ARTICLERead article→" +
-          post.data.title +
-          post.data.author +
-          SITE.website +
-          pubDate
-      )) as FontOptions[],
+      fonts: (await loadGoogleFonts()) as FontOptions[],
     }
   );
 };

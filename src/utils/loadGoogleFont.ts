@@ -18,9 +18,7 @@ async function loadLocalFont(file: string): Promise<ArrayBuffer> {
   return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
 }
 
-async function loadGoogleFonts(
-  _text: string
-): Promise<
+async function loadGoogleFonts(): Promise<
   Array<{ name: string; data: ArrayBuffer; weight: number; style: string }>
 > {
   const fontsConfig = [
