@@ -108,8 +108,12 @@ The shader is only one consumer of the scroll number. The other is CSS itself, a
 The chapter rail on the right highlights the active chapter with zero JavaScript. Each chapter declares a named view timeline, the body hoists the names into scope, and the fixed rail labels animate against them:
 
 ```css
-body { timeline-scope: --ch1, --ch2, --ch3, --ch4, --ch5; }
-#c1  { view-timeline: --ch1; }
+body {
+  timeline-scope: --ch1, --ch2, --ch3, --ch4, --ch5;
+}
+#c1 {
+  view-timeline: --ch1;
+}
 #rail a[href="#c1"] {
   animation: rail-on linear both;
   animation-timeline: --ch1;
@@ -119,11 +123,15 @@ body { timeline-scope: --ch1, --ch2, --ch3, --ch4, --ch5; }
 For contrast, here is the version of that rail I have been writing since roughly 2019:
 
 ```js
-const io = new IntersectionObserver(entries => {
-  for (const e of entries)
-    document.querySelector(`#rail a[href="#${e.target.id}"]`)
-      .classList.toggle('on', e.isIntersecting);
-}, { rootMargin: '-40% 0px -40% 0px' });
+const io = new IntersectionObserver(
+  entries => {
+    for (const e of entries)
+      document
+        .querySelector(`#rail a[href="#${e.target.id}"]`)
+        .classList.toggle("on", e.isIntersecting);
+  },
+  { rootMargin: "-40% 0px -40% 0px" }
+);
 sections.forEach(s => io.observe(s));
 ```
 

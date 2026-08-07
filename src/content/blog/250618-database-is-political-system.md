@@ -5,7 +5,14 @@ title: "Your database is a political system"
 slug: database-is-political-system
 featured: false
 draft: false
-tags: ["database", "postgresql", "schema-design", "software-engineering", "governance"]
+tags:
+  [
+    "database",
+    "postgresql",
+    "schema-design",
+    "software-engineering",
+    "governance",
+  ]
 description: "Constitution, legislature, judiciary, black market. Everyone sees it. Nobody names it."
 ---
 
