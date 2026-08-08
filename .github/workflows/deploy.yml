@@ -10,9 +10,11 @@ permissions:
   pages: write
   id-token: write
 
+# A newer master build supersedes any queued or running Pages deployment.
+# This prevents an orphaned deployment from blocking the queue indefinitely.
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
