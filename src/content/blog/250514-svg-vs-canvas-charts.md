@@ -64,13 +64,13 @@ Each circle is a DOM node. The browser has to:
 
 At 3,200 marks on mobile:
 
-| Metric | Desktop | Mobile |
-|--------|---------|--------|
-| Style Recalc | 380ms | 2,100ms |
-| Layout | 120ms | 840ms |
-| Paint | 80ms | 420ms |
-| **Total blocking** | **580ms** | **3,360ms** |
-| **Time to interaction** | 1.2s | 8s |
+| Metric                  | Desktop   | Mobile      |
+| ----------------------- | --------- | ----------- |
+| Style Recalc            | 380ms     | 2,100ms     |
+| Layout                  | 120ms     | 840ms       |
+| Paint                   | 80ms      | 420ms       |
+| **Total blocking**      | **580ms** | **3,360ms** |
+| **Time to interaction** | 1.2s      | 8s          |
 
 The expensive thing is not the number of rows in your dataset. It is the number of visible DOM nodes the browser has to manage.
 
@@ -99,15 +99,15 @@ Canvas is not the advanced option. It is the lower-level option.
 
 In practice:
 
-| Feature | SVG | Canvas |
-|---------|-----|--------|
-| DOM nodes (5K marks) | 5,000 | 1 |
-| Style recalc (mobile) | 2,100ms | 8ms |
-| Per-mark interaction | Native (`event.target`) | Manual hit testing |
-| Accessibility | Native ARIA | Manual overlays |
-| Testability | `data-testid` works | Pixel diffing |
-| Inspectable | Yes | No |
-| Print-friendly | Yes | Rasterized |
+| Feature               | SVG                     | Canvas             |
+| --------------------- | ----------------------- | ------------------ |
+| DOM nodes (5K marks)  | 5,000                   | 1                  |
+| Style recalc (mobile) | 2,100ms                 | 8ms                |
+| Per-mark interaction  | Native (`event.target`) | Manual hit testing |
+| Accessibility         | Native ARIA             | Manual overlays    |
+| Testability           | `data-testid` works     | Pixel diffing      |
+| Inspectable           | Yes                     | No                 |
+| Print-friendly        | Yes                     | Rasterized         |
 
 Use Canvas when the density or redraw pressure justifies the lower-level work. Do not use it because the demo looked smooth.
 
@@ -126,27 +126,33 @@ I have debugged enough of these to recognize the patterns.
 Score your chart (add points as you go):
 
 **Mark density:**
+
 - < 500 marks → +3 SVG
 - 500-5K marks → +1 either (depends on other factors)
 - \> 5K marks → +3 Canvas
 
 **Interaction:**
+
 - Per-mark events (hover each bar, click individual points) → +2 SVG
 - Global interaction only (crosshair, zoom, brush) → +2 Canvas
 
 **Annotations:**
+
 - Heavy labeling, event markers, explanatory text → +2 SVG
 - Just raw data, no labels → +1 Canvas
 
 **Update frequency:**
+
 - Static or < 1 update/sec → +1 SVG
 - \> 5 updates/sec → +2 Canvas
 
 **Context:**
+
 - Public site, needs accessibility → +2 SVG
 - Internal tool, no compliance requirements → neutral
 
 **Result:**
+
 - SVG score ≥ 6: use SVG
 - Canvas score ≥ 6: use Canvas
 - Tied or close: use hybrid pattern
@@ -173,7 +179,7 @@ ctx.stroke();
 
 // SVG for annotations and semantic markers
 <svg style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none' }}>
-  <line x1={thresholdX} y1={0} x2={thresholdX} y2={height} 
+  <line x1={thresholdX} y1={0} x2={thresholdX} y2={height}
         stroke="red" strokeWidth={2} strokeDasharray="5,5" />
   <text x={thresholdX + 5} y={15} fill="red">Earnings date</text>
   <circle cx={selectedX} cy={selectedY} r={5} fill="orange" />
