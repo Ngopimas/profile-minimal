@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The browser enforces the claim: no script may run on this page. -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'none'" />
+    <meta name="theme-color" content="#f0ebe0" />
+    <title>The listener - NOSCRIPT 01</title>
+    <meta
+      name="description"
+      content="What replaced the scroll listener: scroll and view timelines, scroll-state queries and CSS carousels, each one running on the page that describes it."
+    />
+    <link
+      rel="preload"
+      href="../fonts/clash-display-600.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="../fonts/general-sans-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="zine.css" />
+  </head>
+  <body class="p-scroll">
+    <a class="skip" href="#main">Skip to the text</a>
+    <header class="mast">
+      <a class="mark" href="index.html" aria-label="NOSCRIPT, back to the cover"
+        >NO<b>SCRIPT</b></a
+      >
+      <nav aria-label="Pages">
+        <ol>
+          <li>
+            <a href="scroll.html" aria-current="page"
+              ><span>01</span>Listener</a
+            >
+          </li>
+          <li>
+            <a href="state.html"><span>02</span>Handler</a>
+          </li>
+          <li>
+            <a href="layer.html"><span>03</span>Overlay</a>
+          </li>
+          <li>
+            <a href="count.html"><span>04</span>Loop</a>
+          </li>
+          <li>
+            <a href="route.html"><span>05</span>Router</a>
+          </li>
+        </ol>
+      </nav>
+    </header>
+    <main id="main">
+      <header class="plate">
+        <p class="folio" aria-hidden="true">01</p>
+        <h1><span class="vh">Page 01: </span>The listener</h1>
+        <p class="kills">
+          Retires <s>addEventListener("scroll")</s> and the
+          <s>IntersectionObserver</s> sentinel
+        </p>
+      </header>
+
+      <div class="progress" aria-hidden="true"></div>
+      <p class="lede">
+        For about fifteen years, anything that moved when you scrolled was a
+        function that woke up on every scroll event, read a number and wrote a
+        style.
+      </p>
+      <p>
+        It worked, at a price. The handler ran on the main thread, the same one
+        that was busy laying out the page, so the effect trailed behind your
+        finger whenever the page had other work to do. Libraries grew up around
+        throttling it. IntersectionObserver later took over the &ldquo;is this
+        on screen yet&rdquo; half of the job, and the rest stayed where it was.
+      </p>
+      <p>
+        The replacement is to stop asking. A CSS animation normally runs against
+        a clock. Since Chrome 115, Safari 26 and Firefox 159 it can run against
+        a scroll position instead. The red bar at the top of this page is one
+        such animation, and the percentage at its end is the same animation
+        printed as a number.
+      </p>
+
+      <div class="swap wide">
+        <figure class="was">
+          <figcaption>
+            <span>Was</span><span>runs on every scroll event</span>
+          </figcaption>
+          <pre><code>let ticking = false;
+addEventListener("scroll", () =&gt; {
+  if (ticking) return;
+  ticking = true;
+  requestAnimationFrame(() =&gt; {
+    const max = document.documentElement
+      .scrollHeight - innerHeight;
+    bar.style.width =
+      (scrollY / max) * 100 + "%";
+    ticking = false;
+  });
+}, { passive: true });</code></pre>
+        </figure>
+        <figure class="now">
+          <figcaption><span>Now</span><span>runs nothing</span></figcaption>
+          <pre><code>.progress {
+  animation: read linear both;
+  animation-timeline: scroll(root);
+}
+@keyframes read {
+  from { --pct: 0 }
+  to   { --pct: 100 }
+}</code></pre>
+        </figure>
+      </div>
+      <p>
+        One caveat, since this page is supposed to be honest. A scroll-driven
+        animation of <code>transform</code> or <code>opacity</code> can be
+        handed to the compositor and stay smooth while the main thread is
+        blocked. The bar animates a custom property so that it can print its own
+        value, and custom properties are computed on the main thread. It costs
+        nothing you would notice here, but it is not the fast path.
+      </p>
+
+      <h2>A drum geared to the page</h2>
+      <p class="if-sda if-yes">
+        The next screen holds twelve lines of code on the faces of a drum. It
+        stays where it is while you scroll and turns by exactly as much as you
+        have moved: 330 degrees from one end of the section to the other. Stop
+        and it stops. Scroll back up and the lines come back the way they went.
+        The first six faces are the old listener. Keep going and the drum
+        carries them out of sight and brings up the CSS that replaced them,
+        which is also the CSS that is turning the drum.
+      </p>
+      <p class="if-sda if-no">
+        In a browser with scroll-driven animations, and with no request to
+        reduce motion, the twelve lines below sit on the faces of a drum that
+        turns as you scroll. Here they are as a plain listing instead: the old
+        listener, struck out, and then the CSS that replaced it.
+      </p>
+
+      <section
+        class="pin wide"
+        aria-label="Specimen: twelve lines of code on a drum that turns with the scroll position"
+      >
+        <div class="pin-stick">
+          <div class="pin-stage">
+            <ol class="drum">
+              <li class="was">// the old way: wake up on every event</li>
+              <li class="was">addEventListener("scroll", () =&gt; {</li>
+              <li class="was in1">const t = scrollY / (h - innerHeight);</li>
+              <li class="was in1">drum.style.transform =</li>
+              <li class="was in2">"rotateX(" + t * 330 + "deg)";</li>
+              <li class="was">});</li>
+              <li class="now">/* the new way: say it once */</li>
+              <li class="now">.drum {</li>
+              <li class="now in1">animation: turn linear both;</li>
+              <li class="now in1">animation-timeline: --pin;</li>
+              <li class="now">}</li>
+              <li class="now">@keyframes turn { to { --turn: 330deg } }</li>
+            </ol>
+          </div>
+          <p class="pin-meta readout" aria-hidden="true">
+            through this section <b class="p"></b> &middot; drum at
+            <b class="a"></b>
+          </p>
+        </div>
+      </section>
+
+      <p class="caption">
+        <b>What turned it.</b> The tall section declares
+        <code>view-timeline: --pin</code>. The drum inside it names that
+        timeline, and its keyframes run from 0 to 330 degrees. Each face is
+        placed with <code>rotateX()</code> and pushed out by the drum's radius,
+        which the browser derives from the face height with <code>tan()</code>.
+        The two numbers under the drum are a second animation on the same
+        timeline, read out through a CSS counter.
+      </p>
+
+      <section class="stuck full" aria-labelledby="stuck-h">
+        <div class="bar wide">
+          <div class="bar-in">
+            <span>Section: sticky things</span>
+            <span class="flag" aria-hidden="true"></span>
+          </div>
+        </div>
+        <h2 id="stuck-h">Am I stuck?</h2>
+        <p>
+          A sticky header has always been CSS. Knowing that it is currently
+          stuck, so that it can shrink or grow a shadow, was not. The usual
+          trick was a one-pixel sentinel element placed just above the header,
+          and an IntersectionObserver watching for it to leave the screen.
+          Scroll-state container queries ask the question directly.
+        </p>
+        <p class="if-state if-yes">
+          The bar above this paragraph turns dark and reports &ldquo;stuck:
+          yes&rdquo; for as long as it is pinned to the top of your window.
+          Chrome has had this since version 133. Safari and Firefox have not
+          shipped it.
+        </p>
+        <p class="if-state if-no">
+          In this browser the bar above sticks, but cannot tell that it is
+          stuck, and says so. Chrome 133 and later can. Nothing is broken: the
+          bar is as sticky as it ever was.
+        </p>
+        <div class="swap wide">
+          <figure class="was">
+            <figcaption>
+              <span>Was</span><span>an extra element to watch</span>
+            </figcaption>
+            <pre><code>const io = new IntersectionObserver(
+  ([entry]) =&gt; bar.classList.toggle(
+    "stuck", !entry.isIntersecting));
+io.observe(sentinel);</code></pre>
+          </figure>
+          <figure class="now">
+            <figcaption><span>Now</span><span>a question</span></figcaption>
+            <pre><code>.bar {
+  position: sticky; top: 0;
+  container-type: scroll-state;
+}
+@container scroll-state(stuck: top) {
+  .bar-in { background: var(--ink); }
+}</code></pre>
+          </figure>
+        </div>
+
+        <h2>A carousel that builds its own controls</h2>
+        <p>
+          Scroll listeners had smaller jobs too. Five of them are on the cards
+          below, which are a specimen of the fifth.
+        </p>
+        <div class="reel-wrap wide">
+          <ul
+            class="reel"
+            tabindex="0"
+            aria-label="Five more scroll jobs that no longer need a script"
+          >
+            <li>
+              <span class="tag">1 of 5</span>
+              <h3>Reveal on enter</h3>
+              <p>
+                Was an IntersectionObserver adding a class. Now a keyframe
+                animation with <code>animation-timeline: view()</code> and a
+                range of <code>entry</code>.
+              </p>
+            </li>
+            <li>
+              <span class="tag">2 of 5</span>
+              <h3>Parallax</h3>
+              <p>
+                Was a scroll handler writing <code>translateY</code> at a
+                fraction of the scroll offset. Now two layers on one view
+                timeline with different keyframes.
+              </p>
+            </li>
+            <li>
+              <span class="tag">3 of 5</span>
+              <h3>Snap to slide</h3>
+              <p>
+                Was touch handlers and hand-written momentum. Has been
+                <code>scroll-snap-type</code> for years, in every browser, and
+                is what this list is made of.
+              </p>
+            </li>
+            <li>
+              <span class="tag">4 of 5</span>
+              <h3>Scroll-spy</h3>
+              <p>
+                Was a table of <code>offsetTop</code> values compared on every
+                scroll. Is now <code>:target-current</code>, in Chrome only so
+                far.
+              </p>
+            </li>
+            <li>
+              <span class="tag">5 of 5</span>
+              <h3>Dots and arrows</h3>
+              <p>
+                Was the rest of the carousel library. Is now
+                <code>::scroll-marker</code> and <code>::scroll-button()</code>,
+                in Chrome 135 and later.
+              </p>
+            </li>
+          </ul>
+        </div>
+        <p class="caption if-marker if-yes">
+          <b>The arrows and dots are not in the HTML.</b> The stylesheet asks
+          for them and the browser builds them, wires them to the list, disables
+          an arrow at either end and moves the red dot as you swipe. They are
+          real controls: <kbd>Tab</kbd> reaches them.
+        </p>
+        <p class="caption if-marker if-no">
+          <b>A scroll-snap list.</b> Swipe it, or focus it and use the arrow
+          keys. In Chrome 135 and later the stylesheet also asks the browser for
+          arrows and dots, and gets them. Safari and Firefox have not shipped
+          that part, so here the scrollbar does the job.
+        </p>
+      </section>
+      <nav class="turn" aria-label="Previous and next page">
+        <a class="prev" href="index.html"
+          ><small>&larr; Previous</small><span>Cover</span></a
+        >
+        <a class="next" href="state.html"
+          ><small>Next &rarr;</small><span>02 The handler</span></a
+        >
+      </nav>
+    </main>
+    <footer class="proof">
+      <p>
+        <b>Proof.</b> Script elements in this document:
+        <span class="count">0</span>. Canvas elements: 0. Event handler
+        attributes: 0. The stylesheet checks the first number with
+        <code>:root:has(script)</code> and strikes it out if it is ever wrong.
+        This page also carries a Content-Security-Policy of
+        <code>script-src 'none'</code>, so your browser would refuse to run a
+        script even if one were here.
+      </p>
+      <p>
+        Do not take the page's word for it. View the source (<kbd>Ctrl</kbd>
+        <kbd>U</kbd>, or <kbd>&#8984;</kbd> <kbd>&#8997;</kbd> <kbd>U</kbd>) and
+        search for &ldquo;&lt;script&rdquo;, or switch JavaScript off and
+        reload: nothing will change. Everything that moves is in
+        <a href="zine.css">one unminified stylesheet</a>.
+      </p>
+      <p>
+        NOSCRIPT, a rendering experiment by Romain C., November 2026.
+        <a href="index.html#tests">What your browser supports</a> &middot;
+        <a href="index.html#limits">What this cannot do</a>
+      </p>
+    </footer>
+  </body>
+</html>

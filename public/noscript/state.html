@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The browser enforces the claim: no script may run on this page. -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'none'" />
+    <meta name="theme-color" content="#f0ebe0" />
+    <title>The handler - NOSCRIPT 02</title>
+    <meta
+      name="description"
+      content="What replaced the click handler: :has(), checked radios, CSS counters and named details elements, shown as a working combination lock."
+    />
+    <link
+      rel="preload"
+      href="../fonts/clash-display-600.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="../fonts/general-sans-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="zine.css" />
+  </head>
+  <body class="p-state">
+    <a class="skip" href="#main">Skip to the text</a>
+    <header class="mast">
+      <a class="mark" href="index.html" aria-label="NOSCRIPT, back to the cover"
+        >NO<b>SCRIPT</b></a
+      >
+      <nav aria-label="Pages">
+        <ol>
+          <li>
+            <a href="scroll.html"><span>01</span>Listener</a>
+          </li>
+          <li>
+            <a href="state.html" aria-current="page"><span>02</span>Handler</a>
+          </li>
+          <li>
+            <a href="layer.html"><span>03</span>Overlay</a>
+          </li>
+          <li>
+            <a href="count.html"><span>04</span>Loop</a>
+          </li>
+          <li>
+            <a href="route.html"><span>05</span>Router</a>
+          </li>
+        </ol>
+      </nav>
+    </header>
+    <main id="main">
+      <header class="plate">
+        <p class="folio" aria-hidden="true">02</p>
+        <h1><span class="vh">Page 02: </span>The handler</h1>
+        <p class="kills">
+          Retires <s>classList.toggle()</s> and the click handler wrapped around
+          it
+        </p>
+      </header>
+
+      <p class="lede">
+        Most interface code was never logic. It was a click handler whose whole
+        job was to put a class on some other element.
+      </p>
+      <p>
+        Open the menu: toggle a class. Mark the row as selected: toggle a class.
+        Show the error: add a class, and remember to take it off again. The
+        state lived in JavaScript variables and was copied into the document by
+        hand, which is how the two came to disagree.
+      </p>
+      <p>
+        The document has state of its own. A checkbox is checked or it is not. A
+        details element is open or closed, a field is valid or invalid, the URL
+        has a fragment or it does not. What was missing was a way for one
+        element's state to style a different element somewhere else on the page.
+        <code>:has()</code> is that way, and it has been in every engine since
+        Firefox 121, at the end of 2023.
+      </p>
+
+      <div class="swap wide">
+        <figure class="was">
+          <figcaption>
+            <span>Was</span><span>state kept in two places</span>
+          </figcaption>
+          <pre><code>input.addEventListener("change", () =&gt; {
+  card.classList.toggle(
+    "is-selected", input.checked);
+  updateCount();
+});</code></pre>
+        </figure>
+        <figure class="now">
+          <figcaption>
+            <span>Now</span><span>state kept in one</span>
+          </figcaption>
+          <pre><code>.card:has(input:checked) {
+  border-color: var(--red);
+}</code></pre>
+        </figure>
+      </div>
+
+      <h2>A lock with a thousand states</h2>
+      <p class="if-has if-yes">
+        Three dials, ten digits each. They are radio buttons, so you can click
+        the digit above or below the one that is showing, or
+        <kbd>Tab</kbd> to a dial and use the arrow keys. Each drum turns because
+        its own checked radio tells it to. The readout is assembled by CSS
+        counters from whichever three radios are checked, and the stylesheet
+        knows a dozen HTTP status codes by name. One of them opens the door. It
+        is the one every request hopes for.
+      </p>
+      <p class="if-has if-no">
+        In a browser with <code>:has()</code>, these thirty radio buttons are
+        the faces of three drums that turn as you choose, with a readout and a
+        door that opens on the right code. Without it you get the form
+        underneath, which still works as a form, and the note that was behind
+        the door.
+      </p>
+
+      <figure class="specimen wide">
+        <div
+          class="lock"
+          role="group"
+          aria-label="Specimen: a three-digit combination lock made of radio buttons"
+        >
+          <div class="dials">
+            <fieldset class="dial dial-a">
+              <legend>First digit</legend>
+              <div class="drum">
+                <label
+                  ><input type="radio" name="a" id="a0" value="0" />0</label
+                >
+                <label
+                  ><input type="radio" name="a" id="a1" value="1" />1</label
+                >
+                <label
+                  ><input type="radio" name="a" id="a2" value="2" />2</label
+                >
+                <label
+                  ><input type="radio" name="a" id="a3" value="3" />3</label
+                >
+                <label
+                  ><input
+                    type="radio"
+                    name="a"
+                    id="a4"
+                    value="4"
+                    checked
+                  />4</label
+                >
+                <label
+                  ><input type="radio" name="a" id="a5" value="5" />5</label
+                >
+                <label
+                  ><input type="radio" name="a" id="a6" value="6" />6</label
+                >
+                <label
+                  ><input type="radio" name="a" id="a7" value="7" />7</label
+                >
+                <label
+                  ><input type="radio" name="a" id="a8" value="8" />8</label
+                >
+                <label
+                  ><input type="radio" name="a" id="a9" value="9" />9</label
+                >
+              </div>
+            </fieldset>
+            <fieldset class="dial dial-b">
+              <legend>Second digit</legend>
+              <div class="drum">
+                <label
+                  ><input
+                    type="radio"
+                    name="b"
+                    id="b0"
+                    value="0"
+                    checked
+                  />0</label
+                >
+                <label
+                  ><input type="radio" name="b" id="b1" value="1" />1</label
+                >
+                <label
+                  ><input type="radio" name="b" id="b2" value="2" />2</label
+                >
+                <label
+                  ><input type="radio" name="b" id="b3" value="3" />3</label
+                >
+                <label
+                  ><input type="radio" name="b" id="b4" value="4" />4</label
+                >
+                <label
+                  ><input type="radio" name="b" id="b5" value="5" />5</label
+                >
+                <label
+                  ><input type="radio" name="b" id="b6" value="6" />6</label
+                >
+                <label
+                  ><input type="radio" name="b" id="b7" value="7" />7</label
+                >
+                <label
+                  ><input type="radio" name="b" id="b8" value="8" />8</label
+                >
+                <label
+                  ><input type="radio" name="b" id="b9" value="9" />9</label
+                >
+              </div>
+            </fieldset>
+            <fieldset class="dial dial-c">
+              <legend>Third digit</legend>
+              <div class="drum">
+                <label
+                  ><input type="radio" name="c" id="c0" value="0" />0</label
+                >
+                <label
+                  ><input type="radio" name="c" id="c1" value="1" />1</label
+                >
+                <label
+                  ><input type="radio" name="c" id="c2" value="2" />2</label
+                >
+                <label
+                  ><input type="radio" name="c" id="c3" value="3" />3</label
+                >
+                <label
+                  ><input
+                    type="radio"
+                    name="c"
+                    id="c4"
+                    value="4"
+                    checked
+                  />4</label
+                >
+                <label
+                  ><input type="radio" name="c" id="c5" value="5" />5</label
+                >
+                <label
+                  ><input type="radio" name="c" id="c6" value="6" />6</label
+                >
+                <label
+                  ><input type="radio" name="c" id="c7" value="7" />7</label
+                >
+                <label
+                  ><input type="radio" name="c" id="c8" value="8" />8</label
+                >
+                <label
+                  ><input type="radio" name="c" id="c9" value="9" />9</label
+                >
+              </div>
+            </fieldset>
+          </div>
+          <div class="response">
+            <p class="status if-has if-yes"></p>
+            <p class="readout if-has if-yes">
+              Dials in the right place: <span class="tally"></span>
+            </p>
+            <div class="vault">
+              <p class="vault-note">
+                <b>200 OK.</b> You have just driven a machine with a thousand
+                states. No handler ran, because there is none to run. The catch
+                is on the cover, under &ldquo;What this cannot do&rdquo;: leave
+                this page and the dials forget.
+              </p>
+              <div class="vault-door" aria-hidden="true">
+                <span>Locked</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption>
+          <b>How it works.</b> Ten rules of the form
+          <code>.drum:has(> :nth-child(5) > :checked)</code> set how far a drum
+          has turned. The door opens on
+          <code>.lock:has(#a2:checked):has(#b0:checked):has(#c0:checked)</code>.
+          The red digits are <code>counter(a) counter(b) counter(c)</code>,
+          where each checked radio adds its own value to its dial's counter.
+        </figcaption>
+      </figure>
+
+      <h2>The accordion</h2>
+      <p>
+        The accordion was the first widget many of us ever downloaded. It needed
+        JavaScript twice: once so that opening a panel closed the others, and
+        once to animate a height from zero to &ldquo;whatever the content
+        needs&rdquo;, a value CSS refused to interpolate.
+      </p>
+      <p>
+        The first job now belongs to HTML. Give several details elements the
+        same <code>name</code> and the browser keeps one open at a time, in
+        every engine since Firefox 130. The second job is
+        <code>interpolate-size: allow-keywords</code>, which lets a transition
+        end at <code>auto</code>.
+        <span class="if-size if-yes"
+          >Your browser has it, so the panels below slide.</span
+        >
+        <span class="if-size if-no"
+          >Your browser does not have it yet (only Chrome does, since 129), so
+          the panels below snap. They still open, still close each other and
+          still work from the keyboard.</span
+        >
+      </p>
+      <p>
+        The panels are about the other kinds of state a document keeps for you.
+      </p>
+
+      <div class="fold">
+        <details name="kinds" open>
+          <summary>Open is state <code>details[open]</code></summary>
+          <p>
+            Details elements, dialogs and popovers all expose whether they are
+            open. This panel is turning its own plus sign into a cross with that
+            selector, and its neighbours closed when you opened it because they
+            share a <code>name</code> attribute.
+          </p>
+        </details>
+        <details name="kinds">
+          <summary>The URL is state <code>:target</code></summary>
+          <p>
+            A link to <code>#something</code> sets it and the back button unsets
+            it. It is the only CSS state that survives a reload and can be sent
+            to someone else. Lightboxes and tab sets were built on it long
+            before <code>:has()</code> existed.
+          </p>
+        </details>
+        <details name="kinds">
+          <summary>Validity is state <code>:user-invalid</code></summary>
+          <p>
+            A field knows whether its value passes its own constraints.
+            <code>:user-invalid</code> waits until the reader has finished with
+            the field before it says so, which used to take a blur handler and a
+            &ldquo;touched&rdquo; flag for every input.
+          </p>
+        </details>
+        <details name="kinds">
+          <summary>Focus is state <code>:focus-within</code></summary>
+          <p>
+            This was the first selector that let a parent react to a child,
+            years before <code>:has()</code>. A menu that stays open while the
+            keyboard is inside it needs nothing else. The dials above borrow the
+            idea: the radio that has focus is invisible, so its dial draws the
+            focus ring for it.
+          </p>
+        </details>
+        <details name="kinds">
+          <summary>
+            Quantity is state <code>:has(> :nth-child(5))</code>
+          </summary>
+          <p>
+            That selector matches a list with five or more items. A layout can
+            now change with the amount of content it was given, which used to
+            mean counting children in a script and writing the answer into a
+            class name.
+          </p>
+        </details>
+      </div>
+      <nav class="turn" aria-label="Previous and next page">
+        <a class="prev" href="scroll.html"
+          ><small>&larr; Previous</small><span>01 The listener</span></a
+        >
+        <a class="next" href="layer.html"
+          ><small>Next &rarr;</small><span>03 The overlay</span></a
+        >
+      </nav>
+    </main>
+    <footer class="proof">
+      <p>
+        <b>Proof.</b> Script elements in this document:
+        <span class="count">0</span>. Canvas elements: 0. Event handler
+        attributes: 0. The stylesheet checks the first number with
+        <code>:root:has(script)</code> and strikes it out if it is ever wrong.
+        This page also carries a Content-Security-Policy of
+        <code>script-src 'none'</code>, so your browser would refuse to run a
+        script even if one were here.
+      </p>
+      <p>
+        Do not take the page's word for it. View the source (<kbd>Ctrl</kbd>
+        <kbd>U</kbd>, or <kbd>&#8984;</kbd> <kbd>&#8997;</kbd> <kbd>U</kbd>) and
+        search for &ldquo;&lt;script&rdquo;, or switch JavaScript off and
+        reload: nothing will change. Everything that moves is in
+        <a href="zine.css">one unminified stylesheet</a>.
+      </p>
+      <p>
+        NOSCRIPT, a rendering experiment by Romain C., November 2026.
+        <a href="index.html#tests">What your browser supports</a> &middot;
+        <a href="index.html#limits">What this cannot do</a>
+      </p>
+    </footer>
+  </body>
+</html>

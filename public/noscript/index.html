@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The browser enforces the claim: no script may run on this page. -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'none'" />
+    <meta name="theme-color" content="#f0ebe0" />
+    <title>NOSCRIPT - nothing on this page is JavaScript</title>
+    <meta
+      name="description"
+      content="A zine in six documents with real 3D, choreography and state, and not one line of JavaScript. Each page does a job the web used to hand to a script."
+    />
+    <link
+      rel="preload"
+      href="../fonts/clash-display-600.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="../fonts/general-sans-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="zine.css" />
+  </head>
+  <body class="p-cover">
+    <a class="skip" href="#main">Skip to the text</a>
+    <header class="mast">
+      <a
+        class="mark"
+        href="index.html"
+        aria-current="page"
+        aria-label="NOSCRIPT, the cover"
+        >NO<b>SCRIPT</b></a
+      >
+      <span>A zine in six documents &middot; November 2026</span>
+    </header>
+    <main id="main">
+      <header class="cover">
+        <h1>Nothing on this page is <em>JavaScript.</em></h1>
+        <p class="lede">
+          NOSCRIPT is a small zine. It has sheets that stack in three
+          dimensions, a drum that turns as you read, a combination lock, menus
+          that climb out of the boxes that clip them, and pages that turn. It
+          has no script element, no canvas and no event handler.
+        </p>
+      </header>
+
+      <p>
+        Each of its five pages is about one job the web used to hand to
+        JavaScript, and each page does that job in front of you without it. The
+        code that retired is printed next to the code that replaced it. Where
+        your browser cannot run a specimen yet, the page says so and shows you
+        the plain version instead, and it knows which is which without asking a
+        script.
+      </p>
+      <p>
+        This is the mirror of the three earlier rendering experiments on this
+        site. <a href="/lumen/index.html">LUMEN</a> and
+        <a href="/material/">MATERIAL</a> are each a shader behind a scrolling
+        essay, <a href="/quarto/index.html">QUARTO</a> draws its HTML into a
+        canvas, and none of them could exist without code. I wanted to know how
+        far the document gets by itself at the end of 2026. Further than I
+        expected, and not as far as the demos suggest. Both halves are in here.
+      </p>
+
+      <h2 id="contents">Contents</h2>
+      <figure class="specimen wide">
+        <div class="stack-stage">
+          <ol class="stack">
+            <li>
+              <a href="scroll.html"
+                ><span class="face"
+                  ><span class="num" aria-hidden="true">01</span
+                  ><span class="t"
+                    ><span class="vh">Page 01: </span>The listener</span
+                  ><span class="d">retires the scroll event</span></span
+                ></a
+              >
+            </li>
+            <li>
+              <a href="state.html"
+                ><span class="face"
+                  ><span class="num" aria-hidden="true">02</span
+                  ><span class="t"
+                    ><span class="vh">Page 02: </span>The handler</span
+                  ><span class="d">retires classList.toggle()</span></span
+                ></a
+              >
+            </li>
+            <li>
+              <a href="layer.html"
+                ><span class="face"
+                  ><span class="num" aria-hidden="true">03</span
+                  ><span class="t"
+                    ><span class="vh">Page 03: </span>The overlay</span
+                  ><span class="d">retires z-index: 99999</span></span
+                ></a
+              >
+            </li>
+            <li>
+              <a href="count.html"
+                ><span class="face"
+                  ><span class="num" aria-hidden="true">04</span
+                  ><span class="t"
+                    ><span class="vh">Page 04: </span>The loop</span
+                  ><span class="d"
+                    >retires forEach and Math.random()</span
+                  ></span
+                ></a
+              >
+            </li>
+            <li>
+              <a href="route.html"
+                ><span class="face"
+                  ><span class="num" aria-hidden="true">05</span
+                  ><span class="t"
+                    ><span class="vh">Page 05: </span>The router</span
+                  ><span class="d">retires pushState()</span></span
+                ></a
+              >
+            </li>
+          </ol>
+        </div>
+        <figcaption>
+          <b>Five sheets, five links.</b> On a wide screen they lie in a pile
+          that opens as it scrolls into view; pick a sheet up with the pointer
+          or the <kbd>Tab</kbd> key. Choose one and, if your browser animates
+          between documents, that sheet becomes the page.
+        </figcaption>
+      </figure>
+
+      <h2 id="tests">What your browser makes of it</h2>
+      <p>
+        The last column of this table is not written in the HTML. Each cell is
+        filled in by its own <code>@supports</code> rule, evaluated just now by
+        the browser you are holding. Two rows cannot be tested that way, and say
+        so.
+      </p>
+      <div
+        class="tests"
+        tabindex="0"
+        role="region"
+        aria-label="Feature support table"
+      >
+        <table>
+          <caption>
+            Version numbers are the first stable release with the feature, from
+            MDN's browser-compat-data as read on 20 November 2026. Firefox 161
+            was in beta that day. I ran the zine in Chrome 158 and Firefox 161;
+            the Safari column is from the data alone.
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Feature</th>
+              <th scope="col">Retires</th>
+              <th scope="col">Page</th>
+              <th scope="col">Chrome</th>
+              <th scope="col">Safari</th>
+              <th scope="col">Firefox</th>
+              <th scope="col">This browser</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Scroll and view timelines</th>
+              <td>scroll listeners</td>
+              <td class="pg"><a href="scroll.html">01</a></td>
+              <td class="v">115</td>
+              <td class="v">26</td>
+              <td class="v">159</td>
+              <td class="verdict"><i class="t-sda">untested</i></td>
+            </tr>
+            <tr>
+              <th scope="row">Scroll-state queries</th>
+              <td>a sentinel and an IntersectionObserver</td>
+              <td class="pg"><a href="scroll.html">01</a></td>
+              <td class="v">133</td>
+              <td class="v">no</td>
+              <td class="v">no</td>
+              <td class="verdict"><i class="t-state">untested</i></td>
+            </tr>
+            <tr>
+              <th scope="row">Scroll markers and buttons</th>
+              <td>the carousel script</td>
+              <td class="pg"><a href="scroll.html">01</a></td>
+              <td class="v">135</td>
+              <td class="v">no</td>
+              <td class="v">no</td>
+              <td class="verdict"><i class="t-marker">untested</i></td>
+            </tr>
+            <tr>
+              <th scope="row"><code>:has()</code></th>
+              <td>toggling a class on a parent</td>
+              <td class="pg"><a href="state.html">02</a></td>
+              <td class="v">105</td>
+              <td class="v">15.4</td>
+              <td class="v">121</td>
+              <td class="verdict"><i class="t-has">untested</i></td>
+            </tr>
+            <tr>
+              <th scope="row"><code>::details-content</code></th>
+              <td>reaching inside an accordion panel</td>
+              <td class="pg"><a href="state.html">02</a></td>
+              <td class="v">131</td>
+              <td class="v">18.4</td>
+              <td class="v">143</td>
+              <td class="verdict"><i class="t-details">untested</i></td>
+            </tr>
+            <tr>
+              <th scope="row"><code>interpolate-size</code></th>
+              <td>measuring a height to animate it</td>
+              <td class="pg"><a href="state.html">02</a></td>
+              <td class="v">129</td>
+              <td class="v">no</td>
+              <td class="v">no</td>
+              <td class="verdict"><i class="t-size">untested</i></td>
+            </tr>
+            <tr>
+              <th scope="row">Popover</th>
+              <td>moving the menu to the end of the body</td>
+              <td class="pg"><a href="layer.html">03</a></td>
+              <td class="v">114</td>
+              <td class="v">17</td>
+              <td class="v">125</td>
+              <td class="verdict"><i class="t-popover">untested</i></td>
+            </tr>
+            <tr>
+              <th scope="row">Anchor positioning</th>
+              <td>the positioning library</td>
+              <td class="pg"><a href="layer.html">03</a></td>
+              <td class="v">125</td>
+              <td class="v">26</td>
+              <td class="v">147</td>
+              <td class="verdict"><i class="t-anchor">untested</i></td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <code>@starting-style</code>, discrete transitions
+              </th>
+              <td>a timeout before removing the element</td>
+              <td class="pg"><a href="layer.html">03</a></td>
+              <td class="v">117</td>
+              <td class="v">17.5</td>
+              <td class="v">129</td>
+              <td class="verdict"><i class="t-start">untested</i></td>
+            </tr>
+            <tr>
+              <th scope="row">Invoker commands</th>
+              <td><code>dialog.showModal()</code> in a click handler</td>
+              <td class="pg"><a href="layer.html">03</a></td>
+              <td class="v">135</td>
+              <td class="v">26.2</td>
+              <td class="v">144</td>
+              <td class="verdict">
+                <i class="cannot">an HTML attribute; CSS cannot test for it</i>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><code>sibling-index()</code></th>
+              <td>a loop that writes <code>--i</code></td>
+              <td class="pg"><a href="count.html">04</a></td>
+              <td class="v">138</td>
+              <td class="v">26.2</td>
+              <td class="v">154</td>
+              <td class="verdict"><i class="t-sibling">untested</i></td>
+            </tr>
+            <tr>
+              <th scope="row">Typed arithmetic</th>
+              <td><code>getBoundingClientRect()</code> for ratios</td>
+              <td class="pg"><a href="count.html">04</a></td>
+              <td class="v">140</td>
+              <td class="v">26</td>
+              <td class="v">158</td>
+              <td class="verdict"><i class="t-typed">untested</i></td>
+            </tr>
+            <tr>
+              <th scope="row"><code>random()</code></th>
+              <td><code>Math.random()</code></td>
+              <td class="pg"><a href="count.html">04</a></td>
+              <td class="v">156</td>
+              <td class="v">26.2</td>
+              <td class="v">161 beta</td>
+              <td class="verdict"><i class="t-random">untested</i></td>
+            </tr>
+            <tr>
+              <th scope="row">Cross-document view transitions</th>
+              <td>the client-side router</td>
+              <td class="pg"><a href="route.html">05</a></td>
+              <td class="v">126</td>
+              <td class="v">18.2</td>
+              <td class="v">pref only</td>
+              <td class="verdict">
+                <i class="cannot"
+                  >CSS has no test for this. Turn a page and see.</i
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="limits">What this cannot do</h2>
+      <p>
+        A claim like the one in the title deserves its own list of exceptions.
+      </p>
+      <ul class="limits">
+        <li>
+          <b>It cannot remember.</b> State lives in form controls and in the
+          URL. Turn the page and the lock on page 02 forgets what you dialled.
+        </li>
+        <li>
+          <b>It cannot read a value.</b> CSS can tell that a box is checked. It
+          cannot see the number on a range slider or the text in a field, so
+          there is no slider anywhere in this zine.
+        </li>
+        <li>
+          <b>It cannot talk to a server.</b> No fetching, no saving. Links and
+          forms are still the only requests a document can make.
+        </li>
+        <li>
+          <b>It cannot detect its own best trick.</b> There is no
+          <code>@supports</code> test for cross-document view transitions, which
+          is why the table above shrugs at them.
+        </li>
+        <li>
+          <b>It cannot load the next page early.</b> Speculation rules are JSON
+          inside a script element. That is still a script element.
+        </li>
+        <li>
+          <b>And some of it should not be copied.</b> A lock made of thirty
+          radio buttons is a specimen. The accordion, the popovers and the page
+          transitions are how I would build those things today.
+        </li>
+      </ul>
+
+      <nav class="turn" aria-label="Start reading">
+        <a class="next" href="scroll.html"
+          ><small>Start &rarr;</small><span>01 The listener</span></a
+        >
+      </nav>
+    </main>
+    <footer class="proof">
+      <p>
+        <b>Proof.</b> Script elements in this document:
+        <span class="count">0</span>. Canvas elements: 0. Event handler
+        attributes: 0. The stylesheet checks the first number with
+        <code>:root:has(script)</code> and strikes it out if it is ever wrong.
+        This page also carries a Content-Security-Policy of
+        <code>script-src 'none'</code>, so your browser would refuse to run a
+        script even if one were here.
+      </p>
+      <p>
+        Do not take the page's word for it. View the source (<kbd>Ctrl</kbd>
+        <kbd>U</kbd>, or <kbd>&#8984;</kbd> <kbd>&#8997;</kbd> <kbd>U</kbd>) and
+        search for &ldquo;&lt;script&rdquo;, or switch JavaScript off and
+        reload: nothing will change. Everything that moves is in
+        <a href="zine.css">one unminified stylesheet</a>.
+      </p>
+      <p>
+        NOSCRIPT, a rendering experiment by Romain C., November 2026.
+        <a href="index.html#tests">What your browser supports</a> &middot;
+        <a href="index.html#limits">What this cannot do</a>
+      </p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The browser enforces the claim: no script may run on this page. -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'none'" />
+    <meta name="theme-color" content="#f0ebe0" />
+    <title>The router - NOSCRIPT 05</title>
+    <meta
+      name="description"
+      content="What replaced the client-side router: cross-document view transitions, demonstrated by the page turns of the zine you are reading."
+    />
+    <link
+      rel="preload"
+      href="../fonts/clash-display-600.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="../fonts/general-sans-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="zine.css" />
+  </head>
+  <body class="p-route">
+    <a class="skip" href="#main">Skip to the text</a>
+    <header class="mast">
+      <a class="mark" href="index.html" aria-label="NOSCRIPT, back to the cover"
+        >NO<b>SCRIPT</b></a
+      >
+      <nav aria-label="Pages">
+        <ol>
+          <li>
+            <a href="scroll.html"><span>01</span>Listener</a>
+          </li>
+          <li>
+            <a href="state.html"><span>02</span>Handler</a>
+          </li>
+          <li>
+            <a href="layer.html"><span>03</span>Overlay</a>
+          </li>
+          <li>
+            <a href="count.html"><span>04</span>Loop</a>
+          </li>
+          <li>
+            <a href="route.html" aria-current="page"><span>05</span>Router</a>
+          </li>
+        </ol>
+      </nav>
+    </header>
+    <main id="main">
+      <header class="plate">
+        <p class="folio" aria-hidden="true">05</p>
+        <h1><span class="vh">Page 05: </span>The router</h1>
+        <p class="kills">
+          Retires <s>history.pushState()</s> and the single-page app built to
+          animate a link
+        </p>
+      </header>
+
+      <p class="lede">
+        For about ten years, the price of an animated page change was to stop
+        having pages.
+      </p>
+      <p>
+        A browser moving from one document to the next threw the old one away
+        before it painted the new one. If you wanted the two to overlap, even
+        for a third of a second, both had to live in the same document. So we
+        intercepted every link, fetched the next page as data and rebuilt it in
+        place. Then we rebuilt by hand what the browser had been doing for free:
+        the address bar, the back button, the scroll position, focus, and the
+        announcement to a screen reader that a new page had arrived.
+      </p>
+      <p>
+        Cross-document view transitions remove the reason. When you follow a
+        link to the same origin, the browser keeps a picture of the page you are
+        leaving, loads the next one, and animates between the two. Both pages
+        opt in with one rule.
+      </p>
+
+      <div class="swap wide">
+        <figure class="was">
+          <figcaption>
+            <span>Was</span><span>a router, abridged</span>
+          </figcaption>
+          <pre><code>addEventListener("click", async e =&gt; {
+  const a = e.target.closest("a");
+  if (!a || a.origin !== location.origin)
+    return;
+  e.preventDefault();
+  const res = await fetch(a.href);
+  history.pushState({}, "", a.href);
+  swap(parse(await res.text()));
+  restoreScroll(); moveFocus(); announce();
+});</code></pre>
+        </figure>
+        <figure class="now">
+          <figcaption><span>Now</span><span>the whole router</span></figcaption>
+          <pre><code>@view-transition {
+  navigation: auto;
+}</code></pre>
+        </figure>
+      </div>
+
+      <h2>What you have been watching</h2>
+      <p>
+        This zine is six separate HTML files. If you are reading it in Chrome
+        126 or later, or Safari 18.2 or later, and have not asked your system to
+        reduce motion, three things have happened each time you followed a link.
+        I have to write &ldquo;if&rdquo; because CSS has no test for this
+        feature, so the page cannot check on my behalf.
+      </p>
+      <ol class="limits">
+        <li>
+          <b>The old page turned away on its left edge.</b> That is the default
+          snapshot of the whole page, called <code>root</code>, given a keyframe
+          animation that rotates it in perspective. The new page is already
+          lying underneath.
+        </li>
+        <li>
+          <b>The word NOSCRIPT in the corner stayed put.</b> It has a
+          <code>view-transition-name</code>, so it is lifted out of the page
+          snapshot and carried across separately.
+        </li>
+        <li>
+          <b>From the cover, the sheet you chose became the title plate.</b>
+          The fifth sheet in the stack and the plate at the top of this page
+          share the name <code>plate-5</code>. The browser treats two elements
+          with one name as a single object in two places and moves it from one
+          to the other. Along the way it has to undo the tilt of the stack, and
+          does so without being asked. Between two chapters there is no such
+          pair, so the old plate steps aside and the new one slides in.
+        </li>
+      </ol>
+      <figure class="specimen wide">
+        <div class="layers-stage">
+          <ol
+            class="layers"
+            aria-label="The four snapshots of a page turn, in the order they are painted"
+          >
+            <li class="ly ly-new">
+              <code>::view-transition-new(root)</code
+              ><span>the page you reached</span>
+            </li>
+            <li class="ly ly-old">
+              <code>::view-transition-old(root)</code
+              ><span>the page you left, turning</span>
+            </li>
+            <li class="ly ly-plate">
+              <code>::view-transition-group(plate-5)</code
+              ><span>a sheet becoming a plate</span>
+            </li>
+            <li class="ly ly-mark">
+              <code>::view-transition-group(mark)</code
+              ><span>staying where it is</span>
+            </li>
+          </ol>
+        </div>
+        <figcaption class="if-sda if-yes">
+          <b>The half second, at the speed of your scroll.</b> These are the
+          four pictures the browser holds above both documents during a page
+          turn, stacked in the order it paints them. Scroll slowly. First they
+          lift apart. Then the old page turns on its left edge, the plate
+          travels from its place in the pile to its place on the page, and the
+          mark does not move. The diagram holds the layers apart so that you can
+          see them; on screen they are flat, and the old page never rises above
+          the plate. Scroll back up and the page turn runs in reverse, which the
+          real one never does.
+        </figcaption>
+        <figcaption class="if-sda if-no">
+          <b>The half second, held still.</b> These are the four pictures the
+          browser holds above both documents during a page turn, in the order it
+          paints them. On a wide screen they are drawn as planes, frozen
+          halfway: the old page part turned on its left edge, the plate midway
+          between the pile and the page. With scroll-driven animations, and no
+          request to reduce motion, scrolling plays the turn forwards and
+          backwards.
+        </figcaption>
+      </figure>
+      <p>
+        To watch it again, go back to the
+        <a href="index.html#contents">contents</a> and choose a sheet, or step
+        sideways to <a href="count.html">page 04</a>.
+      </p>
+      <figure class="specimen">
+        <pre
+          class="tree"
+          tabindex="0"
+          role="group"
+          aria-label="Pseudo-element tree of the view transition"
+        >::view-transition
+&#9500;&#9472; <b>::view-transition-group(root)</b>
+&#9474;  &#9492;&#9472; ::view-transition-image-pair(root)
+&#9474;     &#9500;&#9472; ::view-transition-old(root)   <i>the page you left, turning</i>
+&#9474;     &#9492;&#9472; ::view-transition-new(root)   <i>the page you reached</i>
+&#9500;&#9472; <b>::view-transition-group(plate-5)</b>    <i>a sheet becoming a plate</i>
+&#9492;&#9472; <b>::view-transition-group(mark)</b>       <i>staying where it is</i></pre>
+        <figcaption>
+          <b>The same thing as a tree.</b> Each plane above is a pseudo-element
+          the browser creates for the transition and removes afterwards. The
+          rules in section 9 of the stylesheet are addressed to these names.
+        </figcaption>
+      </figure>
+
+      <h2>Where it stops</h2>
+      <p>
+        Firefox is the gap. It has had same-document view transitions since
+        version 144, and those need a script to start them. The cross-document
+        kind is behind a preference that is on in Nightly and off in the current
+        release, Firefox 160. There, the pages of this zine simply load, as
+        pages always have. That is the entire fallback, and it is why this is
+        safe to ship: a browser that does not know the rule skips it.
+      </p>
+      <p>
+        Two more limits. The transition runs only between pages on the same
+        origin. And it can only be as quick as the next page: making a page
+        arrive early is the job of speculation rules, which are JSON inside a
+        script element, so this zine does not use them. On a slow connection the
+        pages here turn when the network lets them.
+      </p>
+      <p>
+        That is the last page. The <a href="index.html#tests">cover</a> has a
+        table of everything used along the way and what your browser made of it,
+        and a list of what a document still cannot do alone.
+      </p>
+      <nav class="turn" aria-label="Previous and next page">
+        <a class="prev" href="count.html"
+          ><small>&larr; Previous</small><span>04 The loop</span></a
+        >
+        <a class="next" href="index.html"
+          ><small>Next &rarr;</small><span>Back to the cover</span></a
+        >
+      </nav>
+    </main>
+    <footer class="proof">
+      <p>
+        <b>Proof.</b> Script elements in this document:
+        <span class="count">0</span>. Canvas elements: 0. Event handler
+        attributes: 0. The stylesheet checks the first number with
+        <code>:root:has(script)</code> and strikes it out if it is ever wrong.
+        This page also carries a Content-Security-Policy of
+        <code>script-src 'none'</code>, so your browser would refuse to run a
+        script even if one were here.
+      </p>
+      <p>
+        Do not take the page's word for it. View the source (<kbd>Ctrl</kbd>
+        <kbd>U</kbd>, or <kbd>&#8984;</kbd> <kbd>&#8997;</kbd> <kbd>U</kbd>) and
+        search for &ldquo;&lt;script&rdquo;, or switch JavaScript off and
+        reload: nothing will change. Everything that moves is in
+        <a href="zine.css">one unminified stylesheet</a>.
+      </p>
+      <p>
+        NOSCRIPT, a rendering experiment by Romain C., November 2026.
+        <a href="index.html#tests">What your browser supports</a> &middot;
+        <a href="index.html#limits">What this cannot do</a>
+      </p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The browser enforces the claim: no script may run on this page. -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'none'" />
+    <meta name="theme-color" content="#f0ebe0" />
+    <title>The loop - NOSCRIPT 04</title>
+    <meta
+      name="description"
+      content="What replaced the loop that fed numbers to CSS: sibling-index(), typed arithmetic and random(), shown as rings, a ruler and a misprinted plate."
+    />
+    <link
+      rel="preload"
+      href="../fonts/clash-display-600.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="../fonts/general-sans-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="zine.css" />
+  </head>
+  <body class="p-count">
+    <a class="skip" href="#main">Skip to the text</a>
+    <header class="mast">
+      <a class="mark" href="index.html" aria-label="NOSCRIPT, back to the cover"
+        >NO<b>SCRIPT</b></a
+      >
+      <nav aria-label="Pages">
+        <ol>
+          <li>
+            <a href="scroll.html"><span>01</span>Listener</a>
+          </li>
+          <li>
+            <a href="state.html"><span>02</span>Handler</a>
+          </li>
+          <li>
+            <a href="layer.html"><span>03</span>Overlay</a>
+          </li>
+          <li>
+            <a href="count.html" aria-current="page"><span>04</span>Loop</a>
+          </li>
+          <li>
+            <a href="route.html"><span>05</span>Router</a>
+          </li>
+        </ol>
+      </nav>
+    </header>
+    <main id="main">
+      <header class="plate">
+        <p class="folio" aria-hidden="true">04</p>
+        <h1><span class="vh">Page 04: </span>The loop</h1>
+        <p class="kills">
+          Retires <s>forEach((el, i) =&gt; ...)</s>,
+          <s>getBoundingClientRect()</s> and <s>Math.random()</s>
+        </p>
+      </header>
+
+      <p class="lede">
+        CSS could always calculate. What it could not do was count, measure or
+        roll dice, so a script did those three things and handed over the
+        results.
+      </p>
+      <p>
+        The pattern is in every staggered animation ever shipped: loop over the
+        children and write each one's index into a custom property, so that the
+        stylesheet has a number to multiply. It is in this zine too. The drum on
+        page 01 gets its face numbers from twelve
+        <code>:nth-child</code> rules, which is the same loop unrolled by hand.
+      </p>
+
+      <div class="swap wide">
+        <figure class="was">
+          <figcaption>
+            <span>Was</span><span>the script counts for the stylesheet</span>
+          </figcaption>
+          <pre><code>items.forEach((el, i) =&gt; {
+  el.style.setProperty("--i", i + 1);
+  el.style.setProperty("--n", items.length);
+});</code></pre>
+        </figure>
+        <figure class="now">
+          <figcaption>
+            <span>Now</span><span>the element knows</span>
+          </figcaption>
+          <pre><code>li {
+  --i: sibling-index();
+  --n: sibling-count();
+}</code></pre>
+        </figure>
+      </div>
+
+      <h2>One rule, three rings</h2>
+      <p>
+        <code>sibling-index()</code> and <code>sibling-count()</code> are in
+        Chrome 138, Safari 26.2 and Firefox 154. With them an element knows its
+        position and the size of its family.
+      </p>
+      <p class="if-sibling if-yes">
+        The three rings below have five, eight and thirteen tiles, and one rule
+        between them. Each tile works out its own angle, which is a full turn
+        divided by the count and multiplied by its index. It also works out how
+        far from the axis to stand, which is half its width over the tangent of
+        half that angle, so that neighbouring edges just meet. Add a fourteenth
+        tile to the HTML and that ring becomes a slightly larger polygon with
+        nothing else changed.
+        <span class="if-motion">Hover a ring to hold it still.</span>
+      </p>
+      <p class="if-sibling if-no">
+        In a browser with <code>sibling-index()</code>, each list below is a
+        ring standing in three dimensions, and all three are built by one shared
+        rule. Yours gets them as rows of tiles numbered by CSS counters.
+        Counters have been able to count since 1998. They could never hand the
+        result to a calculation.
+      </p>
+
+      <figure class="specimen wide">
+        <div class="rings">
+          <div class="ring-box">
+            <div class="ring-stage">
+              <ol class="ring" aria-label="Five tiles">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+              </ol>
+            </div>
+            <p>5 children</p>
+          </div>
+          <div class="ring-box">
+            <div class="ring-stage">
+              <ol class="ring" aria-label="Eight tiles">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+              </ol>
+            </div>
+            <p>8 children</p>
+          </div>
+          <div class="ring-box">
+            <div class="ring-stage">
+              <ol class="ring" aria-label="Thirteen tiles">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+              </ol>
+            </div>
+            <p>13 children</p>
+          </div>
+        </div>
+        <figcaption>
+          <b>The rule.</b>
+          <code
+            >rotateY(calc(360deg / sibling-count() * (sibling-index() -
+            1)))</code
+          >
+          then
+          <code>translateZ(calc(1.65rem / tan(180deg / sibling-count())))</code
+          >. The numbers on the tiles are an ordinary CSS counter.
+        </figcaption>
+      </figure>
+
+      <h2>A length divided by a length</h2>
+      <p>
+        <code>calc()</code> used to refuse this. You could multiply a length by
+        a number, but dividing one length by another to get a plain ratio was a
+        type error, so anything that needed to know how many of these fit in
+        that went to <code>getBoundingClientRect()</code>. Typed arithmetic
+        lifts the restriction. It is in Chrome 140 and Safari 26, and Firefox
+        158 made it the third engine this autumn.
+      </p>
+      <figure class="specimen">
+        <div class="ruler">
+          <p class="line" aria-hidden="true">
+            0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
+          </p>
+          <p class="ruler-read">
+            This window is <span class="v v-px"></span> CSS pixels wide. This
+            box fits <span class="v v-ch"></span> of the digits above on one
+            line.
+          </p>
+        </div>
+        <figcaption class="if-typed if-yes">
+          <b>Resize the window and both numbers follow.</b> The first is
+          <code>100vw / 1px</code>. The second is <code>100cqi / 1ch</code>: the
+          width of the box divided by the width of a zero in its own font. Each
+          result is rounded down, stored in a registered integer property and
+          printed with <code>counter()</code>.
+        </figcaption>
+        <figcaption class="if-typed if-no">
+          Your browser cannot divide a length by a length yet, so both numbers
+          read &ldquo;unknown&rdquo;.
+        </figcaption>
+      </figure>
+
+      <h2>Dice</h2>
+      <p>
+        <code>Math.random()</code> was the last reason a purely visual effect
+        needed a script. <code>random()</code> is in Chrome 156 and Safari 26.2,
+        and in Firefox 161, which is still in beta as I write this. Each element
+        gets its own value for each property unless you ask for a shared one.
+      </p>
+      <figure class="specimen wide">
+        <div class="misreg">
+          <div class="specks" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i
+            ><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i
+            ><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i
+            ><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <span class="word" data-word="Register">Register</span>
+        </div>
+        <figcaption class="if-random if-yes">
+          <b>Printed in two passes.</b> Blue first, then red, the way a
+          risograph does it, and the red pass has slipped by a random amount.
+          The specks are scattered by <code>random()</code> as well. Reload the
+          page: no two printings match.
+        </figcaption>
+        <figcaption class="if-random if-no">
+          <b>Printed in perfect register.</b> Your browser has no
+          <code>random()</code> yet, so the red pass has landed exactly on the
+          blue one and will do so on every reload. Chrome 156 and Safari 26.2
+          print this a little crooked, and differently each time.
+        </figcaption>
+      </figure>
+      <nav class="turn" aria-label="Previous and next page">
+        <a class="prev" href="layer.html"
+          ><small>&larr; Previous</small><span>03 The overlay</span></a
+        >
+        <a class="next" href="route.html"
+          ><small>Next &rarr;</small><span>05 The router</span></a
+        >
+      </nav>
+    </main>
+    <footer class="proof">
+      <p>
+        <b>Proof.</b> Script elements in this document:
+        <span class="count">0</span>. Canvas elements: 0. Event handler
+        attributes: 0. The stylesheet checks the first number with
+        <code>:root:has(script)</code> and strikes it out if it is ever wrong.
+        This page also carries a Content-Security-Policy of
+        <code>script-src 'none'</code>, so your browser would refuse to run a
+        script even if one were here.
+      </p>
+      <p>
+        Do not take the page's word for it. View the source (<kbd>Ctrl</kbd>
+        <kbd>U</kbd>, or <kbd>&#8984;</kbd> <kbd>&#8997;</kbd> <kbd>U</kbd>) and
+        search for &ldquo;&lt;script&rdquo;, or switch JavaScript off and
+        reload: nothing will change. Everything that moves is in
+        <a href="zine.css">one unminified stylesheet</a>.
+      </p>
+      <p>
+        NOSCRIPT, a rendering experiment by Romain C., November 2026.
+        <a href="index.html#tests">What your browser supports</a> &middot;
+        <a href="index.html#limits">What this cannot do</a>
+      </p>
+    </footer>
+  </body>
+</html>

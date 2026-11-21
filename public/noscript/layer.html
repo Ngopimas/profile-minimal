@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The browser enforces the claim: no script may run on this page. -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'none'" />
+    <meta name="theme-color" content="#f0ebe0" />
+    <title>The overlay - NOSCRIPT 03</title>
+    <meta
+      name="description"
+      content="What replaced the tooltip library and the focus trap: the top layer, popover, anchor positioning, @starting-style and invoker commands."
+    />
+    <link
+      rel="preload"
+      href="../fonts/clash-display-600.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="../fonts/general-sans-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="zine.css" />
+  </head>
+  <body class="p-layer">
+    <a class="skip" href="#main">Skip to the text</a>
+    <header class="mast">
+      <a class="mark" href="index.html" aria-label="NOSCRIPT, back to the cover"
+        >NO<b>SCRIPT</b></a
+      >
+      <nav aria-label="Pages">
+        <ol>
+          <li>
+            <a href="scroll.html"><span>01</span>Listener</a>
+          </li>
+          <li>
+            <a href="state.html"><span>02</span>Handler</a>
+          </li>
+          <li>
+            <a href="layer.html" aria-current="page"><span>03</span>Overlay</a>
+          </li>
+          <li>
+            <a href="count.html"><span>04</span>Loop</a>
+          </li>
+          <li>
+            <a href="route.html"><span>05</span>Router</a>
+          </li>
+        </ol>
+      </nav>
+    </header>
+    <main id="main">
+      <header class="plate">
+        <p class="folio" aria-hidden="true">03</p>
+        <h1><span class="vh">Page 03: </span>The overlay</h1>
+        <p class="kills">
+          Retires <s>z-index: 99999</s>, the positioning library and the focus
+          trap
+        </p>
+      </header>
+
+      <p class="lede">
+        Putting one box on top of another was the hardest easy thing on the web.
+      </p>
+      <p>
+        A tooltip has to be drawn above everything else, so it could not live
+        where it belonged in the markup. Any ancestor with
+        <code>overflow: hidden</code> would cut it off, and any ancestor that
+        formed a stacking context would cap its z-index no matter how many nines
+        you typed. Libraries got round this by moving the element to the end of
+        the body with JavaScript, measuring the trigger, positioning the tooltip
+        by hand, and listening for scroll and resize in order to do it all
+        again.
+      </p>
+      <p>
+        Three additions took that apart. The top layer is a plane above the
+        whole document that z-index cannot reach and overflow cannot clip. The
+        <code>popover</code> attribute puts an element there, and gives it light
+        dismiss, the Escape key and focus return. Anchor positioning ties it to
+        the thing it points at.
+      </p>
+
+      <h2>Out of a clipped box</h2>
+      <p class="if-popover if-yes">
+        The box below clips whatever is inside it. Both buttons open a menu that
+        lives inside the box. The first is the old approach without its
+        JavaScript rescue: an absolutely positioned child with a z-index of
+        9999. The second is a popover.
+      </p>
+      <p class="if-popover if-no">
+        Your browser does not know the <code>popover</code> attribute, so the
+        second menu below is simply printed in place and the box around it has
+        been left unclipped. In a current browser the box clips its contents,
+        the first menu is cut off by it and the second one is not.
+      </p>
+      <figure class="specimen">
+        <div class="trap">
+          <details class="old">
+            <summary>Open with z-index: 9999</summary>
+            <div class="menu">
+              <b>The old menu.</b> Five lines long. You can see about one.
+              <ol>
+                <li>clipped</li>
+                <li>by</li>
+                <li>my</li>
+                <li>own</li>
+                <li>parent</li>
+              </ol>
+            </div>
+          </details>
+          <button class="btn btn-free" type="button" popovertarget="free">
+            Open as a popover
+          </button>
+          <div class="menu" id="free" popover>
+            <b>The popover.</b> Same parent, same clipping box.
+            <ol>
+              <li>drawn</li>
+              <li>in</li>
+              <li>the</li>
+              <li>top</li>
+              <li>layer</li>
+            </ol>
+          </div>
+        </div>
+        <figcaption class="if-popover if-yes">
+          <b>Things nobody wrote.</b> Click outside the popover or press
+          <kbd>Esc</kbd> and it closes. Focus goes back to the button. Open it,
+          scroll the page, and it stays attached to the button.
+        </figcaption>
+      </figure>
+
+      <div class="swap wide">
+        <figure class="was">
+          <figcaption>
+            <span>Was</span><span>eight lines before any content</span>
+          </figcaption>
+          <pre><code>document.body.appendChild(menu);
+const r = btn.getBoundingClientRect();
+menu.style.top = r.bottom + scrollY + "px";
+menu.style.left = r.left + "px";
+addEventListener("scroll", reposition);
+addEventListener("resize", reposition);
+addEventListener("keydown", onEscape);
+addEventListener("click", onOutside);</code></pre>
+        </figure>
+        <figure class="now">
+          <figcaption>
+            <span>Now</span><span>two attributes, three declarations</span>
+          </figcaption>
+          <pre><code>&lt;button popovertarget="menu"&gt;Open&lt;/button&gt;
+&lt;div id="menu" popover&gt;...&lt;/div&gt;
+
+#menu {
+  position-anchor: --button;
+  position-area: bottom span-right;
+  position-try-fallbacks: flip-block;
+}</code></pre>
+        </figure>
+      </div>
+
+      <h2>Notes that find their own place</h2>
+      <p>
+        Anchor positioning reached the third engine when Firefox 147 shipped it.
+        A positioned element names an anchor and says which side of it to sit
+        on. It can also list fallbacks, and the browser tries them in order when
+        the first choice would run off the screen.
+      </p>
+      <p>
+        This paragraph has three notes in it. Open the first one
+        <button
+          class="fn fn-1"
+          type="button"
+          popovertarget="n1"
+          aria-label="Note 1"
+        >
+          1
+        </button>
+        <span class="note note-1" id="n1" popover
+          >I am anchored to the red marker with <code>position-area: top</code>.
+          Scroll until the marker is near the top edge of the window and open me
+          again: <code>position-try-fallbacks: flip-block</code> will put me
+          underneath it instead.</span
+        >
+        when its marker is in the middle of your window, then again when the
+        marker is close to the top edge. The second
+        <button
+          class="fn fn-2"
+          type="button"
+          popovertarget="n2"
+          aria-label="Note 2"
+        >
+          2
+        </button>
+        <span class="note note-2" id="n2" popover
+          >I fade in from a <code>@starting-style</code> rule, and I can fade
+          out because <code>display</code> is allowed to wait for the transition
+          with <code>allow-discrete</code>. Firefox does not transition
+          <code>display</code> yet, so there I arrive with the fade and leave
+          without it.</span
+        >
+        is about how a note appears and disappears. The third
+        <button
+          class="fn fn-3"
+          type="button"
+          popovertarget="n3"
+          aria-label="Note 3"
+        >
+          3
+        </button>
+        <span class="note note-3" id="n3" popover
+          >Without the <code>popover</code> attribute I am an ordinary span and
+          sit in the sentence as small grey text. Without anchor positioning I
+          open in the middle of the window, which is the browser's default for a
+          popover. Either way nothing is lost.</span
+        >
+        is about what you see when none of this is supported.
+      </p>
+      <p class="caption if-anchor if-no">
+        Your browser does not position by anchor yet, so these notes open in the
+        centre of the window.
+      </p>
+
+      <h2>The modal</h2>
+      <p>
+        A modal dialog makes one more promise: while it is open, the rest of the
+        page is out of reach. Doing that by hand meant trapping the Tab key
+        inside the dialog, hiding everything else from screen readers, and
+        putting focus back afterwards. The dialog element does all three. What
+        it lacked was a way to open it as a modal without calling
+        <code>showModal()</code> from a script. Invoker commands are that way: a
+        button names its target and the command to send it. They are in Chrome
+        135, Safari 26.2 and Firefox 144.
+      </p>
+      <p class="modal-open" id="modal-open">
+        <button
+          class="btn modal-cmd"
+          type="button"
+          commandfor="modal"
+          command="show-modal"
+        >
+          Open a modal dialog
+        </button>
+        <a class="btn modal-link" href="#modal">Open the dialog</a>
+      </p>
+      <dialog class="modal" id="modal" aria-labelledby="modal-h">
+        <h3 id="modal-h">
+          <span class="when-modal">You are in the top layer</span>
+          <span class="when-target">You are in the fallback</span>
+        </h3>
+        <p class="when-modal">
+          The page behind this is inert. <kbd>Tab</kbd> cannot reach it and a
+          click on it does nothing. Press <kbd>Esc</kbd> or use the button, and
+          focus will go back to where you came from.
+        </p>
+        <p class="when-modal">
+          The button that opened this says
+          <code>command="show-modal"</code>. That is the entire wiring.
+        </p>
+        <p class="when-target">
+          Your browser was offered a plain link to <code>#modal</code>, and this
+          box is showing itself because it is the <code>:target</code> of the
+          URL. It looks like the modal and it is not one. The page behind is
+          still live, <kbd>Tab</kbd> will walk straight out of this box, and
+          <kbd>Esc</kbd> does nothing.
+        </p>
+        <p class="when-target">
+          Those three missing behaviours are the reason the dialog element
+          exists.
+        </p>
+        <form class="when-modal" method="dialog">
+          <button class="btn">Close</button>
+        </form>
+        <p class="when-target">
+          <a class="btn when-target" href="#modal-open">Close</a>
+        </p>
+      </dialog>
+      <p>
+        There are two openers in the markup and you were shown one of them. CSS
+        cannot ask whether a browser understands an HTML attribute, so the
+        stylesheet asks about something else: every engine shipped
+        <code>sibling-index()</code> after invoker commands or in the same
+        release. Where that test passes you get the command button and a real
+        modal. Where it fails you get a link to <code>#modal</code>, and the
+        dialog opens itself with <code>:target</code>, as lightboxes did fifteen
+        years ago. That version is an overlay and says so. The
+        <a href="#modal">link is here</a> if you want to compare the two.
+      </p>
+      <nav class="turn" aria-label="Previous and next page">
+        <a class="prev" href="state.html"
+          ><small>&larr; Previous</small><span>02 The handler</span></a
+        >
+        <a class="next" href="count.html"
+          ><small>Next &rarr;</small><span>04 The loop</span></a
+        >
+      </nav>
+    </main>
+    <footer class="proof">
+      <p>
+        <b>Proof.</b> Script elements in this document:
+        <span class="count">0</span>. Canvas elements: 0. Event handler
+        attributes: 0. The stylesheet checks the first number with
+        <code>:root:has(script)</code> and strikes it out if it is ever wrong.
+        This page also carries a Content-Security-Policy of
+        <code>script-src 'none'</code>, so your browser would refuse to run a
+        script even if one were here.
+      </p>
+      <p>
+        Do not take the page's word for it. View the source (<kbd>Ctrl</kbd>
+        <kbd>U</kbd>, or <kbd>&#8984;</kbd> <kbd>&#8997;</kbd> <kbd>U</kbd>) and
+        search for &ldquo;&lt;script&rdquo;, or switch JavaScript off and
+        reload: nothing will change. Everything that moves is in
+        <a href="zine.css">one unminified stylesheet</a>.
+      </p>
+      <p>
+        NOSCRIPT, a rendering experiment by Romain C., November 2026.
+        <a href="index.html#tests">What your browser supports</a> &middot;
+        <a href="index.html#limits">What this cannot do</a>
+      </p>
+    </footer>
+  </body>
+</html>

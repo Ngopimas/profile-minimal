@@ -1,0 +1,3089 @@
+<!doctype html>
+<html lang="en" class="plain">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f3efe6" />
+    <title>QUARTO - one sheet, two folds, eight pages</title>
+    <meta
+      name="description"
+      content="An essay on how print physically works, printed on a single sheet that folds, is sewn and trimmed as you scroll. The paper is a GPU mesh; the ink is the live, selectable DOM, drawn with HTML-in-Canvas."
+    />
+    <link rel="icon" href="/favicon.ico" />
+    <link
+      rel="preload"
+      href="../fonts/clash-display-600.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <script>
+      /* Synchronous feature test, before first paint. If HTML-in-Canvas is
+         there we hide the flowing article for a moment ("pending") so the
+         reader never sees it jump onto the sheet. Everything else happens in
+         the main script at the end of the body. */
+      (function () {
+        try {
+          var c = document.createElement("canvas");
+          c.setAttribute("content", "drawable");
+          var ok =
+            c.content === "drawable" &&
+            typeof c.updateElementGeometry === "function" &&
+            typeof WebGL2RenderingContext !== "undefined" &&
+            "texElementSubImage2D" in WebGL2RenderingContext.prototype &&
+            !/[?&]plain\b/.test(location.search);
+          if (ok) {
+            document.documentElement.classList.add("pending");
+            // Failsafe: whatever happens below, the article comes back.
+            setTimeout(function () {
+              document.documentElement.classList.remove("pending");
+            }, 2500);
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <style>
+      /* ============================================================
+         QUARTO - one sheet, two folds, eight pages
+         Rendering experiment no. 3. One file, no library, no build.
+
+         The markup is a plain article of eight <section class="page">.
+         Default CSS (html.plain) typesets it as a normal column.
+         When HTML-in-Canvas is available the script moves the article
+         inside <canvas content="drawable">, switches to html.live, and
+         each section becomes a fixed-size page whose pixels are handed
+         to WebGL as a texture.
+         ============================================================ */
+
+      @font-face {
+        font-family: "Clash Display";
+        src: url("../fonts/clash-display-600.woff2") format("woff2");
+        font-weight: 600;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "Martian Mono";
+        src: url("../fonts/martian-mono-var-latin.woff2") format("woff2");
+        font-weight: 100 800;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      :root {
+        --paper: #f3efe6;
+        --bench: #0f1d21;
+        --hud: #e6e1d4;
+        --hud-dim: #8fa3a4;
+
+        /* Screen colours for the plain article. */
+        --ink: #17140f;
+        --soft: #5d564b;
+        --red: #c8321f;
+        --cyan: #00a4dd;
+        --magenta: #dc1a80;
+        --yellow: #f6dc1c;
+
+        --font-display: "Clash Display", "Avenir Next", "Segoe UI", sans-serif;
+        --font-body:
+          "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+          Georgia, serif;
+        --font-mono: "Martian Mono", "SF Mono", ui-monospace, Menlo, monospace;
+
+        /* --u is the one unit all page typography is written in.
+           Plain article: a fraction of a rem. Live sheet: 1% of the page
+           width (set on .leaf below), so a page is resolution independent
+           and its line breaks never change with the viewport. */
+        --u: 0.32rem;
+      }
+
+      html {
+        background: var(--paper);
+        -webkit-text-size-adjust: 100%;
+      }
+      body {
+        margin: 0;
+        color: var(--ink);
+        font-family: var(--font-body);
+      }
+
+      /* ---------- chrome shared by both modes ---------- */
+
+      .skip {
+        position: fixed;
+        left: 1rem;
+        top: -4rem;
+        z-index: 30;
+        padding: 0.6rem 0.9rem;
+        background: var(--paper);
+        color: var(--ink);
+        font: 500 0.8rem var(--font-mono);
+      }
+      .skip:focus {
+        top: 1rem;
+      }
+
+      #masthead {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 1rem;
+        font: 400 0.68rem/1.4 var(--font-mono);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      #masthead a {
+        color: inherit;
+        text-decoration: none;
+      }
+      #masthead a:hover,
+      #masthead a:focus-visible {
+        text-decoration: underline;
+      }
+      #masthead b {
+        font: 600 0.95rem/1 var(--font-display);
+        letter-spacing: 0.14em;
+        margin-right: 0.8em;
+      }
+
+      #rail ol {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      #rail a {
+        color: inherit;
+        text-decoration: none;
+        font: 400 0.66rem/1 var(--font-mono);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      #telemetry {
+        font: 400 0.62rem/1.5 var(--font-mono);
+        letter-spacing: 0.06em;
+      }
+
+      #press {
+        display: none;
+      }
+      #hint {
+        display: none;
+      }
+
+      /* ---------- the article, shared rules ---------- */
+
+      .leaf {
+        font-size: calc(3.5 * var(--u) * var(--fit, 1));
+        line-height: 1.42;
+        font-variant-numeric: oldstyle-nums;
+        hanging-punctuation: first;
+      }
+      .leaf p {
+        margin: 0;
+        text-wrap: pretty;
+        hyphens: auto;
+      }
+      .leaf p + p {
+        text-indent: 1.4em;
+      }
+      .leaf a {
+        color: inherit;
+        text-decoration: underline;
+        text-decoration-color: var(--red);
+        text-decoration-thickness: 0.09em;
+        text-underline-offset: 0.18em;
+      }
+      .leaf a:focus-visible {
+        outline: 0.14em solid var(--cyan);
+        outline-offset: 0.16em;
+      }
+      .leaf ::selection {
+        background: rgb(0 255 255 / 0.3);
+        color: inherit;
+      }
+      .leaf kbd {
+        font: 500 0.78em var(--font-mono);
+        padding: 0.05em 0.35em;
+        border: 0.06em solid currentColor;
+        border-radius: 0.25em;
+      }
+
+      .kicker {
+        margin: 0;
+        font: 400 calc(1.75 * var(--u)) / 1.4 var(--font-mono);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      h1 {
+        margin: calc(7 * var(--u)) 0 0;
+        font: 600 calc(19 * var(--u)) / 0.86 var(--font-display);
+        letter-spacing: -0.02em;
+      }
+      h1 + .sub {
+        margin: calc(3 * var(--u)) 0 calc(7 * var(--u));
+        font-style: italic;
+        font-size: 1.28em;
+        line-height: 1.25;
+      }
+      h2 {
+        display: flex;
+        align-items: baseline;
+        gap: 0.55em;
+        margin: 0 0 calc(3.6 * var(--u));
+        font: 600 calc(7.4 * var(--u)) / 1 var(--font-display);
+        letter-spacing: -0.01em;
+        color: var(--red);
+      }
+      h2 .num {
+        font: 500 calc(1.9 * var(--u)) / 1 var(--font-mono);
+        letter-spacing: 0.1em;
+        color: var(--ink);
+      }
+      figure {
+        margin: calc(3 * var(--u)) 0 0;
+      }
+      figcaption,
+      .note {
+        margin-top: calc(1.6 * var(--u));
+        font-size: 0.8em;
+        line-height: 1.36;
+        font-style: italic;
+        color: var(--soft);
+      }
+      figcaption {
+        text-indent: 0;
+      }
+
+      /* II. The plate: a small landscape made only of CSS gradients, so it
+         is a real continuous-tone image for the halftone to chew on. */
+      .plate {
+        position: relative;
+        height: calc(17 * var(--u));
+        overflow: hidden;
+        background:
+          radial-gradient(
+            circle at 70% 62%,
+            #fff3c4 0 6%,
+            #ffd166 9%,
+            rgb(255 190 90 / 0) 30%
+          ),
+          linear-gradient(
+            to top,
+            #f39a4e 0%,
+            #f6c08f 28%,
+            #b9d2e6 62%,
+            #4f86c6 100%
+          );
+      }
+      .plate::before,
+      .plate::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+      }
+      .plate::before {
+        background: #2f7f76;
+        clip-path: polygon(
+          0 62%,
+          14% 54%,
+          30% 63%,
+          47% 50%,
+          63% 64%,
+          80% 57%,
+          100% 66%,
+          100% 100%,
+          0 100%
+        );
+      }
+      .plate::after {
+        background: #0b0b0b;
+        clip-path: polygon(
+          0 86%,
+          18% 77%,
+          36% 84%,
+          58% 74%,
+          78% 85%,
+          100% 78%,
+          100% 100%,
+          0 100%
+        );
+      }
+      .tints {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        height: calc(3 * var(--u));
+        margin-top: calc(1 * var(--u));
+      }
+      .tints i:nth-child(1) {
+        background: #e6e6e6;
+      }
+      .tints i:nth-child(2) {
+        background: #bfbfbf;
+      }
+      .tints i:nth-child(3) {
+        background: #999;
+      }
+      .tints i:nth-child(4) {
+        background: #737373;
+      }
+      .tints i:nth-child(5) {
+        background: #4d4d4d;
+      }
+      .specimen-line {
+        margin-top: calc(1 * var(--u));
+        font: 600 calc(5 * var(--u)) / 1 var(--font-display);
+        letter-spacing: 0.01em;
+        white-space: nowrap;
+      }
+
+      /* III. The register target: three process inks overprinting in
+         pairs (blue, red, green). The discs are sized so that no point is
+         under all three, which keeps every colour here a two-ink build. */
+      .target {
+        position: relative;
+        height: calc(17 * var(--u));
+        isolation: isolate;
+      }
+      .target i {
+        position: absolute;
+        top: 54%;
+        left: 50%;
+        width: calc(9 * var(--u));
+        aspect-ratio: 1;
+        border-radius: 50%;
+        mix-blend-mode: multiply;
+        translate: -50% -50%;
+      }
+      .target i:nth-child(1) {
+        background: var(--cyan);
+        margin: calc(-4.8 * var(--u)) 0 0 0;
+      }
+      .target i:nth-child(2) {
+        background: var(--magenta);
+        margin: calc(2.4 * var(--u)) 0 0 calc(-4.15 * var(--u));
+      }
+      .target i:nth-child(3) {
+        background: var(--yellow);
+        margin: calc(2.4 * var(--u)) 0 0 calc(4.15 * var(--u));
+      }
+      .target::before,
+      .target::after {
+        content: "";
+        position: absolute;
+        background: var(--ink);
+        z-index: 2;
+      }
+      .target::before {
+        left: 6%;
+        right: 6%;
+        top: 54%;
+        height: calc(0.16 * var(--u));
+      }
+      .target::after {
+        top: 4%;
+        bottom: 4%;
+        left: 50%;
+        width: calc(0.16 * var(--u));
+      }
+
+      .folio,
+      .sig {
+        font: 400 calc(1.7 * var(--u)) / 1 var(--font-mono);
+        letter-spacing: 0.08em;
+      }
+      .colophon-list {
+        margin: calc(3 * var(--u)) 0 0;
+        padding: 0;
+        list-style: none;
+        font: 400 calc(1.75 * var(--u)) / 1.75 var(--font-mono);
+        letter-spacing: 0.02em;
+      }
+      .colophon-list b {
+        display: inline-block;
+        min-width: 9.5em;
+        font-weight: 500;
+        color: var(--red);
+      }
+
+      /* ---------- PLAIN MODE: the well-typeset fallback ---------- */
+
+      html.plain .live-only,
+      html.live .plain-only,
+      html.pending .plain-only {
+        display: none;
+      }
+
+      html.plain body {
+        padding: 1.5rem clamp(1.1rem, 5vw, 3rem) 4rem;
+      }
+      html.plain #masthead,
+      html.plain #rail,
+      html.plain #flow,
+      html.plain #telemetry {
+        max-width: calc(100 * var(--u) + 2rem);
+        margin-inline: auto;
+      }
+      html.plain #masthead {
+        padding-bottom: 0.9rem;
+        border-bottom: 1px solid rgb(23 20 15 / 0.25);
+      }
+      html.plain #rail {
+        margin-top: 0.9rem;
+      }
+      html.plain #rail ol {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 1.2rem;
+      }
+      html.plain #rail a:hover,
+      html.plain #rail a:focus-visible {
+        color: var(--red);
+      }
+      html.plain .notice {
+        margin: 1.4rem auto 0;
+        max-width: calc(100 * var(--u) + 2rem);
+        padding: 0.8rem 1rem;
+        border-left: 3px solid var(--cyan);
+        background: rgb(0 164 221 / 0.07);
+        font: 400 0.72rem/1.6 var(--font-mono);
+      }
+      html.plain .page {
+        position: relative;
+        padding: calc(11 * var(--u)) 1rem calc(9 * var(--u));
+        border-bottom: 1px solid rgb(23 20 15 / 0.18);
+        scroll-margin-top: 1rem;
+      }
+      html.plain .page:first-child {
+        padding-top: calc(8 * var(--u));
+      }
+      html.plain .marks,
+      html.plain .slug {
+        display: none;
+      }
+      html.plain .folio,
+      html.plain .sig {
+        position: absolute;
+        bottom: calc(3 * var(--u));
+        color: var(--soft);
+      }
+      html.plain .folio {
+        right: 1rem;
+      }
+      html.plain .sig {
+        left: 1rem;
+      }
+      html.plain #telemetry {
+        margin-top: 1.5rem;
+        color: var(--soft);
+      }
+      html.plain #runway {
+        display: none;
+      }
+
+      /* While we find out whether the sheet can be printed, show nothing
+         but paper (at most 1.5 s, see the watchdog in the script). */
+      html.pending body {
+        opacity: 0;
+      }
+
+      /* ---------- LIVE MODE: the article is inside the canvas ---------- */
+
+      html.live {
+        background: var(--bench);
+        scrollbar-color: #36494c var(--bench);
+      }
+      html.live body {
+        opacity: 1;
+        color: var(--hud);
+      }
+      html.live #press {
+        display: block;
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        /* the small viewport height: stable while a phone's URL bar slides */
+        height: 100vh;
+        height: 100svh;
+        min-width: 2px;
+        min-height: 2px;
+        outline: none;
+      }
+      html.live #masthead {
+        position: fixed;
+        z-index: 10;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 0.95rem 1.2rem;
+        color: var(--hud);
+        pointer-events: none;
+      }
+      html.live #masthead a {
+        pointer-events: auto;
+      }
+      html.live #masthead span {
+        color: var(--hud-dim);
+      }
+      html.live #rail {
+        position: fixed;
+        z-index: 10;
+        right: 1.2rem;
+        top: 50%;
+        translate: 0 -50%;
+      }
+      html.live #rail ol {
+        display: grid;
+        gap: 0.85rem;
+        justify-items: end;
+      }
+      html.live #rail a {
+        color: var(--hud-dim);
+        padding: 0.2rem 0;
+        transition: color 0.2s;
+      }
+      html.live #rail a::after {
+        content: "";
+        display: inline-block;
+        width: 0.9rem;
+        height: 1px;
+        margin-left: 0.6rem;
+        vertical-align: middle;
+        background: currentColor;
+        transition: width 0.2s;
+      }
+      html.live #rail a:hover,
+      html.live #rail a:focus-visible,
+      html.live #rail a[aria-current] {
+        color: var(--hud);
+      }
+      html.live #rail a[aria-current]::after {
+        width: 1.8rem;
+        background: #ff5a3c;
+      }
+      html.live.narrow #rail,
+      html.live.narrow #masthead span {
+        display: none;
+      }
+      html.live.narrow #telemetry {
+        font-size: 0.54rem;
+        white-space: nowrap;
+      }
+      html.live #telemetry {
+        position: fixed;
+        z-index: 10;
+        left: 1.2rem;
+        bottom: 0.8rem;
+        color: var(--hud-dim);
+        pointer-events: none;
+      }
+      html.live #hint {
+        display: block;
+        position: fixed;
+        z-index: 10;
+        left: 50%;
+        bottom: 1.6rem;
+        translate: -50% 0;
+        margin: 0;
+        color: var(--hud);
+        font: 400 0.68rem/1 var(--font-mono);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        pointer-events: none;
+        opacity: var(--hint, 1);
+      }
+      html.live #hint::after {
+        content: "";
+        display: block;
+        width: 1px;
+        height: 1.4rem;
+        margin: 0.6rem auto 0;
+        background: currentColor;
+      }
+      html.live .notice {
+        display: none;
+      }
+      /* The runway gives the document its scroll length; the sheet itself
+         never moves, scroll position is just the argument of the fold. */
+      html.live #runway {
+        height: var(--runway, 1000vh);
+      }
+
+      /* In live mode colours are plate percentages. Pure RGB secondaries
+         separate into exactly one process ink each in the shader, which
+         then prints them with real ink colours on the paper. */
+      html.live #sheet {
+        --ink: #000;
+        --soft: #000;
+        --red: #f00;
+        --cyan: #0ff;
+        --magenta: #f0f;
+        --yellow: #ff0;
+        color: var(--ink);
+      }
+
+      html.live .page {
+        position: relative;
+        width: var(--pw, 440px);
+        height: var(--ph, 622px);
+        container-type: size;
+        overflow: hidden;
+      }
+      html.live .leaf {
+        --u: 1cqw;
+        position: absolute;
+        top: calc(12 * var(--u));
+        bottom: calc(15 * var(--u));
+      }
+      /* recto: spine on the left; 4u of bleed lies beyond the trim on the
+         head, tail and fore-edge. */
+      html.live .recto .leaf {
+        left: calc(10 * var(--u));
+        right: calc(12 * var(--u));
+      }
+      html.live .verso .leaf {
+        left: calc(12 * var(--u));
+        right: calc(10 * var(--u));
+      }
+      html.live .folio,
+      html.live .sig {
+        --u: 1cqw;
+        position: absolute;
+        bottom: calc(9 * var(--u));
+      }
+      html.live .recto .folio {
+        right: calc(12 * var(--u));
+      }
+      html.live .verso .folio {
+        left: calc(12 * var(--u));
+      }
+      html.live .recto .sig {
+        left: calc(10 * var(--u));
+      }
+
+      /* The plate bleeds: it runs past the trim to the very edge of the
+         untrimmed leaf, so the knife can cut through it. */
+      html.live .recto .plate {
+        margin-right: calc(-12 * var(--u));
+      }
+
+      /* Crop marks in the corners of the bleed, and a slug in the tail
+         waste. Both are cut away in chapter V. */
+      html.live .marks {
+        --u: 1cqw;
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+      html.live .verso .marks {
+        transform: scaleX(-1);
+      }
+      html.live .marks::before,
+      html.live .marks::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        width: calc(4 * var(--u));
+        height: calc(4 * var(--u));
+        background:
+          linear-gradient(#000, #000) 0 calc(0.7 * var(--u)) /
+            calc(0.14 * var(--u)) calc(2.5 * var(--u)) no-repeat,
+          linear-gradient(#000, #000) calc(0.8 * var(--u)) 100% /
+            calc(2.5 * var(--u)) calc(0.14 * var(--u)) no-repeat;
+      }
+      html.live .marks::before {
+        top: 0;
+      }
+      html.live .marks::after {
+        bottom: 0;
+        transform: scaleY(-1);
+      }
+      html.live .slug {
+        --u: 1cqw;
+        position: absolute;
+        bottom: calc(1.25 * var(--u));
+        left: calc(12 * var(--u));
+        right: calc(12 * var(--u));
+        font: 400 calc(1.3 * var(--u)) / 1 var(--font-mono);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        user-select: none;
+      }
+      html.live .recto .slug {
+        text-align: right;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html.live #rail a,
+        html.live #rail a::after {
+          transition: none;
+        }
+      }
+      @media print {
+        #masthead,
+        #rail,
+        #telemetry,
+        .notice {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#p1">Skip to the essay</a>
+
+    <header id="masthead">
+      <div><b>QUARTO</b><span>Rendering experiments · no. 3</span></div>
+      <a href="/">Index</a>
+    </header>
+
+    <nav id="rail" aria-label="Chapters">
+      <ol>
+        <li><a href="#fold">I Fold</a></li>
+        <li><a href="#ink">II Ink</a></li>
+        <li><a href="#press-ch">III Press</a></li>
+        <li><a href="#thread">IV Thread</a></li>
+        <li><a href="#knife">V Knife</a></li>
+        <li><a href="#screen">VI Screen</a></li>
+        <li><a href="#colophon">Colophon</a></li>
+      </ol>
+    </nav>
+
+    <p class="notice plain-only" id="notice">
+      You are reading the plain sheet. In a browser with HTML-in-Canvas (Chrome
+      157 or later), on a screen larger than a phone, this same article is
+      printed on a sheet of paper that folds, is sewn and trimmed as you scroll,
+      and the figures move. Nothing is missing from the text below.
+    </p>
+
+    <main id="flow">
+      <!-- The press. Empty until the script moves #sheet inside it. -->
+      <canvas id="press"></canvas>
+
+      <article id="sheet">
+        <!-- ============ page 1 ============ -->
+        <section class="page recto" id="p1" data-page="1" tabindex="-1">
+          <div class="leaf">
+            <p class="kicker">One sheet · two folds · eight pages</p>
+            <h1>Quarto</h1>
+            <p class="sub">
+              How a printed page is physically made, printed on the page it
+              describes.
+            </p>
+            <p>
+              This essay is printed on a single sheet.
+              <span class="live-only"
+                >Scroll, and the sheet is folded, sewn and trimmed into the
+                booklet that explains it.</span
+              >
+              Nothing here is a picture of text. The paper is a mesh on your
+              graphics card, and the ink is this very paragraph: a live piece of
+              the document that you can select, copy and tab through, even where
+              it is printed upside down.
+            </p>
+            <p class="plain-only">
+              In this browser the sheet stays flat and unfolded, so the eight
+              pages simply follow one another.
+            </p>
+          </div>
+          <span class="sig" aria-hidden="true">A</span>
+          <i class="marks" aria-hidden="true"></i>
+          <small class="slug" aria-hidden="true"
+            >Quarto · sig. A · outer forme · K C M Y</small
+          >
+        </section>
+
+        <!-- ============ page 2 ============ -->
+        <section class="page verso" id="p2" data-page="2">
+          <div class="leaf">
+            <h2 id="fold"><span class="num">I</span> Fold</h2>
+            <p>
+              A press does not print pages. It prints sheets, several pages at a
+              time. Fold a sheet once and you have a folio of four pages; twice,
+              a quarto of eight; three times, an octavo of sixteen. The names
+              count leaves, not folds: a quarto is a sheet in four.
+            </p>
+            <p>
+              For the pages to fall in order after folding, they must be laid
+              out of order before it. This is imposition. Here pages 1, 4, 5 and
+              8 share one side of the sheet, the outer forme, and 2, 3, 6 and 7
+              the other. Pages 4 and 5 stand head to head with 1 and 8<span
+                class="live-only"
+                >, which is why half the sheet read upside down when you
+                arrived</span
+              >.
+            </p>
+            <p>
+              Nothing on this sheet was arranged by hand. The program folds the
+              mesh first, counts the layers from front to back, and only then
+              decides which page is printed on which panel, and which way up.
+            </p>
+          </div>
+          <span class="folio" aria-hidden="true">2</span>
+          <i class="marks" aria-hidden="true"></i>
+          <small class="slug" aria-hidden="true">Quarto · inner forme</small>
+        </section>
+
+        <!-- ============ page 3 ============ -->
+        <section class="page recto" id="p3" data-page="3">
+          <div class="leaf">
+            <h2 id="ink"><span class="num">II</span> Ink</h2>
+            <p>
+              Ink is either on the paper or it is not. A press cannot print a
+              paler black, so every grey and every photograph is made of dots:
+              large for dark tones, small for light ones, on a grid too fine to
+              notice. This is the halftone.
+            </p>
+            <p>
+              Colour takes four inks, cyan, magenta, yellow and black, each on
+              its own plate with its own grid. The grids are turned to different
+              angles, commonly black at 45°, cyan at 15°, magenta at 75° and
+              yellow at 0°, so the dots gather into small rosettes instead of a
+              moiré.
+            </p>
+            <figure id="specimen">
+              <div
+                class="plate"
+                role="img"
+                aria-label="A small landscape: an orange sky fading to blue, a low sun, a green hill and a black hill."
+              ></div>
+              <div class="tints" aria-hidden="true">
+                <i></i><i></i><i></i><i></i><i></i>
+              </div>
+              <div class="specimen-line" aria-hidden="true">
+                Solid black 100
+              </div>
+              <figcaption>
+                <span class="live-only"
+                  >Move the glass over the plate. This screen is coarse, so
+                  eight times is enough; a magazine at 150 lines to the inch
+                  needs a stronger loupe.</span
+                >
+                Greys break into dots. Solid black type is not screened, and its
+                edge stays whole.
+              </figcaption>
+            </figure>
+          </div>
+          <span class="folio" aria-hidden="true">3</span>
+          <span class="sig" aria-hidden="true">A2</span>
+          <i class="marks" aria-hidden="true"></i>
+          <small class="slug" aria-hidden="true"
+            >Quarto · inner forme · bleed 4</small
+          >
+        </section>
+
+        <!-- ============ page 4 ============ -->
+        <section class="page verso" id="p4" data-page="4">
+          <div class="leaf">
+            <h2 id="press-ch"><span class="num">III</span> Press</h2>
+            <p>
+              Most printing today is offset lithography. The plate is flat. Its
+              image areas hold greasy ink, its blank areas hold a film of water,
+              and the two refuse to mix. The plate never touches the paper: it
+              prints onto a rubber blanket, and the blanket prints onto the
+              sheet. That detour is the offset.
+            </p>
+            <p>
+              Each ink has its own printing unit, and the sheet runs through all
+              four in about a second, commonly black first, then cyan, magenta
+              and yellow. The four impressions must land on one another to
+              within about a tenth of a millimetre. That is register, and the
+              first sheets of every run are spent finding it.
+            </p>
+            <figure>
+              <div
+                class="target"
+                role="img"
+                aria-label="A register target: three overlapping discs of cyan, magenta and yellow ink under a black crosshair."
+              >
+                <i></i><i></i><i></i>
+              </div>
+              <figcaption>
+                <span class="live-only"
+                  >Scroll, and the plates walk into register.</span
+                >
+                Black type barely notices. Anything built from two inks, like
+                the red heading above, grows a fringe.
+              </figcaption>
+            </figure>
+          </div>
+          <span class="folio" aria-hidden="true">4</span>
+          <i class="marks" aria-hidden="true"></i>
+          <small class="slug" aria-hidden="true">Quarto · outer forme</small>
+        </section>
+
+        <!-- ============ page 5 ============ -->
+        <section class="page recto" id="p5" data-page="5">
+          <div class="leaf">
+            <h2 id="thread"><span class="num">IV</span> Thread</h2>
+            <p>
+              A folded sheet is called a signature, after the letter the printer
+              set at the foot of its first page so that the binder could gather
+              the sections in order. This one is signed A, at the foot of page
+              1.
+            </p>
+            <p>
+              A thick book is many signatures sewn to one another through their
+              folds. A single signature needs three holes and one length of
+              thread. The needle goes out through the middle of the fold, comes
+              back in at the head, runs down the whole gutter, goes out at the
+              tail and returns through the middle, where the two ends are
+              knotted across the long stitch.
+            </p>
+            <p>
+              <span class="live-only"
+                >You are at the centre of the booklet, the one opening where the
+                thread shows.</span
+              >
+              Wire staples do the same job faster, and the trade calls that
+              saddle stitching. A glued paperback has its folds milled away, and
+              nothing but adhesive holds its leaves.
+            </p>
+          </div>
+          <span class="folio" aria-hidden="true">5</span>
+          <i class="marks" aria-hidden="true"></i>
+          <small class="slug" aria-hidden="true"
+            >Quarto · outer forme · centre</small
+          >
+        </section>
+
+        <!-- ============ page 6 ============ -->
+        <section class="page verso" id="p6" data-page="6">
+          <div class="leaf">
+            <h2 id="knife"><span class="num">V</span> Knife</h2>
+            <p>
+              Until now the booklet was unfinished. The fold across the head
+              still joined its leaves in pairs. Such closed folds are called
+              bolts<span class="live-only"
+                >, and you tore two of them to get here: this opening and the
+                first one were sealed</span
+              >. Books were once sold like this, and readers opened them with a
+              paper knife as they went.
+            </p>
+            <p>
+              A bindery trims three edges: the fore-edge, then the head and the
+              tail. The spine is never cut. The knives take off the bolts, the
+              ragged edges and a few millimetres of margin, so anything meant to
+              run off the page is printed about three millimetres past the trim
+              line. That overhang is the bleed. The hairlines in the corners are
+              crop marks. They show the knife where to fall, and they leave with
+              the waste.
+            </p>
+            <p class="note live-only">
+              Scroll, and the knives come down: the front knife first, then the
+              two side knives together.
+            </p>
+          </div>
+          <span class="folio" aria-hidden="true">6</span>
+          <i class="marks" aria-hidden="true"></i>
+          <small class="slug" aria-hidden="true">Quarto · inner forme</small>
+        </section>
+
+        <!-- ============ page 7 ============ -->
+        <section class="page recto" id="p7" data-page="7">
+          <div class="leaf">
+            <h2 id="screen"><span class="num">VI</span> Screen</h2>
+            <p>
+              In July 2026 this page could not have shipped. Text inside a 3D
+              scene was a picture of text, or an invisible copy floated on top,
+              unless you held a trial token. Since Chrome 157 any canvas can
+              adopt real elements through the
+              <a href="https://github.com/WICG/html-in-canvas"
+                >HTML-in-Canvas API</a
+              >. The browser lays them out, paints them and hands each one to
+              the GPU as a texture, here through the API’s WebGL 2 entry point.
+              The page reports back where every element ended up, so a click
+              still lands on the right word after two folds and a turn.
+            </p>
+            <p class="live-only">
+              Try it. Select this sentence. Press <kbd>Tab</kbd> and watch the
+              focus ring travel across the paper.
+            </p>
+            <p>
+              Each of the eight pages is one section of an ordinary article.
+              Where the API is missing they stack up as plain text, and nothing
+              is lost but the paper.
+              <a
+                href="https://developer.chrome.com/docs/web-platform/html-in-canvas"
+                >Chrome’s documentation</a
+              >
+              has the details.
+            </p>
+          </div>
+          <span class="folio" aria-hidden="true">7</span>
+          <i class="marks" aria-hidden="true"></i>
+          <small class="slug" aria-hidden="true">Quarto · inner forme</small>
+        </section>
+
+        <!-- ============ page 8 ============ -->
+        <section class="page verso" id="p8" data-page="8">
+          <div class="leaf">
+            <h2 id="colophon"><span class="num">·</span> Colophon</h2>
+            <p>
+              Quarto is the third rendering experiment on this site, after
+              <a href="/lumen/index.html">Lumen</a>, on light, and
+              <a href="/material/">Material</a>, on the browser itself.
+            </p>
+            <ul class="colophon-list">
+              <li><b>Sheet</b>1 : √2, folded twice</li>
+              <li><b>Inks</b>K, C, M, Y</li>
+              <li><b>Screen</b>45° 15° 75° 0°</li>
+              <li><b>Sewing</b>three-hole pamphlet</li>
+              <li>
+                <b>Type</b>Clash Display, Martian Mono, your system’s serif
+              </li>
+              <li><b>Press</b>HTML-in-Canvas, by its WebGL 2 door</li>
+              <li><b>Weight</b>one file, no library</li>
+            </ul>
+            <p class="note live-only">
+              Two limits. Find-in-page reads all eight pages but cannot turn
+              them, so a match on a leaf that is folded away stays out of sight.
+              And on a phone the pages would be too small to read, so phones get
+              the plain article.
+            </p>
+            <p class="note">
+              View the source: it is unminified, and the shader that prints this
+              sentence is in it.
+              <a href="#p1">Back to the first page</a>, or
+              <a href="/">back to the index</a>.
+            </p>
+          </div>
+          <span class="folio" aria-hidden="true">8</span>
+          <i class="marks" aria-hidden="true"></i>
+          <small class="slug" aria-hidden="true"
+            >Quarto · outer forme · MMXXVI</small
+          >
+        </section>
+      </article>
+    </main>
+
+    <div id="runway" aria-hidden="true"></div>
+    <p id="hint" aria-hidden="true">Scroll to fold</p>
+
+    <footer id="telemetry">
+      <span id="stat">plain article</span>
+    </footer>
+
+    <!-- ================================================================
+         SHADERS (GLSL ES 3.00)
+         ================================================================ -->
+
+    <!-- Paper bends. While a panel is in transit it is rolled into an arc
+         about its hinge (the spine, or the line of a fold): each point keeps
+         its distance from the hinge along the surface, so the paper curls
+         without stretching. The curvature is zero at every rest stop, and
+         the sheet is then exactly flat again. Shared by the page and its
+         shadow; the script has the same function for hit-testing. -->
+    <script type="x-shader/x-chunk" id="glsl-bend">
+      uniform vec4 u_bend;   // hinge (0: u=0 edge, 1: u=1 edge, 2: v=0 edge), curvature, cone, H
+      vec3 bendPanel(vec2 p, out vec3 n) {
+        float k = u_bend.y;
+        n = vec3(0.0, 0.0, 1.0);
+        if (abs(k) < 1e-5) return vec3(p, 0.0);
+        int hinge = int(u_bend.x + 0.5);
+        float d = hinge == 0 ? p.x : hinge == 1 ? 1.0 - p.x : p.y * u_bend.w;  // arc length from the hinge
+        float w = hinge == 2 ? p.x : p.y;                                     // position along the hinge
+        k *= 1.0 + u_bend.z * (w - 0.5);            // one corner leads a little
+        float s = sin(k * d), c = cos(k * d);
+        float along = s / k, lift = (1.0 - c) / k;
+        if (hinge == 0) { n = vec3(-s, 0.0, c); return vec3(along, p.y, lift); }
+        if (hinge == 1) { n = vec3(s, 0.0, c); return vec3(1.0 - along, p.y, lift); }
+        n = vec3(0.0, -s / u_bend.w, c);
+        return vec3(p.x, along / u_bend.w, lift);
+      }
+    </script>
+
+    <!-- One tessellated panel of the sheet. Both faces in one draw call. -->
+    <script type="x-shader/x-vertex" id="vs-page">
+      #version 300 es
+      layout(location = 0) in vec2 a_pos;      // panel-local, 0..1
+      uniform mat4 u_mvp;
+      uniform mat4 u_nmat;                     // panel -> lit space, for normals
+      out vec2 v_uv;
+      out vec3 v_nrm;
+      //#bend
+      void main() {
+        vec3 n;
+        vec3 p = bendPanel(a_pos, n);
+        v_uv = a_pos;
+        v_nrm = mat3(u_nmat) * n;
+        gl_Position = u_mvp * vec4(p, 1.0);
+      }
+    </script>
+
+    <script type="x-shader/x-fragment" id="fs-page">
+      #version 300 es
+      precision highp float;
+
+      in vec2 v_uv;
+      in vec3 v_nrm;              // normal of the front face
+      out vec4 o_color;
+
+      uniform sampler2D u_tex0;   // page on the front face of this panel
+      uniform sampler2D u_tex1;   // page on the back face
+      uniform vec4 u_face0;       // flipS, flipT, page number, gutter shade
+      uniform vec4 u_face1;
+      uniform vec4 u_fx0;         // plates laid 0..1, misregister, torn head, -
+      uniform vec4 u_fx1;
+      uniform vec2 u_trim;        // front knife 0..1, side knives 0..1
+      uniform vec2 u_bleed;       // bleed as a fraction of page width, height
+      uniform float u_H;          // page height / page width
+      uniform vec4 u_lens;        // centre x,y (framebuffer px), radius, power
+      uniform float u_lensPage;   // page the glass rests on (0 = no glass)
+      uniform float u_screen;     // halftone cells across one page width
+
+      // Process inks as light they let through (ink is subtractive).
+      const vec3 INK_C = vec3(0.00, 0.62, 0.86);
+      const vec3 INK_M = vec3(0.89, 0.06, 0.48);
+      const vec3 INK_Y = vec3(1.00, 0.91, 0.06);
+      const vec3 INK_K = vec3(0.085, 0.08, 0.09);
+      const vec3 PAPER = vec3(0.957, 0.940, 0.898);
+
+      // Classic screen angles: C 15, M 75, Y 0, K 45 degrees.
+      const float ANGLE[4] = float[4](0.2618, 1.3090, 0.0, 0.7854);
+      // Where each plate lands when the press is out of register (page units).
+      const vec2 OFF_C = vec2( 0.0052,  0.0014);
+      const vec2 OFF_M = vec2(-0.0034,  0.0030);
+      const vec2 OFF_Y = vec2( 0.0018, -0.0036);
+
+      float hash(vec2 p) {
+        return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+      }
+      float vnoise(vec2 p) {
+        vec2 i = floor(p), f = fract(p);
+        f = f * f * (3.0 - 2.0 * f);
+        return mix(mix(hash(i), hash(i + vec2(1, 0)), f.x),
+                   mix(hash(i + vec2(0, 1)), hash(i + vec2(1, 1)), f.x), f.y);
+      }
+
+      // The DOM texture is a transparent page with premultiplied alpha.
+      // Read it as "ink over white" and separate it into four plates.
+      vec4 separate(vec4 t) {
+        vec3 c = t.rgb + (1.0 - t.a);
+        float k = 1.0 - max(c.r, max(c.g, c.b));
+        vec3 cmy = (1.0 - c - k) / max(1.0 - k, 1e-3);
+        return vec4(cmy, k);
+      }
+      // Solid dark linework (type, rules) is not screened in print.
+      bool isLinework(vec4 t) {
+        return t.a > 0.02 && max(t.r, max(t.g, t.b)) < 0.2 * t.a;
+      }
+
+      void main() {
+        bool front = gl_FrontFacing;
+        vec4 face = front ? u_face0 : u_face1;
+        vec4 fx = front ? u_fx0 : u_fx1;
+
+        // Panel coordinates -> page coordinates (s right, t down), using
+        // the orientation the imposition worked out for this face.
+        vec2 uv = vec2(face.x > 0.5 ? 1.0 - v_uv.x : v_uv.x,
+                       face.y > 0.5 ? v_uv.y : 1.0 - v_uv.y);
+        vec2 dux = dFdx(uv), duy = dFdy(uv);
+        float pageNo = face.z;
+        bool recto = mod(pageNo, 2.0) > 0.5;
+        float e = recto ? uv.x : 1.0 - uv.x;      // 0 at the spine, 1 at the fore-edge
+        float we = max(fwidth(e), 1e-5), wt = max(fwidth(uv.y), 1e-5);
+
+        // ---- V. Knife: what is left of the leaf -------------------------
+        float cov = 1.0;
+        // A bolt opened with a paper knife leaves a ragged head.
+        float rag = fx.z * (0.0035 + 0.0085 * vnoise(vec2(uv.x * 46.0, pageNo * 9.0))
+                                   + 0.004 * vnoise(vec2(uv.x * 190.0, pageNo)));
+        cov *= smoothstep(rag - wt, rag + wt, uv.y + (1.0 - fx.z));
+        // Front knife: takes the fore-edge strip, sweeping down the page.
+        float inFore = smoothstep(-we, we, e - (1.0 - u_bleed.x));
+        cov *= 1.0 - inFore * (1.0 - smoothstep(-wt, wt, uv.y - u_trim.x * 1.03));
+        // Side knives: head and tail together, sweeping in from the fore-edge.
+        float inHead = 1.0 - smoothstep(-wt, wt, uv.y - u_bleed.y);
+        float inTail = smoothstep(-wt, wt, uv.y - (1.0 - u_bleed.y));
+        cov *= 1.0 - max(inHead, inTail) * smoothstep(-we, we, e - (1.0 - u_trim.y * 1.03));
+        if (cov < 0.004) discard;
+
+        // ---- II. Ink: read the DOM and separate it ------------------------
+        vec2 d = gl_FragCoord.xy - u_lens.xy;
+        bool glass = u_lensPage == pageNo && dot(d, d) < u_lens.z * u_lens.z;
+        vec4 cmyk;
+        float plateC = smoothstep(0.04, 0.30, fx.x);
+        float plateM = smoothstep(0.36, 0.62, fx.x);
+        float plateY = smoothstep(0.68, 0.94, fx.x);
+
+        if (!glass) {
+          // Naked eye: the dots are below what you can resolve, so each
+          // ink is simply its coverage.
+          vec4 t = front ? textureGrad(u_tex0, uv, dux, duy) : textureGrad(u_tex1, uv, dux, duy);
+          cmyk = separate(t);
+          if (fx.y > 0.0) {
+            // ---- III. Press: each plate lands somewhere else ------------
+            vec2 a = uv + OFF_C * fx.y, b = uv + OFF_M * fx.y, c = uv + OFF_Y * fx.y;
+            vec4 tc = front ? textureGrad(u_tex0, a, dux, duy) : textureGrad(u_tex1, a, dux, duy);
+            vec4 tm = front ? textureGrad(u_tex0, b, dux, duy) : textureGrad(u_tex1, b, dux, duy);
+            vec4 ty = front ? textureGrad(u_tex0, c, dux, duy) : textureGrad(u_tex1, c, dux, duy);
+            cmyk.x = separate(tc).x;
+            cmyk.y = separate(tm).y;
+            cmyk.z = separate(ty).z;
+          }
+        } else {
+          // Under the glass: magnify, and rebuild the image the way the
+          // plates carry it, as rows of dots at four angles.
+          vec2 centre = uv - (dux * d.x + duy * d.y);
+          vec2 uvL = centre + (uv - centre) / u_lens.w;
+          vec2 gx = dux / u_lens.w, gy = duy / u_lens.w;
+          vec2 p = vec2(uvL.x, uvL.y * u_H) * u_screen;
+          float aa = 1.7 * u_screen * length(gx);
+          cmyk = vec4(0.0);
+          for (int i = 0; i < 4; i++) {
+            float ca = cos(ANGLE[i]), sa = sin(ANGLE[i]);
+            vec2 q = vec2(ca * p.x + sa * p.y, -sa * p.x + ca * p.y);
+            vec2 cell = floor(q + 0.5);
+            vec2 cuv = vec2(ca * cell.x - sa * cell.y, sa * cell.x + ca * cell.y) / u_screen;
+            cuv.y /= u_H;
+            vec4 t = front ? textureLod(u_tex0, cuv, 0.0) : textureLod(u_tex1, cuv, 0.0);
+            float v = separate(t)[i];
+            if (i == 3 && isLinework(t)) v = 0.0;      // linework is drawn below
+            // Round dot that grows from the cell centre, meets its
+            // neighbours at 50% and closes into holes above it.
+            float spot = 0.5 - 0.25 * (cos(6.2831853 * q.x) + cos(6.2831853 * q.y));
+            cmyk[i] = v < 0.012 ? 0.0 : smoothstep(v + aa, v - aa, spot);
+          }
+          vec4 t = front ? textureGrad(u_tex0, uvL, gx, gy) : textureGrad(u_tex1, uvL, gx, gy);
+          if (isLinework(t)) {
+            // Solid ink: one clean edge, slightly bitten by the paper.
+            float bite = (vnoise(uvL * vec2(900.0, 900.0 * u_H)) - 0.5) * 0.14;
+            cmyk.w = max(cmyk.w, smoothstep(0.42, 0.58, t.a + bite));
+          }
+        }
+
+        // ---- the sheet itself ----------------------------------------------
+        vec2 fibre = uv * vec2(1.0, u_H);
+        float tooth = vnoise(fibre * 310.0 + pageNo) * 0.6 + vnoise(fibre * vec2(46.0, 90.0) + pageNo * 3.0) * 0.4;
+        vec3 col = PAPER * (0.972 + 0.036 * tooth);
+
+        // Inks multiply: each one removes part of the light the paper returns.
+        col *= mix(vec3(1.0), INK_C, cmyk.x * plateC);
+        col *= mix(vec3(1.0), INK_M, cmyk.y * plateM);
+        col *= mix(vec3(1.0), INK_Y, cmyk.z * plateY);
+        col *= mix(vec3(1.0), INK_K, cmyk.w);
+
+        // Light: one soft source up and to the left, and the shade that
+        // gathers in the gutter of an open booklet.
+        vec3 n = normalize(v_nrm) * (front ? 1.0 : -1.0);
+        float diff = clamp(dot(n, normalize(vec3(-0.22, 0.38, 1.0))) / 0.915, 0.0, 1.06);
+        float shade = mix(0.52, 1.0, diff);
+        shade *= 1.0 - face.w * 0.30 * exp(-e / 0.06);
+        if (glass) shade *= 1.04;
+
+        o_color = vec4(col * shade, cov);
+      }
+    </script>
+
+    <!-- Soft shadow of each panel on the table. -->
+    <script type="x-shader/x-vertex" id="vs-shadow">
+      #version 300 es
+      layout(location = 0) in vec2 a_pos;
+      uniform mat4 u_model;
+      uniform mat4 u_vp;
+      uniform float u_floor;
+      out vec2 v_q;
+      out float v_h;
+      //#bend
+      void main() {
+        vec2 q = (a_pos - 0.5) * 1.7 + 0.5;       // room for the penumbra
+        vec2 qc = clamp(q, 0.0, 1.0);
+        vec3 n;
+        vec4 w = u_model * vec4(bendPanel(qc, n) + vec3(q - qc, 0.0), 1.0);
+        float h = max(w.z - u_floor, 0.0);
+        v_q = q;
+        v_h = h;
+        gl_Position = u_vp * vec4(w.xy + h * vec2(0.20, -0.30), u_floor, 1.0);
+      }
+    </script>
+    <script type="x-shader/x-fragment" id="fs-shadow">
+      #version 300 es
+      precision highp float;
+      in vec2 v_q;
+      in float v_h;
+      uniform float u_H;
+      out vec4 o_color;
+      void main() {
+        float dx = min(v_q.x, 1.0 - v_q.x);
+        float dy = min(v_q.y, 1.0 - v_q.y) * u_H;
+        float soft = 0.035 + 0.30 * v_h;
+        float a = smoothstep(-soft, soft, min(dx, dy));
+        a *= mix(0.62, 0.34, clamp(v_h * 1.2, 0.0, 1.0));
+        o_color = vec4(a);
+      }
+    </script>
+
+    <!-- The table: one flat colour under a soft light, multiplied by the
+         shadows already in the framebuffer. -->
+    <script type="x-shader/x-vertex" id="vs-full">
+      #version 300 es
+      void main() {
+        vec2 p = vec2(float((gl_VertexID << 1) & 2), float(gl_VertexID & 2));
+        gl_Position = vec4(p * 2.0 - 1.0, 0.0, 1.0);
+      }
+    </script>
+    <script type="x-shader/x-fragment" id="fs-bench">
+      #version 300 es
+      precision highp float;
+      uniform vec2 u_res;
+      out vec4 o_color;
+      float hash(vec2 p) {
+        return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+      }
+      void main() {
+        vec2 q = gl_FragCoord.xy / u_res - vec2(0.42, 0.60);
+        q.x *= u_res.x / u_res.y;
+        float light = clamp(1.0 - dot(q, q) * 0.85, 0.0, 1.0);
+        vec3 col = mix(vec3(0.030, 0.058, 0.066), vec3(0.105, 0.185, 0.200), light * light);
+        col += (hash(gl_FragCoord.xy) - 0.5) * 0.012;
+        o_color = vec4(col, 1.0);
+      }
+    </script>
+
+    <!-- IV. The thread in the centre fold, and the glass. Small flat
+         drawings, so one quad and a little distance maths each. -->
+    <script type="x-shader/x-vertex" id="vs-quad">
+      #version 300 es
+      layout(location = 0) in vec2 a_pos;
+      uniform mat4 u_mvp;
+      out vec2 v_p;
+      void main() {
+        v_p = a_pos;
+        gl_Position = u_mvp * vec4(a_pos, 0.0, 1.0);
+      }
+    </script>
+    <script type="x-shader/x-fragment" id="fs-thread">
+      #version 300 es
+      precision highp float;
+      in vec2 v_p;                // x: 0..1 across the strip, y: 0 tail .. 1 head
+      uniform vec2 u_size;        // strip width and height in page widths
+      uniform float u_sew;        // 0..1
+      uniform vec3 u_holes;       // head, middle, tail stations (y, 0..1)
+      out vec4 o_color;
+
+      float seg(vec2 p, vec2 a, vec2 b) {
+        vec2 pa = p - a, ba = b - a;
+        return length(pa - ba * clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0));
+      }
+      void main() {
+        vec2 p = (v_p - vec2(0.5, 0.0)) * u_size;   // page widths, x centred on the fold
+        float px = fwidth(p.x);
+        float r = 0.0036;                           // thread radius
+        vec4 acc = vec4(0.0);
+
+        // The three holes are pierced first.
+        float holes = smoothstep(0.0, 0.10, u_sew);
+        for (int i = 0; i < 3; i++) {
+          float hd = length(p - vec2(0.0, u_holes[i] * u_size.y));
+          float a = (1.0 - smoothstep(r * 1.15 - px, r * 1.15 + px, hd)) * holes;
+          acc = mix(acc, vec4(vec3(0.03) * a, a), a);
+        }
+
+        // The long stitch runs from the head hole down to the tail hole.
+        float run = smoothstep(0.14, 0.72, u_sew);
+        float yHead = u_holes.x * u_size.y, yTail = u_holes.z * u_size.y, yMid = u_holes.y * u_size.y;
+        float yEnd = mix(yHead, yTail, run);
+        float dist = seg(p, vec2(0.0, yHead), vec2(0.0, yEnd));
+        // The knot: two short ends tied across the long stitch at the middle.
+        float knot = smoothstep(0.76, 0.96, u_sew);
+        if (knot > 0.0) {
+          dist = min(dist, seg(p, vec2(0.0, yMid), vec2(-0.017, yMid + 0.012) * vec2(knot, 1.0) + vec2(0.0, 0.0)));
+          dist = min(dist, seg(p, vec2(0.0, yMid), vec2(0.015 * knot, yMid - 0.014)));
+          dist = min(dist, length(p - vec2(0.0, yMid)) - r * 0.9 * knot);
+        }
+        if (run > 0.0) {
+          float a = 1.0 - smoothstep(r - px, r + px, dist);
+          // Two plies twisted together, lit from the left.
+          float ply = 0.5 + 0.5 * sin((p.y * 1.0 + p.x * 1.6) * 1500.0);
+          float round_ = 1.0 - 0.55 * clamp(dist / r, 0.0, 1.0);
+          vec3 col = vec3(0.80, 0.16, 0.10) * (0.72 + 0.28 * ply) * round_;
+          acc = mix(acc, vec4(col * a, a), a);
+          // contact shadow on the paper
+          float sh = (1.0 - smoothstep(r, r * 3.2, seg(p - vec2(0.0022, -0.0022), vec2(0.0, yHead), vec2(0.0, yEnd)))) * 0.30 * (1.0 - a);
+          acc += vec4(0.0, 0.0, 0.0, sh) * (1.0 - acc.a);
+        }
+        o_color = acc;
+      }
+    </script>
+    <script type="x-shader/x-fragment" id="fs-rim">
+      #version 300 es
+      precision highp float;
+      in vec2 v_p;
+      uniform float u_radius;     // glass radius / quad half-size
+      uniform float u_px;         // one pixel in quad units
+      out vec4 o_color;
+      void main() {
+        vec2 p = v_p * 2.0 - 1.0;
+        float r = length(p);
+        float rimW = 0.045;
+        float rim = smoothstep(u_radius - u_px, u_radius + u_px, r) *
+                    (1.0 - smoothstep(u_radius + rimW - u_px, u_radius + rimW + u_px, r));
+        float ang = dot(normalize(p + 1e-5), normalize(vec2(-0.5, 0.8)));
+        vec3 metal = mix(vec3(0.10, 0.11, 0.12), vec3(0.78, 0.76, 0.70), smoothstep(0.2, 1.0, ang) * 0.9);
+        // a thin bright arc inside the glass, and a shadow outside the rim
+        float glint = (1.0 - smoothstep(0.0, 0.03, abs(r - u_radius * 0.93))) * smoothstep(0.55, 1.0, ang) * 0.22;
+        float shadow = (1.0 - smoothstep(u_radius + rimW, 1.0, length(p - vec2(0.03, -0.05)))) * 0.42 * step(u_radius + rimW * 0.5, r);
+        float a = max(rim, shadow);
+        vec3 col = metal * rim;
+        o_color = vec4(col + vec3(glint) * (1.0 - rim) * step(r, u_radius), max(a, glint * step(r, u_radius)));
+      }
+    </script>
+
+    <script>
+      /* ================================================================
+         QUARTO - script
+         1. feature detection and the promotion ladder
+         2. layout of the fixed pages
+         3. the journey: scroll position -> state of the sheet
+         4. matrices
+         5. imposition, computed by folding
+         6. WebGL: programs, textures, the paint event
+         7. render, and telling the browser where each page landed
+         8. frame loop, adaptive cost, visibility
+         9. navigation the browser can no longer do alone
+         ================================================================ */
+      (() => {
+        "use strict";
+
+        const root = document.documentElement;
+        const canvas = document.getElementById("press");
+        const article = document.getElementById("sheet");
+        const flow = document.getElementById("flow");
+        const runway = document.getElementById("runway");
+        const stat = document.getElementById("stat");
+        const hint = document.getElementById("hint");
+        const pages = [...article.querySelectorAll(".page")]; // DOM order = pages 1..8
+        const reduceMQ = matchMedia("(prefers-reduced-motion: reduce)");
+
+        /* Debug hook, like LUMEN's: set QUARTO.journey to a number to drive
+           the sheet without scrolling; null hands control back to scroll. */
+        const Q = (window.QUARTO = { mode: "plain", info: {} });
+        let forcedJourney = null;
+        Object.defineProperty(Q, "journey", {
+          get: () => forcedJourney,
+          set(v) {
+            forcedJourney = v === null ? null : +v;
+            if (Q.mode === "live") {
+              view.settled = true;
+              render();
+            }
+          },
+        });
+
+        /* ---------- 1. feature detection ------------------------------- */
+
+        function htmlInCanvasSupported() {
+          // The test Chrome documents: the attribute must reflect.
+          const c = document.createElement("canvas");
+          c.setAttribute("content", "drawable");
+          return (
+            c.content === "drawable" &&
+            typeof c.updateElementGeometry === "function" &&
+            typeof c.clearElementGeometry === "function" &&
+            typeof c.requestPaint === "function" &&
+            typeof WebGL2RenderingContext !== "undefined" &&
+            "texElementSubImage2D" in WebGL2RenderingContext.prototype
+          );
+        }
+
+        function stayPlain(reason) {
+          root.classList.remove("pending", "live", "narrow");
+          root.classList.add("plain");
+          Q.mode = "plain";
+          Q.info.reason = reason;
+          stat.textContent = "plain article · " + reason;
+        }
+
+        /* ---------- 2. layout ------------------------------------------ */
+
+        const SQRT2 = Math.SQRT2;
+        const BLEED = 0.04; // of the page width, on head, tail and fore-edge
+        const MIN_PAGE = 410; // CSS px: the narrowest page we are willing to print
+        const L = {
+          wide: true,
+          pw: 440,
+          ph: 622,
+          H: SQRT2,
+          cw: 2,
+          ch: 2,
+          fit: 200,
+          texW: 2,
+          texH: 2,
+        };
+
+        function measure() {
+          const cw = Math.max(2, canvas.clientWidth || window.innerWidth);
+          const ch = Math.max(2, canvas.clientHeight || window.innerHeight);
+          const availH = ch - 88; // masthead above, telemetry below
+          const pwWide = Math.floor(
+            Math.min((cw * 0.92) / 2, availH / SQRT2, 640)
+          );
+          const pwNarrow = Math.floor(Math.min(cw * 0.94, availH / SQRT2, 640));
+          L.wide = pwWide >= MIN_PAGE;
+          L.pw = L.wide ? pwWide : pwNarrow;
+          L.ph = Math.round(L.pw * SQRT2);
+          L.H = L.ph / L.pw;
+          L.cw = cw;
+          L.ch = ch;
+          // one texel per device pixel at reading size (2x at most)
+          const ts = Math.min(window.devicePixelRatio || 1, 2);
+          L.texW = Math.max(2, Math.round(L.pw * ts));
+          L.texH = Math.max(2, Math.round(L.ph * ts));
+          // Body type is 3.5% of the page width. Below MIN_PAGE it would drop
+          // under about 14 px (every phone, in practice): stay plain instead.
+          return L.pw >= MIN_PAGE;
+        }
+
+        function applyLayout() {
+          root.style.setProperty("--pw", L.pw + "px");
+          root.style.setProperty("--ph", L.ph + "px");
+          root.classList.toggle("narrow", !L.wide);
+          buildStops();
+          root.style.setProperty(
+            "--runway",
+            Math.round((J.total + 1) * L.ch) + "px"
+          );
+        }
+
+        /* Pages are fixed in size, so text that does not fit would be lost.
+           If a fallback font runs wider than expected, shrink the type a
+           little until every page holds its text. */
+        function fitType() {
+          let fit = 1;
+          root.style.setProperty("--fit", "1");
+          for (let i = 0; i < 6; i++) {
+            const over = pages.some(p => {
+              const leaf = p.querySelector(".leaf");
+              return leaf.scrollHeight > leaf.clientHeight + 1;
+            });
+            if (!over) break;
+            fit *= 0.965;
+            root.style.setProperty("--fit", fit.toFixed(4));
+          }
+          Q.info.fit = fit;
+        }
+
+        /* ---------- 3. the journey ------------------------------------- */
+
+        /* A stop is a place where the sheet rests and can be read. Between
+           two stops the sheet is in transit. Positions are in viewport
+           heights of scroll. In a wide window a stop is an opening of two
+           pages; in a narrow one it is a single page. */
+        const J = { stops: [], total: 1, stopOfPage: {} };
+
+        function buildStops() {
+          const S = [];
+          const cy = -L.H / 2;
+          const open = fitOpening();
+          L.fit = open.scale;
+          S.push({
+            pages: [1, 8, 4, 5],
+            turn: 0,
+            fold: 0,
+            cx: 0,
+            cy: open.cy,
+            scale: open.scale,
+            tilt: 1,
+            len: 0.4,
+            gap: 0,
+          });
+          if (L.wide) {
+            S.push({ pages: [1], turn: 0, cx: 0.5, len: 0.8, gap: 1.8 });
+            S.push({ pages: [2, 3], turn: 1, cx: 0, len: 1.5, gap: 0.8 });
+            S.push({ pages: [4, 5], turn: 2, cx: 0, len: 1.5, gap: 0.8 });
+            S.push({ pages: [6, 7], turn: 3, cx: 0, len: 1.5, gap: 0.8 });
+            S.push({ pages: [8], turn: 4, cx: -0.5, len: 0.8, gap: 0.8 });
+          } else {
+            S.push({ pages: [1], turn: 0, cx: 0.5, len: 0.8, gap: 1.8 });
+            for (let p = 2; p <= 7; p++) {
+              const left = p % 2 === 0;
+              S.push({
+                pages: [p],
+                turn: p >> 1,
+                cx: left ? -0.5 : 0.5,
+                len: p === 2 || p === 7 ? 0.9 : 1.4,
+                gap: left ? 0.8 : 0.5,
+              });
+            }
+            S.push({ pages: [8], turn: 4, cx: -0.5, len: 0.8, gap: 0.8 });
+          }
+          let at = 0;
+          J.stopOfPage = {};
+          S.forEach((s, i) => {
+            if (i > 0) Object.assign(s, { fold: 1, cy, scale: L.pw, tilt: 0 });
+            at += s.gap;
+            s.start = at;
+            at += s.len;
+            s.end = at;
+            if (i > 0) for (const p of s.pages) J.stopOfPage[p] = i;
+          });
+          J.stops = S;
+          J.total = at;
+        }
+
+        const clamp01 = x => Math.min(1, Math.max(0, x));
+        const ease = t => t * t * (3 - 2 * t);
+        const lerp = (a, b, t) => a + (b - a) * t;
+
+        /* State of the sheet at journey position u. */
+        function stateAt(u) {
+          const S = J.stops;
+          u = Math.min(Math.max(u, 0), J.total);
+          let i = 0;
+          while (i < S.length - 1 && u >= S[i + 1].start) i++;
+          const a = S[i];
+          if (u <= a.end || i === S.length - 1) {
+            return {
+              ...a,
+              stop: i,
+              rest: true,
+              p: clamp01((u - a.start) / a.len),
+            };
+          }
+          const b = S[i + 1];
+          let t = (u - a.end) / (b.start - a.end);
+          // Reduced motion: no transit. The sheet is at one stop or the next.
+          if (reduceMQ.matches)
+            return {
+              ...(t < 0.5 ? a : b),
+              stop: t < 0.5 ? i : i + 1,
+              rest: true,
+              p: t < 0.5 ? 1 : 0,
+            };
+          const k = ease(t);
+          if (a.fold !== b.fold) {
+            // The two folds: the camera follows the shrinking sheet, first
+            // down to the bottom row, then across to the right-hand page.
+            const f1 = ease(clamp01(t / FOLD_SPLIT)),
+              f2 = ease(clamp01((t - FOLD_SPLIT) / (1 - FOLD_SPLIT)));
+            const zoom = ease(clamp01((t - 0.25) / 0.75));
+            return {
+              pages: [],
+              stop: t < 0.5 ? i : i + 1,
+              rest: false,
+              p: 0,
+              t,
+              turn: 0,
+              fold: t,
+              cx: lerp(a.cx, b.cx, f2),
+              cy: lerp(a.cy, b.cy, f1),
+              scale: Math.exp(lerp(Math.log(a.scale), Math.log(b.scale), zoom)),
+              tilt: 1 - ease(clamp01((t - 0.3) / 0.7)),
+            };
+          }
+          return {
+            pages: [],
+            stop: t < 0.5 ? i : i + 1,
+            rest: false,
+            p: 0,
+            t,
+            turn: lerp(a.turn, b.turn, k),
+            fold: lerp(a.fold, b.fold, t),
+            cx: lerp(a.cx, b.cx, k),
+            cy: lerp(a.cy, b.cy, k),
+            scale: Math.exp(lerp(Math.log(a.scale), Math.log(b.scale), k)),
+            tilt: lerp(a.tilt, b.tilt, k),
+          };
+        }
+
+        /* How far through the stop that shows `page` we are: <0 before it,
+           0..1 on it, >1 after it. */
+        function progressAt(page, u) {
+          const s = J.stops[J.stopOfPage[page]];
+          return (u - s.start) / s.len;
+        }
+        /* An effect that happens once and stays (sewing, trimming). */
+        const once = p => clamp01((p - 0.12) / 0.66);
+
+        /* ---------- 4. matrices (column-major 4x4) --------------------- */
+
+        const M4 = {
+          mul(a, b) {
+            const o = new Array(16);
+            for (let c = 0; c < 4; c++)
+              for (let r = 0; r < 4; r++)
+                o[c * 4 + r] =
+                  a[r] * b[c * 4] +
+                  a[4 + r] * b[c * 4 + 1] +
+                  a[8 + r] * b[c * 4 + 2] +
+                  a[12 + r] * b[c * 4 + 3];
+            return o;
+          },
+          tr: (x, y, z) => [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, x, y, z, 1],
+          sc: (x, y, z) => [x, 0, 0, 0, 0, y, 0, 0, 0, 0, z, 0, 0, 0, 0, 1],
+          rx(a) {
+            const c = Math.cos(a),
+              s = Math.sin(a);
+            return [1, 0, 0, 0, 0, c, s, 0, 0, -s, c, 0, 0, 0, 0, 1];
+          },
+          ry(a) {
+            const c = Math.cos(a),
+              s = Math.sin(a);
+            return [c, 0, -s, 0, 0, 1, 0, 0, s, 0, c, 0, 0, 0, 0, 1];
+          },
+          rz(a) {
+            const c = Math.cos(a),
+              s = Math.sin(a);
+            return [c, s, 0, 0, -s, c, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
+          },
+          persp(fov, aspect, n, f) {
+            const t = 1 / Math.tan(fov / 2);
+            return [
+              t / aspect,
+              0,
+              0,
+              0,
+              0,
+              t,
+              0,
+              0,
+              0,
+              0,
+              (f + n) / (n - f),
+              -1,
+              0,
+              0,
+              (2 * f * n) / (n - f),
+              0,
+            ];
+          },
+          // rotation R about an axis through the point (x, y, z)
+          about: (x, y, z, R) =>
+            M4.mul(M4.tr(x, y, z), M4.mul(R, M4.tr(-x, -y, -z))),
+          apply(m, x, y, z, w) {
+            return [
+              m[0] * x + m[4] * y + m[8] * z + m[12] * w,
+              m[1] * x + m[5] * y + m[9] * z + m[13] * w,
+              m[2] * x + m[6] * y + m[10] * z + m[14] * w,
+              m[3] * x + m[7] * y + m[11] * z + m[15] * w,
+            ];
+          },
+        };
+
+        /* ---------- 5. the sheet, and its imposition ------------------- */
+
+        /* The sheet is 2 x 2 panels, each one page wide (1 unit) and one
+           page tall (H units), lying in the plane z = 0 and facing +z.
+           Panel-local (u, v) runs 0..1 from its bottom-left corner.
+
+           Fold 1 takes the top row back and under, about the horizontal
+           centre line. Fold 2 takes the left half back and under, about the
+           vertical centre line: that fold becomes the spine. After both the
+           booklet occupies x 0..1, y -H..0. Leaves then turn about the
+           spine towards the viewer. */
+        const PAPER_T = 0.0008; // thickness of one leaf, in page widths
+        const FOLD_SPLIT = 0.47; // share of the folding transit spent on the first fold
+        const panels = [
+          { col: 1, row: 0 }, // bottom right
+          { col: 1, row: 1 }, // top right
+          { col: 0, row: 1 }, // top left
+          { col: 0, row: 0 }, // bottom left
+        ];
+
+        function panelMatrix(panel, a, b, theta) {
+          let m = M4.mul(
+            M4.tr(panel.col - 1, (panel.row - 1) * L.H, 0),
+            M4.sc(1, L.H, 1)
+          );
+          if (panel.row === 1)
+            m = M4.mul(M4.about(0, 0, -PAPER_T / 2, M4.rx(-a)), m);
+          if (panel.col === 0)
+            m = M4.mul(M4.about(0, 0, -1.5 * PAPER_T, M4.ry(-b)), m);
+          if (theta)
+            m = M4.mul(M4.about(0, 0, -1.5 * PAPER_T, M4.ry(-theta)), m);
+          return m;
+        }
+
+        /* The bend, in script: the same arc as bendPanel() in the shader.
+           Returns the panel-local position of the point (u, v). */
+        function bendPoint(bend, u, v) {
+          let k = bend.k;
+          if (Math.abs(k) < 1e-5) return [u, v, 0];
+          const d = bend.hinge === 0 ? u : bend.hinge === 1 ? 1 - u : v * L.H;
+          const w = bend.hinge === 2 ? u : v;
+          k *= 1 + bend.cone * (w - 0.5);
+          const along = Math.sin(k * d) / k,
+            lift = (1 - Math.cos(k * d)) / k;
+          if (bend.hinge === 0) return [along, v, lift];
+          if (bend.hinge === 1) return [1 - along, v, lift];
+          return [u, along / L.H, lift];
+        }
+        const FLAT = { hinge: 0, k: 0, cone: 0 };
+        const CURL_TURN = 0.85; // radians of arc across a turning leaf, at most
+        const CURL_FOLD = 0.6;
+
+        /* How much, and which way, a panel curls right now. Only a panel
+           that is moving curls: sin^2 of its progress, so it leaves flat and
+           lands flat. The free edge trails behind the motion, like paper
+           dragged through air; the side is found by asking where the edge
+           was a moment ago. */
+        function bendOf(panel, st, a, b) {
+          if (st.rest) return FLAT;
+          const f1 = clamp01(st.fold / FOLD_SPLIT),
+            f2 = clamp01((st.fold - FOLD_SPLIT) / (1 - FOLD_SPLIT));
+          const ft = st.turn - panel.leaf;
+          let hinge,
+            f,
+            amount,
+            cone = 0,
+            before;
+          const eps = 0.02;
+          if (st.fold < 1 && panel.col === 0 && f2 > 0 && f2 < 1) {
+            hinge = 1;
+            f = f2;
+            amount = CURL_FOLD;
+            before = panelMatrix(panel, a, b - eps, 0);
+          } else if (st.fold < 1 && panel.row === 1 && f1 > 0 && f1 < 1) {
+            hinge = 2;
+            f = f1;
+            amount = CURL_FOLD;
+            before = panelMatrix(panel, a - eps, b, 0);
+          } else if (st.fold === 1 && ft > 0 && ft < 1) {
+            hinge = panel.col === 1 ? 0 : 1;
+            f = ft;
+            amount = CURL_TURN;
+            cone = panel.row === 1 ? -0.45 : 0.45;
+            before = panelMatrix(panel, a, b, Math.PI * ease(ft) - eps);
+          } else return FLAT;
+          const now = panelMatrix(
+            panel,
+            a,
+            b,
+            st.fold === 1 ? Math.PI * ease(clamp01(ft)) : 0
+          );
+          const tip =
+            hinge === 0 ? [1, 0.5] : hinge === 1 ? [0, 0.5] : [0.5, 1];
+          const p1 = M4.apply(now, tip[0], tip[1], 0, 1),
+            p0 = M4.apply(before, tip[0], tip[1], 0, 1);
+          const n = M4.apply(now, 0, 0, 1, 0);
+          const side =
+            (p0[0] - p1[0]) * n[0] +
+              (p0[1] - p1[1]) * n[1] +
+              (p0[2] - p1[2]) * n[2] <
+            0
+              ? -1
+              : 1;
+          const s = Math.sin(Math.PI * f);
+          return { hinge, k: side * amount * s * s, cone };
+        }
+
+        /* Four points -> the projective map that carries one onto the other.
+           Used to tell the browser where a curled page is: exact at its
+           four corners, close in between. */
+        function homography(src, dst) {
+          const A = [];
+          for (let i = 0; i < 4; i++) {
+            const [x, y] = src[i],
+              [X, Y] = dst[i];
+            A.push([x, y, 1, 0, 0, 0, -X * x, -X * y, X]);
+            A.push([0, 0, 0, x, y, 1, -Y * x, -Y * y, Y]);
+          }
+          for (let c = 0; c < 8; c++) {
+            let piv = c;
+            for (let r = c + 1; r < 8; r++)
+              if (Math.abs(A[r][c]) > Math.abs(A[piv][c])) piv = r;
+            if (Math.abs(A[piv][c]) < 1e-12) return null;
+            [A[c], A[piv]] = [A[piv], A[c]];
+            for (let r = 0; r < 8; r++) {
+              if (r === c) continue;
+              const f = A[r][c] / A[c][c];
+              for (let k = c; k < 9; k++) A[r][k] -= f * A[c][k];
+            }
+          }
+          const h = A.map((row, i) => row[8] / row[i]);
+          // as a column-major 4x4 that leaves z alone
+          return [
+            h[0],
+            h[3],
+            0,
+            h[6],
+            h[1],
+            h[4],
+            0,
+            h[7],
+            0,
+            0,
+            1,
+            0,
+            h[2],
+            h[5],
+            0,
+            1,
+          ];
+        }
+
+        /* Imposition by folding. Fold the sheet completely, sort the panels
+           from front to back, and number their faces in reading order. The
+           orientation of each page on its panel falls out of where the
+           panel's own axes ended up. Nothing here is a lookup table. */
+        function impose() {
+          const folded = panels.map(p => panelMatrix(p, Math.PI, Math.PI, 0));
+          const order = panels
+            .map((_, i) => i)
+            .sort((i, j) => folded[j][14] - folded[i][14]);
+          order.forEach((pi, leaf) => {
+            const m = folded[pi];
+            const facesViewer = m[10] > 0; // does the panel's front face +z once folded?
+            const right = m[0] > 0; // does its u axis still run left to right?
+            const up = m[5] > 0; // does its v axis still run upward?
+            const rectoFace = { page: 2 * leaf + 1, flipS: !right, flipT: !up };
+            const versoFace = { page: 2 * leaf + 2, flipS: right, flipT: !up };
+            panels[pi].leaf = leaf;
+            panels[pi].front = facesViewer ? rectoFace : versoFace;
+            panels[pi].back = facesViewer ? versoFace : rectoFace;
+          });
+          Q.info.imposition = panels.map(p => ({
+            col: p.col,
+            row: p.row,
+            leaf: p.leaf + 1,
+            front: p.front.page,
+            back: p.back.page,
+          }));
+        }
+
+        /* ---------- 6. WebGL ------------------------------------------- */
+
+        let gl = null;
+        let lost = false;
+        const prog = {};
+        const geom = {};
+        const tex = []; // one texture per page
+        let needAll = true; // re-upload every page on the next paint event
+        let firstPaint = false;
+
+        function compile(type, id) {
+          const sh = gl.createShader(type);
+          const bend = document.getElementById("glsl-bend").textContent;
+          gl.shaderSource(
+            sh,
+            document
+              .getElementById(id)
+              .textContent.trim()
+              .replace("//#bend", bend)
+          );
+          gl.compileShader(sh);
+          if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS))
+            throw new Error(id + ": " + gl.getShaderInfoLog(sh));
+          return sh;
+        }
+        function program(vs, fs) {
+          const p = gl.createProgram();
+          gl.attachShader(p, compile(gl.VERTEX_SHADER, vs));
+          gl.attachShader(p, compile(gl.FRAGMENT_SHADER, fs));
+          gl.linkProgram(p);
+          if (!gl.getProgramParameter(p, gl.LINK_STATUS))
+            throw new Error(fs + ": " + gl.getProgramInfoLog(p));
+          const u = {};
+          const n = gl.getProgramParameter(p, gl.ACTIVE_UNIFORMS);
+          for (let i = 0; i < n; i++) {
+            const name = gl.getActiveUniform(p, i).name.replace(/\[0\]$/, "");
+            u[name] = gl.getUniformLocation(p, name);
+          }
+          return { p, u };
+        }
+
+        function initGL() {
+          gl = canvas.getContext("webgl2", {
+            antialias: true,
+            alpha: false,
+            depth: true,
+            powerPreference: "high-performance",
+          });
+          if (!gl) throw new Error("no WebGL 2");
+          prog.page = program("vs-page", "fs-page");
+          prog.shadow = program("vs-shadow", "fs-shadow");
+          prog.bench = program("vs-full", "fs-bench");
+          prog.thread = program("vs-quad", "fs-thread");
+          prog.rim = program("vs-quad", "fs-rim");
+
+          // Two meshes of the unit square: one quad for the flat drawings,
+          // and a grid fine enough for a panel to curl smoothly.
+          const mesh = cells => {
+            const [nx, ny] = cells;
+            const v = [];
+            for (let j = 0; j < ny; j++)
+              for (let i = 0; i < nx; i++) {
+                const x0 = i / nx,
+                  x1 = (i + 1) / nx,
+                  y0 = j / ny,
+                  y1 = (j + 1) / ny;
+                v.push(x0, y0, x1, y0, x0, y1, x0, y1, x1, y0, x1, y1);
+              }
+            const vao = gl.createVertexArray();
+            gl.bindVertexArray(vao);
+            gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(v), gl.STATIC_DRAW);
+            gl.enableVertexAttribArray(0);
+            gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+            return { vao, count: v.length / 2 };
+          };
+          geom.quad = mesh([1, 1]);
+          geom.grid = mesh([36, 24]);
+
+          const aniso = gl.getExtension("EXT_texture_filter_anisotropic");
+          for (let i = 0; i < pages.length; i++) {
+            const t = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, t);
+            gl.texParameteri(
+              gl.TEXTURE_2D,
+              gl.TEXTURE_MIN_FILTER,
+              gl.LINEAR_MIPMAP_LINEAR
+            );
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            gl.texParameteri(
+              gl.TEXTURE_2D,
+              gl.TEXTURE_WRAP_S,
+              gl.CLAMP_TO_EDGE
+            );
+            gl.texParameteri(
+              gl.TEXTURE_2D,
+              gl.TEXTURE_WRAP_T,
+              gl.CLAMP_TO_EDGE
+            );
+            if (aniso)
+              gl.texParameterf(
+                gl.TEXTURE_2D,
+                aniso.TEXTURE_MAX_ANISOTROPY_EXT,
+                Math.min(
+                  8,
+                  gl.getParameter(aniso.MAX_TEXTURE_MAX_ANISOTROPY_EXT)
+                )
+              );
+            // a blank (transparent) page until the first paint event
+            gl.texImage2D(
+              gl.TEXTURE_2D,
+              0,
+              gl.RGBA8,
+              2,
+              2,
+              0,
+              gl.RGBA,
+              gl.UNSIGNED_BYTE,
+              null
+            );
+            tex.push({ t, w: 2, h: 2 });
+          }
+        }
+
+        /* HTML-in-Canvas, the WebGL half. Storage must be allocated first
+           (like texSubImage2D); the element is then rasterised by the
+           browser straight into it, at the size we ask for. */
+        function upload(el) {
+          const i = pages.indexOf(el);
+          if (i < 0) return;
+          const T = tex[i];
+          gl.bindTexture(gl.TEXTURE_2D, T.t);
+          if (T.w !== L.texW || T.h !== L.texH) {
+            gl.texImage2D(
+              gl.TEXTURE_2D,
+              0,
+              gl.RGBA8,
+              L.texW,
+              L.texH,
+              0,
+              gl.RGBA,
+              gl.UNSIGNED_BYTE,
+              null
+            );
+            T.w = L.texW;
+            T.h = L.texH;
+          }
+          // premultiplied, so that filtering and mipmaps do not darken edges
+          gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+          gl.texElementSubImage2D(gl.TEXTURE_2D, 0, 0, 0, el, {
+            width: L.texW,
+            height: L.texH,
+          });
+          gl.generateMipmap(gl.TEXTURE_2D);
+        }
+
+        /* The browser fires `paint` on the canvas whenever one of its
+           drawable children would look different: text selected, a link
+           focused, a font arriving, a resize. We re-upload only those. */
+        function onPaint(ev) {
+          if (lost || !gl) return;
+          const list = needAll ? pages : ev.changedElements || pages;
+          try {
+            for (const el of list) upload(el);
+          } catch (err) {
+            if (!firstPaint)
+              return failPromotion("upload failed: " + err.message);
+            console.warn("QUARTO upload", err);
+            return;
+          }
+          needAll = false;
+          if (!firstPaint) {
+            if (gl.getError() !== gl.NO_ERROR)
+              return failPromotion("GL error on first upload");
+            firstPaint = true;
+            finishPromotion();
+          }
+          Q.info.paints = (Q.info.paints || 0) + 1;
+          render();
+        }
+
+        /* ---------- 7. render ------------------------------------------ */
+
+        const view = {
+          j: 0,
+          target: 0,
+          settled: false,
+          scale: 1,
+          devW: 2,
+          devH: 2,
+        };
+        const lens = {
+          x: 0,
+          y: 0,
+          tx: 0,
+          ty: 0,
+          on: 0,
+          has: false,
+          px: -1,
+          py: -1,
+          pointer: false,
+        };
+        const geo = pages.map(() => ({ shown: false, key: "" }));
+        const FOV = 0.4;
+        const LENS_POWER = 8;
+        const SCREEN = 250; // halftone cells across a page: coarse on purpose
+
+        function sizeCanvas(scale) {
+          const w = Math.max(2, Math.round(view.devW * scale));
+          const h = Math.max(2, Math.round(view.devH * scale));
+          if (canvas.width !== w || canvas.height !== h) {
+            canvas.width = w;
+            canvas.height = h;
+          }
+        }
+
+        /* The camera looks straight down the z axis at (cx, cy), from the
+           distance where one page width is exactly `scale` CSS pixels. The
+           opening view leans back, about the point it looks at. */
+        const TILT_X = 0.62,
+          TILT_Z = 0.05;
+        function camera(st, cx, cy) {
+          const D = L.ch / (2 * Math.tan(FOV / 2) * st.scale);
+          const proj = M4.persp(FOV, L.cw / L.ch, D * 0.2, D + 8);
+          const tilt = M4.mul(
+            M4.rx(-TILT_X * st.tilt),
+            M4.rz(TILT_Z * st.tilt)
+          );
+          const viewM = M4.mul(
+            M4.tr(0, 0, -D),
+            M4.mul(tilt, M4.tr(-cx, -cy, 0))
+          );
+          return { D, tilt, viewM, VP: M4.mul(proj, viewM) };
+        }
+        const toScreen = c => [
+          ((c[0] / c[3]) * 0.5 + 0.5) * L.cw,
+          (0.5 - (c[1] / c[3]) * 0.5) * L.ch,
+        ];
+
+        /* The opening: the largest view of the whole flat sheet, leaning
+           back, that fits between the masthead and the footer. */
+        function fitOpening() {
+          const top = 54,
+            bottom = L.ch - 84,
+            left = L.cw * 0.04,
+            right = L.cw * 0.96;
+          const boxAt = (scale, cy) => {
+            const { VP } = camera({ scale, tilt: 1 }, 0, cy);
+            let x0 = 1e9,
+              x1 = -1e9,
+              y0 = 1e9,
+              y1 = -1e9;
+            for (const [x, y] of [
+              [-1, -L.H],
+              [1, -L.H],
+              [1, L.H],
+              [-1, L.H],
+            ]) {
+              const s = toScreen(M4.apply(VP, x, y, 0, 1));
+              x0 = Math.min(x0, s[0]);
+              x1 = Math.max(x1, s[0]);
+              y0 = Math.min(y0, s[1]);
+              y1 = Math.max(y1, s[1]);
+            }
+            return { x0, x1, y0, y1 };
+          };
+          let lo = 40,
+            hi = L.pw * 1.2,
+            best = { scale: lo, cy: 0 };
+          for (let i = 0; i < 18; i++) {
+            const scale = (lo + hi) / 2;
+            let cy = 0,
+              box;
+            for (let j = 0; j < 4; j++) {
+              box = boxAt(scale, cy);
+              cy -= ((box.y0 + box.y1) / 2 - (top + bottom) / 2) / scale; // centre it
+            }
+            box = boxAt(scale, cy);
+            const fits =
+              box.x0 >= left &&
+              box.x1 <= right &&
+              box.y0 >= top - 1 &&
+              box.y1 <= bottom + 1;
+            if (fits) {
+              lo = scale;
+              best = { scale, cy };
+            } else hi = scale;
+          }
+          return best;
+        }
+
+        function currentJourney() {
+          return Q.journey !== null ? Q.journey : view.j;
+        }
+
+        function inQuad(q, x, y) {
+          let sign = 0;
+          for (let i = 0; i < 4; i++) {
+            const a = q[i],
+              b = q[(i + 1) % 4];
+            const c = (b[0] - a[0]) * (y - a[1]) - (b[1] - a[1]) * (x - a[0]);
+            if (Math.abs(c) < 1e-9) continue;
+            if (sign === 0) sign = Math.sign(c);
+            else if (Math.sign(c) !== sign) return false;
+          }
+          return true;
+        }
+
+        function render() {
+          if (!gl || lost || Q.mode === "plain") return;
+          const u = currentJourney();
+          const st = stateAt(u);
+          const cw = L.cw,
+            ch = L.ch;
+          sizeCanvas(view.settled ? 1 : view.scale);
+          const W = canvas.width,
+            Hpx = canvas.height;
+
+          /* camera: straight on, at the distance where one page width is
+             exactly st.scale CSS pixels. At a stop that is the laid-out
+             width of the page, so texels land on pixels and type is crisp. */
+          let cx = st.cx,
+            cy = st.cy;
+          if (st.rest && st.fold === 1) {
+            // snap the spine and the head to whole device pixels
+            const dpr = W / cw;
+            const sx = Math.round((cw / 2 - cx * st.scale) * dpr) / dpr;
+            const sy = Math.round((ch / 2 + cy * st.scale) * dpr) / dpr;
+            cx = (cw / 2 - sx) / st.scale;
+            cy = (sy - ch / 2) / st.scale;
+          }
+          const { tilt, viewM, VP } = camera(st, cx, cy);
+          // clip space -> CSS pixels of the canvas (y down)
+          const toCss = [
+            cw / 2,
+            0,
+            0,
+            0,
+            0,
+            -ch / 2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            cw / 2,
+            ch / 2,
+            0,
+            1,
+          ];
+
+          /* the folds, the turns */
+          const a = Math.PI * ease(clamp01(st.fold / FOLD_SPLIT));
+          const b =
+            Math.PI * ease(clamp01((st.fold - FOLD_SPLIT) / (1 - FOLD_SPLIT)));
+          let floorZ = 0;
+          const P = panels.map(panel => {
+            const theta = Math.PI * ease(clamp01(st.turn - panel.leaf));
+            const model = panelMatrix(panel, a, b, theta);
+            const bend = bendOf(panel, st, a, b);
+            const mvp = M4.mul(VP, model);
+            const mv = M4.mul(viewM, model);
+            // the four corners, where the curl has taken them
+            const corners = [
+              [0, 0],
+              [1, 0],
+              [1, 1],
+              [0, 1],
+            ].map(([x, y]) => {
+              const q = bendPoint(bend, x, y);
+              const w = M4.apply(model, q[0], q[1], q[2], 1);
+              floorZ = Math.min(floorZ, w[2]);
+              return toScreen(M4.apply(mvp, q[0], q[1], q[2], 1));
+            });
+            const centre = M4.apply(mv, 0.5, 0.5, 0, 1);
+            const nrm = M4.apply(mv, 0, 0, 1, 0);
+            const len =
+              Math.hypot(centre[0], centre[1], centre[2]) *
+              Math.hypot(nrm[0], nrm[1], nrm[2]);
+            const facing =
+              -(centre[0] * nrm[0] + centre[1] * nrm[1] + centre[2] * nrm[2]) /
+              len;
+            return {
+              panel,
+              model,
+              mvp,
+              corners,
+              bend,
+              depth: centre[2],
+              facing,
+              nmat: M4.mul(tilt, model),
+            };
+          });
+
+          /* Which pages can the reader actually see? A face that looks at
+             the camera and whose centre is not under another panel. */
+          const exposed = new Array(pages.length).fill(null);
+          for (const p of P) {
+            if (Math.abs(p.facing) < 0.12) continue;
+            const face = p.facing > 0 ? p.panel.front : p.panel.back;
+            const c = M4.apply(p.mvp, 0.5, 0.5, 0, 1);
+            const sx = ((c[0] / c[3]) * 0.5 + 0.5) * cw,
+              sy = (0.5 - (c[1] / c[3]) * 0.5) * ch;
+            const covered = P.some(
+              o =>
+                o !== p && o.depth > p.depth + 1e-5 && inQuad(o.corners, sx, sy)
+            );
+            if (covered) continue;
+            // element pixels -> panel (u, v) -> clip -> canvas CSS pixels
+            const A = [
+              (face.flipS ? -1 : 1) / L.pw,
+              0,
+              0,
+              0,
+              0,
+              (face.flipT ? 1 : -1) / L.ph,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              face.flipS ? 1 : 0,
+              face.flipT ? 0 : 1,
+              0,
+              1,
+            ];
+            let m;
+            if (p.bend.k === 0) {
+              // Flat (always the case at rest): the exact projection.
+              m = M4.mul(toCss, M4.mul(p.mvp, A));
+              // flatten: a page has no depth as far as the DOM is concerned
+              m[2] = m[6] = m[14] = m[8] = m[9] = m[11] = 0;
+              m[10] = 1;
+            } else {
+              // Curled, in transit: pin the page's corners to the corners of
+              // the curled panel. Hit-testing is approximate until it lands.
+              const src = [
+                [0, 0],
+                [1, 0],
+                [1, 1],
+                [0, 1],
+              ].map(([pu, pv]) => [
+                (face.flipS ? 1 - pu : pu) * L.pw,
+                (face.flipT ? pv : 1 - pv) * L.ph,
+              ]);
+              m = homography(src, p.corners);
+              if (!m) continue;
+            }
+            exposed[face.page - 1] = m;
+          }
+
+          /* ---- effects, each driven by the stop of its own page ---- */
+          /* III. Press. Replayed while you are on its page: the finished
+             print rewinds, the four inks go down one after another, each a
+             little off, and then the plates are walked into register. */
+          const pPress = progressAt(4, u);
+          let plates = 1,
+            misregister = 0;
+          if (pPress > 0 && pPress < 1) {
+            if (pPress < 0.1) {
+              plates = 1 - ease(pPress / 0.1);
+              misregister = 1 - plates;
+            } else {
+              plates = clamp01((pPress - 0.1) / 0.36);
+              misregister = 1 - ease(clamp01((pPress - 0.5) / 0.32));
+            }
+          }
+          const sew = once(progressAt(5, u)); // IV. Thread
+          const pTrim = once(progressAt(6, u)); // V. Knife
+          const trimFore = clamp01(pTrim / 0.5),
+            trimSide = clamp01((pTrim - 0.55) / 0.45);
+          const pInk = progressAt(3, u);
+          const lensWanted =
+            st.rest &&
+            st.pages.includes(3) &&
+            pInk > 0.02 &&
+            pInk < 0.985 &&
+            exposed[2]
+              ? 1
+              : 0;
+          lens.on = lensWanted;
+          Q.info.fx = {
+            plates,
+            misregister,
+            sew,
+            trimFore,
+            trimSide,
+            lens: lensWanted,
+          };
+
+          /* ---- draw ---- */
+          gl.viewport(0, 0, W, Hpx);
+          gl.disable(gl.DEPTH_TEST);
+          gl.depthMask(true);
+          gl.clearColor(0, 0, 0, 1);
+          gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+          // shadows first, keeping the darkest where they overlap
+          gl.enable(gl.BLEND);
+          gl.blendEquation(gl.MAX);
+          gl.blendFunc(gl.ONE, gl.ONE);
+          gl.useProgram(prog.shadow.p);
+          gl.uniformMatrix4fv(prog.shadow.u.u_vp, false, VP);
+          gl.uniform1f(prog.shadow.u.u_floor, floorZ - 0.045);
+          gl.uniform1f(prog.shadow.u.u_H, L.H);
+          gl.bindVertexArray(geom.grid.vao);
+          for (const p of P) {
+            gl.uniformMatrix4fv(prog.shadow.u.u_model, false, p.model);
+            gl.uniform4f(
+              prog.shadow.u.u_bend,
+              p.bend.hinge,
+              p.bend.k,
+              p.bend.cone,
+              L.H
+            );
+            gl.drawArrays(gl.TRIANGLES, 0, geom.grid.count);
+          }
+          // the table, multiplied by (1 - shadow)
+          gl.blendEquation(gl.FUNC_ADD);
+          gl.blendFunc(gl.ONE_MINUS_DST_COLOR, gl.ZERO);
+          gl.useProgram(prog.bench.p);
+          gl.uniform2f(prog.bench.u.u_res, W, Hpx);
+          gl.drawArrays(gl.TRIANGLES, 0, 3);
+          gl.disable(gl.BLEND);
+          gl.bindVertexArray(geom.grid.vao);
+
+          // the sheet
+          gl.enable(gl.DEPTH_TEST);
+          gl.enable(gl.SAMPLE_ALPHA_TO_COVERAGE);
+          const pg = prog.page;
+          gl.useProgram(pg.p);
+          gl.uniform1i(pg.u.u_tex0, 0);
+          gl.uniform1i(pg.u.u_tex1, 1);
+          gl.uniform1f(pg.u.u_H, L.H);
+          gl.uniform2f(pg.u.u_bleed, BLEED, BLEED / L.H);
+          gl.uniform2f(pg.u.u_trim, trimFore, trimSide);
+          gl.uniform1f(pg.u.u_screen, SCREEN);
+
+          // the glass: where it rests, where the pointer wants it
+          let lensDraw = null;
+          if (lens.on && exposed[2]) {
+            const R = lensRadius();
+            const box = specimenBox(exposed[2]);
+            if (!lens.has) {
+              lens.x = lens.tx = box.restX;
+              lens.y = lens.ty = box.restY;
+              lens.has = true;
+            }
+            const inside =
+              lens.pointer &&
+              lens.px >= box.x0 - 8 &&
+              lens.px <= box.x1 + 8 &&
+              lens.py >= box.y0 - 8 &&
+              lens.py <= box.y1 + 8;
+            lens.tx = inside
+              ? Math.min(box.x1, Math.max(box.x0, lens.px))
+              : box.restX;
+            lens.ty = inside
+              ? Math.min(box.y1, Math.max(box.y0, lens.py))
+              : box.restY;
+            const k = W / cw;
+            lensDraw = { x: lens.x, y: lens.y, R };
+            gl.uniform4f(
+              pg.u.u_lens,
+              lens.x * k,
+              (ch - lens.y) * k,
+              R * k,
+              LENS_POWER
+            );
+            gl.uniform1f(pg.u.u_lensPage, 3);
+          } else {
+            lens.has = false;
+            gl.uniform1f(pg.u.u_lensPage, 0);
+            gl.uniform4f(pg.u.u_lens, 0, 0, 0, 1);
+          }
+
+          const gutter = ease(clamp01((st.fold - 0.7) / 0.3));
+          const torn = [
+            ease(clamp01(st.turn / 0.3)),
+            ease(clamp01((st.turn - 2) / 0.3)),
+          ];
+          for (const p of P) {
+            const f = p.panel.front,
+              bk = p.panel.back;
+            const fxOf = face => [
+              face.page === 4 || face.page === 5 ? plates : 1,
+              face.page === 4 || face.page === 5 ? misregister : 0,
+              // leaves 1-2 share the first bolt, leaves 3-4 the second
+              torn[p.panel.leaf < 2 ? 0 : 1],
+              0,
+            ];
+            const shadeOf = face =>
+              gutter * (face.page === 1 || face.page === 8 ? 0.35 : 1);
+            gl.activeTexture(gl.TEXTURE0);
+            gl.bindTexture(gl.TEXTURE_2D, tex[f.page - 1].t);
+            gl.activeTexture(gl.TEXTURE1);
+            gl.bindTexture(gl.TEXTURE_2D, tex[bk.page - 1].t);
+            gl.uniformMatrix4fv(pg.u.u_mvp, false, p.mvp);
+            gl.uniform4f(
+              pg.u.u_face0,
+              f.flipS ? 1 : 0,
+              f.flipT ? 1 : 0,
+              f.page,
+              shadeOf(f)
+            );
+            gl.uniform4f(
+              pg.u.u_face1,
+              bk.flipS ? 1 : 0,
+              bk.flipT ? 1 : 0,
+              bk.page,
+              shadeOf(bk)
+            );
+            gl.uniform4fv(pg.u.u_fx0, fxOf(f));
+            gl.uniform4fv(pg.u.u_fx1, fxOf(bk));
+            gl.uniformMatrix4fv(pg.u.u_nmat, false, p.nmat);
+            gl.uniform4f(pg.u.u_bend, p.bend.hinge, p.bend.k, p.bend.cone, L.H);
+            gl.drawArrays(gl.TRIANGLES, 0, geom.grid.count);
+          }
+          gl.disable(gl.SAMPLE_ALPHA_TO_COVERAGE);
+          gl.bindVertexArray(geom.quad.vao);
+
+          // IV. the thread, lying in the centre fold between leaves 2 and 3
+          gl.enable(gl.BLEND);
+          gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+          if (sew > 0 && st.turn > 1 && st.turn < 3) {
+            const stripW = 0.07;
+            const inset = BLEED; // holes sit inside the trimmed height
+            const m = M4.mul(
+              VP,
+              M4.mul(
+                M4.tr(-stripW / 2, -L.H, -2 * PAPER_T + 0.25 * PAPER_T),
+                M4.sc(stripW, L.H, 1)
+              )
+            );
+            gl.depthMask(false);
+            gl.useProgram(prog.thread.p);
+            gl.uniformMatrix4fv(prog.thread.u.u_mvp, false, m);
+            gl.uniform2f(prog.thread.u.u_size, stripW, L.H);
+            gl.uniform1f(prog.thread.u.u_sew, sew);
+            gl.uniform3f(
+              prog.thread.u.u_holes,
+              1 - (inset + 0.16) / L.H,
+              0.5,
+              (inset + 0.16) / L.H
+            );
+            gl.drawArrays(gl.TRIANGLES, 0, 6);
+            gl.depthMask(true);
+          }
+
+          // the rim of the glass, in screen space
+          gl.disable(gl.DEPTH_TEST);
+          if (lensDraw) {
+            const half = lensDraw.R * 1.3;
+            const m = [
+              (2 * 2 * half) / cw,
+              0,
+              0,
+              0,
+              0,
+              (2 * 2 * half) / ch,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              ((lensDraw.x - half) / cw) * 2 - 1,
+              1 - ((lensDraw.y + half) / ch) * 2,
+              0,
+              1,
+            ];
+            gl.useProgram(prog.rim.p);
+            gl.uniformMatrix4fv(prog.rim.u.u_mvp, false, m);
+            gl.uniform1f(prog.rim.u.u_radius, 1 / 1.3);
+            gl.uniform1f(prog.rim.u.u_px, 1 / (half * (W / cw)));
+            gl.drawArrays(gl.TRIANGLES, 0, 6);
+          }
+          gl.disable(gl.BLEND);
+
+          /* ---- tell the browser where every page landed ----
+             This is what keeps the text real: with the transform of each
+             visible page the browser can hit-test clicks, place the caret,
+             extend a selection and report bounds to assistive technology.
+             The matrix carries the full perspective, so it holds even
+             while a page is folding or upside down. */
+          const shown = [];
+          for (let i = 0; i < pages.length; i++) {
+            const m = exposed[i];
+            if (m) {
+              const key = m.map(v => v.toFixed(4)).join(",");
+              if (key !== geo[i].key) {
+                canvas.updateElementGeometry(pages[i], {
+                  canvasTransform: new DOMMatrix(m),
+                });
+                geo[i].key = key;
+              }
+              geo[i].shown = true;
+              shown.push(i + 1);
+            } else if (geo[i].shown || geo[i].key === "") {
+              canvas.clearElementGeometry(pages[i]);
+              geo[i].shown = false;
+              geo[i].key = "-";
+            }
+          }
+          Q.info.shown = shown;
+          Q.info.frames = (Q.info.frames || 0) + 1;
+          Q.info.curl = Math.max(...P.map(p => Math.abs(p.bend.k)));
+          Q.info.stop = st.stop;
+          Q.info.rest = st.rest;
+          if (st.stop !== view.lastStop) {
+            view.lastStop = st.stop;
+            markRail(st.stop);
+          }
+          const h = clamp01(1 - u / 0.35);
+          if (h !== view.hint) {
+            view.hint = h;
+            hint.style.setProperty("--hint", h.toFixed(3));
+          }
+        }
+
+        /* The block the glass may roam over (the figure on page 3), in
+           canvas CSS pixels. Laid-out offsets are mapped through the same
+           matrix the browser was given for the page. */
+        function specimenBox(m) {
+          const el = document.getElementById("specimen");
+          const plate = el.querySelector(".plate");
+          const last = el.querySelector(".specimen-line");
+          let x = 0,
+            y = 0;
+          for (
+            let n = el;
+            n && !n.classList.contains("page");
+            n = n.offsetParent
+          ) {
+            x += n.offsetLeft;
+            y += n.offsetTop;
+          }
+          const x0 = x,
+            x1 = x + plate.offsetWidth - 1;
+          const y0 = y,
+            y1 = y + last.offsetTop + last.offsetHeight - el.offsetTop;
+          const a = M4.apply(m, x0, y0, 0, 1),
+            b = M4.apply(m, x1, y1, 0, 1);
+          // The glass stays over the figure: fully inside it sideways, and
+          // never far enough up to sit on the prose above.
+          const R = lensRadius();
+          const rest = M4.apply(
+            m,
+            x0 + plate.offsetWidth * 0.6,
+            y0 + plate.offsetHeight * 0.58,
+            0,
+            1
+          );
+          return {
+            x0: a[0] / a[3] + R,
+            y0: a[1] / a[3] + R * 0.8,
+            x1: b[0] / b[3] - R,
+            y1: b[1] / b[3] - R * 0.35,
+            restX: rest[0] / rest[3],
+            restY: rest[1] / rest[3], // over the sky, beside the sun
+          };
+        }
+
+        const lensRadius = () => Math.min(0.11 * L.pw, 70);
+
+        function markRail(stop) {
+          const s = J.stops[stop];
+          const ids = new Set();
+          if (stop > 0)
+            for (const p of s.pages)
+              pages[p - 1]
+                .querySelectorAll("h2[id]")
+                .forEach(h => ids.add("#" + h.id));
+          const first = [...ids][0];
+          document.querySelectorAll("#rail a").forEach(a => {
+            if (a.getAttribute("href") === first)
+              a.setAttribute("aria-current", "true");
+            else a.removeAttribute("aria-current");
+          });
+        }
+
+        /* ---------- 8. frame loop -------------------------------------- */
+
+        let rafAlive = false;
+        let rafPending = false;
+        let lastFrame = 0;
+        let dirty = true;
+        const times = [];
+        let fps = 0;
+
+        function invalidate() {
+          dirty = true;
+          if (!rafPending) {
+            rafPending = true;
+            requestAnimationFrame(t => {
+              rafAlive = true;
+              rafPending = false;
+              frame(t);
+            });
+          }
+        }
+
+        function frame(now) {
+          if (Q.mode !== "live" || lost) return;
+          if (document.hidden && rafAlive) return; // hidden tab: render nothing
+          const dt = Math.min(100, now - (lastFrame || now));
+          const wasMoving = !view.settled;
+          lastFrame = now;
+
+          // follow the scroll position, with a little weight
+          view.target = window.scrollY / Math.max(1, L.ch);
+          const reduce = reduceMQ.matches;
+          const diff = view.target - view.j;
+          if (reduce || view.snap || Math.abs(diff) < 0.0006)
+            view.j = view.target;
+          else view.j += diff * (1 - Math.exp(-dt / 85));
+          view.snap = false;
+
+          // the glass follows the pointer the same way
+          let lensMoving = false;
+          if (lens.on && lens.has) {
+            const dx = lens.tx - lens.x,
+              dy = lens.ty - lens.y;
+            if (reduce || Math.hypot(dx, dy) < 0.3) {
+              lens.x = lens.tx;
+              lens.y = lens.ty;
+            } else {
+              const k = 1 - Math.exp(-dt / 70);
+              lens.x += dx * k;
+              lens.y += dy * k;
+              lensMoving = true;
+            }
+          }
+
+          const moving = view.j !== view.target || lensMoving;
+
+          /* Adaptive cost. While the sheet is in motion, render at a scale
+             that the measured frame time can afford. The moment it comes
+             to rest, render one frame at full resolution: the page you are
+             reading is never the one that pays. At rest nothing is drawn
+             at all until something changes. */
+          if (moving && wasMoving && dt > 0) {
+            times.push(dt);
+            if (times.length > 30) times.shift();
+            if (times.length >= 12) {
+              const avg = times.reduce((s, v) => s + v, 0) / times.length;
+              fps = Math.round(1000 / avg);
+              if (avg > 21 && view.scale > 0.5) {
+                view.scale = Math.max(0.5, view.scale * 0.85);
+                view.lastDrop = now;
+                times.length = 0;
+              } else if (
+                avg < 17.6 &&
+                view.scale < 1 &&
+                now - (view.lastDrop || 0) > 3000
+              ) {
+                // frames are landing on time again: try a little more, but
+                // not right after a drop, or the scale would only oscillate
+                view.scale = Math.min(1, view.scale / 0.92);
+                times.length = 0;
+              }
+            }
+          }
+          view.settled = !moving;
+          dirty = false;
+          render();
+          // render() may have given the glass a new place to go
+          const lensBehind =
+            lens.on &&
+            lens.has &&
+            Math.hypot(lens.tx - lens.x, lens.ty - lens.y) > 0.3;
+          if (lensBehind) view.settled = false;
+          if (moving || lensBehind) invalidate();
+        }
+
+        /* Some embedded webviews never fire requestAnimationFrame. If it
+           has never fired, a slow timer drives the frames instead. If it
+           has fired before and the tab is hidden, the silence is correct. */
+        setInterval(() => {
+          if (Q.mode !== "live") return;
+          if (rafAlive && document.hidden) return;
+          if ((dirty || !view.settled) && performance.now() - lastFrame > 120) {
+            rafPending = false;
+            frame(performance.now());
+          }
+        }, 60);
+
+        setInterval(() => {
+          if (Q.mode !== "live") return;
+          const texScale = (L.texW / L.pw).toFixed(L.texW % L.pw ? 2 : 0);
+          const text =
+            "HTML-in-Canvas · WebGL 2 · " +
+            (view.settled ? "at rest, 0 fps" : (fps || "--") + " fps") +
+            " · scale " +
+            (view.settled ? 1 : view.scale).toFixed(2) +
+            " · ink " +
+            texScale +
+            "x";
+          if (stat.textContent !== text) stat.textContent = text;
+        }, 500);
+
+        /* ---------- 9. navigation -------------------------------------- */
+
+        /* Inside a canvas the browser cannot scroll a focused link into
+           view: the page it is printed on may be folded under three
+           others. So we do it: find the page, scroll to its stop. */
+        function goToPage(n, smooth) {
+          const s = J.stops[J.stopOfPage[n]];
+          if (!s) return;
+          const u = currentJourney();
+          if (u >= s.start && u <= s.end) return; // already there
+          const target = s.start + s.len * 0.86;
+          // Glide to the next opening; anything further is a jump cut. A
+          // keyboard user tabbing to a link five leaves away should not sit
+          // through five page turns.
+          const near = Math.abs(target - u) < 2.4;
+          if (!(smooth && near && !reduceMQ.matches)) view.snap = true;
+          window.scrollTo({
+            top: target * L.ch,
+            behavior: view.snap ? "auto" : "smooth",
+          });
+        }
+        function pageOf(el) {
+          const p = el && el.closest && el.closest(".page");
+          return p ? +p.dataset.page : 0;
+        }
+        function onFocusIn(e) {
+          if (Q.mode !== "live") return;
+          const n = pageOf(e.target);
+          // Only when focus lands on a page the reader cannot see. A click
+          // on visible text also moves focus, and must not move the sheet.
+          const r = e.target.getBoundingClientRect();
+          const cx = r.x + r.width / 2,
+            cy = r.y + r.height / 2;
+          const visible =
+            (Q.info.shown || []).includes(n) &&
+            cx >= 0 &&
+            cx <= L.cw &&
+            cy >= 0 &&
+            cy <= L.ch;
+          // After the browser's own focus handling, which would otherwise
+          // cancel a smooth scroll started here.
+          if (n && !visible) setTimeout(() => goToPage(n, true), 0);
+        }
+        function onClick(e) {
+          if (Q.mode !== "live") return;
+          const a = e.target.closest && e.target.closest('a[href^="#"]');
+          if (!a) return;
+          const target = document.getElementById(
+            a.getAttribute("href").slice(1)
+          );
+          const n = pageOf(target);
+          if (!n) return;
+          e.preventDefault();
+          history.replaceState(null, "", a.getAttribute("href"));
+          goToPage(n, true);
+          const page = pages[n - 1];
+          if (a.classList.contains("skip")) page.focus({ preventScroll: true });
+        }
+        /* A selection can also land on a page that is folded away: extended
+           with Shift+arrows past the foot of a page, or left behind by the
+           browser's find-in-page when its bar is closed. Turn to it. */
+        let pointerIsDown = false;
+        let lastPointer = -1e9;
+        function onSelectionChange() {
+          // Never for a selection the reader is making by hand, and never
+          // while the sheet is in transit.
+          if (Q.mode !== "live" || pointerIsDown || !Q.info.rest) return;
+          if (performance.now() - lastPointer < 600) return;
+          const sel = getSelection();
+          if (!sel.rangeCount || sel.isCollapsed || !sel.focusNode) return;
+          const n = pageOf(
+            sel.focusNode.nodeType === 1
+              ? sel.focusNode
+              : sel.focusNode.parentElement
+          );
+          if (n && !(Q.info.shown || []).includes(n)) goToPage(n, true);
+        }
+        function goToHash() {
+          const n = pageOf(
+            location.hash.length > 1 &&
+              document.getElementById(location.hash.slice(1))
+          );
+          if (n) goToPage(n, false);
+        }
+
+        /* ---------- promotion: from article to sheet ------------------- */
+
+        let promoteTimer = 0;
+        let resizeObs = null;
+
+        function promote() {
+          if (!htmlInCanvasSupported())
+            return stayPlain("HTML-in-Canvas not available in this browser");
+          if (/[?&]plain\b/.test(location.search))
+            return stayPlain("?plain requested");
+          if (!measure()) return stayPlain("window too small for a page");
+
+          // Move the article into the canvas. From here on its sections
+          // are laid out by the browser but only appear where we draw them.
+          root.classList.remove("plain");
+          root.classList.add("live");
+          canvas.setAttribute("content", "drawable");
+          canvas.appendChild(article);
+          for (const p of pages) p.setAttribute("drawable", "");
+          applyLayout();
+          Q.mode = "promoting";
+
+          try {
+            initGL();
+            impose();
+          } catch (err) {
+            console.warn("QUARTO", err);
+            return failPromotion(err.message);
+          }
+
+          canvas.addEventListener("paint", onPaint);
+          canvas.addEventListener("webglcontextlost", e => {
+            e.preventDefault();
+            lost = true;
+            failPromotion("WebGL context lost");
+          });
+
+          // Size the drawing buffer to the device pixels the canvas covers.
+          resizeObs = new ResizeObserver(entries => {
+            const e = entries[0];
+            const d =
+              e.devicePixelContentBoxSize && e.devicePixelContentBoxSize[0];
+            // devicePixelContentBoxSize is exact; fall back to CSS size x DPR
+            // where it is missing or (as under device emulation) not scaled.
+            const estW = Math.round(e.contentRect.width * devicePixelRatio);
+            const estH = Math.round(e.contentRect.height * devicePixelRatio);
+            const exact =
+              d &&
+              Math.abs(d.inlineSize - estW) <= 2 &&
+              Math.abs(d.blockSize - estH) <= 2;
+            view.devW = Math.max(2, exact ? d.inlineSize : estW);
+            view.devH = Math.max(2, exact ? d.blockSize : estH);
+            const ok = measure();
+            if (!ok) return failPromotion("window too small for a page");
+            applyLayout();
+            if (firstPaint) fitType();
+            needAll = true;
+            for (const g of geo) g.key = "";
+            canvas.requestPaint();
+            invalidate();
+          });
+          try {
+            resizeObs.observe(canvas, { box: "device-pixel-content-box" });
+          } catch (e) {
+            resizeObs.observe(canvas);
+          }
+
+          canvas.requestPaint();
+          // If no paint event arrives (an embed that never renders a frame),
+          // give the reader the plain article back rather than a blank page.
+          promoteTimer = setTimeout(() => {
+            if (!firstPaint) failPromotion("no paint event from the browser");
+          }, 1500);
+        }
+
+        function finishPromotion() {
+          clearTimeout(promoteTimer);
+          Q.mode = "live";
+          root.classList.remove("pending");
+          document.querySelector('meta[name="theme-color"]').content =
+            "#0f1d21";
+          fitType();
+          document.fonts &&
+            document.fonts.ready.then(() => {
+              fitType();
+              invalidate();
+            });
+          window.addEventListener("scroll", invalidate, { passive: true });
+          const onPointer = e => {
+            lens.px = e.clientX;
+            lens.py = e.clientY;
+            lens.pointer = true; // mouse, pen or a finger
+            if (lens.on) invalidate();
+          };
+          window.addEventListener("pointermove", onPointer, { passive: true });
+          window.addEventListener("pointerdown", onPointer, { passive: true });
+          document.addEventListener("visibilitychange", () => {
+            if (!document.hidden) invalidate();
+          });
+          reduceMQ.addEventListener("change", invalidate);
+          article.addEventListener("focusin", onFocusIn);
+          document.addEventListener("selectionchange", onSelectionChange);
+          const pointer = down => () => {
+            pointerIsDown = down;
+            lastPointer = performance.now();
+          };
+          window.addEventListener("pointerdown", pointer(true), {
+            passive: true,
+          });
+          window.addEventListener("pointerup", pointer(false), {
+            passive: true,
+          });
+          window.addEventListener("pointercancel", pointer(false), {
+            passive: true,
+          });
+          document.addEventListener("click", onClick);
+          window.addEventListener("hashchange", goToHash);
+          goToHash();
+          view.j = view.target = window.scrollY / Math.max(1, L.ch);
+          invalidate();
+        }
+
+        /* Back down the ladder: put the article where it was. */
+        function failPromotion(reason) {
+          clearTimeout(promoteTimer);
+          if (resizeObs) resizeObs.disconnect();
+          canvas.removeEventListener("paint", onPaint);
+          for (const p of pages) p.removeAttribute("drawable");
+          canvas.removeAttribute("content");
+          flow.appendChild(article);
+          root.style.removeProperty("--fit");
+          document.querySelector('meta[name="theme-color"]').content =
+            "#f3efe6";
+          stayPlain(reason);
+        }
+
+        // Expose a little for tests and the curious.
+        Q.goToPage = n => goToPage(n, false);
+        Q.stops = () => J.stops;
+        Q.layout = L;
+        Q.render = () => {
+          view.settled = true;
+          render();
+        };
+
+        promote();
+      })();
+    </script>
+  </body>
+</html>

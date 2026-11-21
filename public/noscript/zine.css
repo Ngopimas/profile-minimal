@@ -1,0 +1,2501 @@
+/* ============================================================
+   NOSCRIPT - a zine in six documents and one stylesheet.
+   Nothing here is JavaScript. There is no build step either:
+   this is the file your browser is running, as it was written.
+
+   Order of the file
+     1. fonts, registered properties
+     2. tokens and base typography
+     3. page furniture: mast, plate, prose, code, turn links, proof
+     4. cover: the stack of sheets and the self-testing table
+     5. 01 scroll: progress, drum, stuck flag, reel
+     6. 02 state: lock, accordion
+     7. 03 layer: trap, notes, dialog
+     8. 04 count: rings, ruler, misregistration
+     9. 05 route: the layer diagram, page turns between documents
+    10. print and reduced motion
+
+   Rule of the house: the plain version is the default. Every
+   effect lives inside an @supports block, so a browser that
+   does not know a feature never sees a half-built specimen.
+   ============================================================ */
+
+/* ---------- 1. fonts and registered properties ---------- */
+
+@font-face {
+  font-family: "Clash Display";
+  src: url("../fonts/clash-display-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "General Sans";
+  src: url("../fonts/general-sans-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "General Sans";
+  src: url("../fonts/general-sans-500.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Martian Mono";
+  src: url("../fonts/martian-mono-var-latin.woff2") format("woff2");
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Registered so that keyframes can interpolate them and so that
+   counter() can print them. This is how the page shows numbers. */
+@property --turn {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+@property --pct {
+  syntax: "<integer>";
+  inherits: true;
+  initial-value: 0;
+}
+@property --i {
+  syntax: "<integer>";
+  inherits: true;
+  initial-value: 0;
+}
+@property --n {
+  syntax: "<integer>";
+  inherits: true;
+  initial-value: 1;
+}
+@property --px {
+  syntax: "<integer>";
+  inherits: true;
+  initial-value: 0;
+}
+@property --chars {
+  syntax: "<integer>";
+  inherits: true;
+  initial-value: 0;
+}
+@property --move {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+@property --gap {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+/* ---------- 2. tokens and base ---------- */
+
+:root {
+  color-scheme: light;
+
+  /* Two inks on paper, like a risograph: a blue-black and a red. */
+  --paper: oklch(94.5% 0.017 88);
+  --sheet: oklch(98.2% 0.008 88);
+  --ink: oklch(25% 0.055 266);
+  --dim: oklch(46% 0.04 266);
+  --rule: oklch(25% 0.055 266 / 0.2);
+  --blue: oklch(47% 0.19 264);
+  --red: oklch(62% 0.225 27);
+  --red-wash: oklch(62% 0.225 27 / 0.12);
+  --blue-wash: oklch(47% 0.19 264 / 0.1);
+
+  --display: "Clash Display", "Avenir Next", "Segoe UI", sans-serif;
+  --body: "General Sans", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --mono: "Martian Mono", "SF Mono", ui-monospace, Menlo, monospace;
+
+  --measure: 36rem;
+  --gutter: clamp(1.1rem, 4vw, 3rem);
+  --ease: cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: 4rem;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1.0625rem/1.62 var(--body);
+  overflow-x: clip;
+  counter-reset: scripts;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--display);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.012em;
+  margin: 0;
+  text-wrap: balance;
+}
+h2 {
+  font-size: clamp(1.7rem, 4.4vw, 2.5rem);
+}
+h3 {
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+p,
+ul,
+ol,
+dl,
+figure,
+pre,
+table {
+  margin: 0;
+}
+p {
+  text-wrap: pretty;
+}
+strong,
+b {
+  font-weight: 500;
+}
+a {
+  color: inherit;
+  text-decoration-color: var(--red);
+  text-decoration-thickness: 0.12em;
+  text-underline-offset: 0.18em;
+}
+a:hover {
+  color: var(--blue);
+}
+code,
+kbd,
+pre {
+  font-family: var(--mono);
+  font-size: 0.82em;
+  font-variant-ligatures: none;
+}
+p code,
+li code,
+td code,
+dd code,
+figcaption code {
+  background: var(--blue-wash);
+  padding: 0.1em 0.3em;
+  border-radius: 0.2em;
+  overflow-wrap: anywhere;
+}
+kbd {
+  border: 1px solid var(--rule);
+  border-bottom-width: 2px;
+  border-radius: 0.25em;
+  padding: 0.05em 0.35em;
+  background: var(--sheet);
+}
+
+:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+::selection {
+  background: var(--red);
+  color: var(--sheet);
+}
+
+.vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip {
+  position: absolute;
+  left: var(--gutter);
+  top: -4rem;
+  z-index: 10;
+  background: var(--ink);
+  color: var(--sheet);
+  padding: 0.5rem 0.9rem;
+  font: 500 0.85rem var(--mono);
+}
+.skip:focus {
+  top: 0.5rem;
+}
+
+/* ---------- 3. page furniture ---------- */
+
+/* The mast is the one thing that never moves when a page turns. */
+.mast {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  flex-wrap: wrap;
+  padding: 1.1rem var(--gutter);
+  border-bottom: 2px solid var(--ink);
+  font: 500 0.72rem/1.3 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.mark {
+  font: 600 1.15rem/1 var(--display);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+.mark b {
+  font-weight: 600;
+  color: var(--red);
+}
+.mast ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 1.1rem;
+  list-style: none;
+  padding: 0;
+}
+.mast ol a {
+  text-decoration: none;
+  display: inline-block;
+  padding: 0.25rem 0;
+  border-bottom: 2px solid transparent;
+}
+.mast ol a:hover {
+  border-color: var(--red);
+}
+.mast ol a[aria-current="page"] {
+  border-color: var(--ink);
+}
+.mast ol span {
+  color: var(--red);
+  margin-right: 0.35em;
+}
+
+main {
+  display: grid;
+  grid-template-columns:
+    [full-start] minmax(var(--gutter), 1fr)
+    [wide-start] minmax(0, 9rem)
+    [prose-start] min(var(--measure), 100% - 2 * var(--gutter))
+    [prose-end] minmax(0, 9rem)
+    [wide-end] minmax(var(--gutter), 1fr)
+    [full-end];
+  row-gap: 1.25rem;
+  padding-bottom: 4rem;
+}
+main > *,
+.stuck > * {
+  grid-column: prose;
+}
+main > .wide,
+.stuck > .wide {
+  grid-column: wide;
+}
+main > .full {
+  grid-column: full;
+}
+/* A section that keeps the page's columns, so that a sticky bar
+   has a box to be sticky inside. */
+.stuck {
+  display: grid;
+  grid-template-columns: subgrid;
+  row-gap: 1.25rem;
+}
+main > h2,
+.stuck > h2 {
+  margin-top: 3.5rem;
+}
+.stuck > h2:first-of-type {
+  margin-top: 1.5rem;
+}
+main > h2::before,
+.stuck > h2::before {
+  content: "";
+  display: block;
+  width: 2.2rem;
+  height: 0.5rem;
+  background: var(--red);
+  margin-bottom: 0.9rem;
+}
+
+/* The plate: a sheet of paper with the page number on it.
+   On the cover the same sheet lies in the stack. Each one
+   carries a matching view-transition-name (section 9). */
+.plate {
+  grid-column: wide;
+  margin-top: clamp(1.5rem, 5vw, 3.5rem);
+  margin-bottom: 1.5rem;
+  background: var(--sheet);
+  border: 2px solid var(--ink);
+  padding: clamp(1.1rem, 3.5vw, 2.2rem);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.4rem clamp(1rem, 4vw, 2.5rem);
+  align-items: end;
+  box-shadow: 0.5rem 0.5rem 0 var(--ink);
+}
+.plate .folio {
+  grid-row: span 2;
+  align-self: start;
+  font: 600 clamp(3.4rem, 13vw, 8.5rem) / 0.8 var(--display);
+  color: var(--red);
+}
+.plate h1 {
+  font-size: clamp(2.3rem, 8.5vw, 5.4rem);
+  text-transform: uppercase;
+  align-self: end;
+}
+.plate .kills {
+  font: 500 0.74rem/1.5 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--dim);
+}
+.plate .kills s {
+  text-decoration-color: var(--red);
+  text-decoration-thickness: 0.14em;
+  color: var(--ink);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.lede {
+  font-size: 1.28rem;
+  line-height: 1.45;
+}
+
+/* Was / Now: the code that retired and the code that replaced it. */
+.swap {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+  gap: 1rem;
+  margin-block: 0.75rem;
+}
+.swap figure {
+  background: var(--sheet);
+  border: 1px solid var(--ink);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.swap figcaption {
+  font: 500 0.7rem/1 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.6rem 0.9rem;
+  border-bottom: 1px solid var(--ink);
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.swap pre {
+  padding: 0.9rem;
+  overflow-x: auto;
+  line-height: 1.6;
+  font-size: 0.74rem;
+  flex: 1;
+}
+.swap .was figcaption {
+  background: var(--red);
+  color: var(--sheet);
+}
+.swap .was pre {
+  color: var(--dim);
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent 0 0.55rem,
+    var(--red-wash) 0.55rem 0.62rem
+  );
+}
+.swap .now figcaption {
+  background: var(--ink);
+  color: var(--sheet);
+}
+
+/* A specimen is a figure whose caption says what it proves. */
+.specimen {
+  margin-block: 1rem;
+}
+.specimen > figcaption,
+.caption {
+  font: 400 0.74rem/1.6 var(--mono);
+  color: var(--dim);
+  margin-top: 0.8rem;
+  max-width: 44rem;
+}
+.specimen > figcaption b,
+.caption b {
+  color: var(--ink);
+}
+
+/* Sentences that only apply with or without a feature. The
+   "without" version is in the HTML and shows by default; each
+   @supports block further down swaps the pair. */
+.if-yes {
+  display: none;
+}
+
+.readout {
+  font: 500 0.78rem/1.5 var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+.readout b {
+  color: var(--red);
+  font-weight: 600;
+}
+
+/* Previous / next, at the foot of every page. */
+.turn {
+  grid-column: wide;
+  margin-top: 4rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 1rem;
+}
+.turn a {
+  display: block;
+  border: 2px solid var(--ink);
+  background: var(--sheet);
+  padding: 1rem 1.2rem 1.2rem;
+  text-decoration: none;
+  transition:
+    translate 0.2s var(--ease),
+    box-shadow 0.2s var(--ease);
+}
+.turn a:hover,
+.turn a:focus-visible {
+  color: inherit;
+  translate: -0.25rem -0.25rem;
+  box-shadow: 0.4rem 0.4rem 0 var(--red);
+}
+.turn small {
+  display: block;
+  font: 500 0.7rem/1 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--red);
+  margin-bottom: 0.6rem;
+}
+.turn span {
+  font: 600 1.6rem/1 var(--display);
+  text-transform: uppercase;
+}
+.turn .next {
+  text-align: right;
+}
+
+/* The proof strip. The zero is typed into the HTML so that it
+   survives without CSS. What CSS adds is the check: if a script
+   element exists anywhere in the document, the zero is struck
+   out and the page says so. Extensions can trip this. Good. */
+.proof {
+  border-top: 2px solid var(--ink);
+  padding: 1.4rem var(--gutter) 2.5rem;
+  font: 400 0.72rem/1.75 var(--mono);
+  color: var(--dim);
+  display: grid;
+  gap: 0.4rem;
+}
+.proof p {
+  max-width: 62rem;
+}
+.proof b {
+  color: var(--ink);
+}
+.proof .count {
+  color: var(--ink);
+  font-weight: 600;
+}
+:root:has(script) .proof .count {
+  text-decoration: line-through var(--red) 0.15em;
+}
+:root:has(script) .proof .count::after {
+  content: " at least 1. Something put a script element in this document. If it was not a browser extension, the claim is broken.";
+  display: inline-block;
+  color: var(--red);
+}
+
+/* ---------- 4. cover ---------- */
+
+.cover {
+  grid-column: wide;
+  padding-top: clamp(2rem, 7vw, 5rem);
+}
+.cover h1 {
+  font-size: clamp(2.9rem, 11.5vw, 9rem);
+  text-transform: uppercase;
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+}
+.cover h1 em {
+  font-style: normal;
+  color: var(--red);
+}
+.cover .lede {
+  max-width: var(--measure);
+  margin-top: 1.8rem;
+}
+
+/* Contents. Plain version: a list of sheets. */
+.stack {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.8rem;
+}
+.stack a {
+  display: block;
+  text-decoration: none;
+}
+/* The link is the thing you click. The face inside it is the
+   sheet of paper you see. They are separate so that, in the 3D
+   pile, the paper can be picked up while the link stays put. */
+.stack .face {
+  display: grid;
+  grid-template-columns: 3.2rem 1fr;
+  align-items: baseline;
+  gap: 0.2rem 1rem;
+  background: var(--sheet);
+  border: 2px solid var(--ink);
+  padding: 0.9rem 1.1rem;
+}
+.stack .num {
+  font: 600 1.9rem/1 var(--display);
+  color: var(--red);
+  grid-row: span 2;
+}
+.stack .t {
+  font: 600 1.5rem/1.05 var(--display);
+  text-transform: uppercase;
+}
+.stack .d {
+  font: 400 0.72rem/1.5 var(--mono);
+  color: var(--dim);
+}
+.stack a:hover {
+  color: inherit;
+}
+
+/* 3D version: the five sheets lie on a tilted table, one above
+   the other, and the gap between them opens as the stack scrolls
+   into view. They are still the same five links in the same
+   order, so Tab walks them from 01 to 05. */
+@supports (transform-style: preserve-3d) and (translate: 1px 1px 1px) {
+  @media (min-width: 60rem) {
+    .stack-stage {
+      perspective: 2400px;
+      perspective-origin: 50% 20%;
+      height: 42rem;
+      display: grid;
+      place-items: center;
+      --gap: 3.4rem;
+    }
+    .stack {
+      display: block;
+      position: relative;
+      width: 30rem;
+      height: 19rem;
+      transform-style: preserve-3d;
+      transform: translate(-3rem, -1rem) rotateX(57deg) rotateZ(-36deg);
+    }
+    .stack li {
+      position: absolute;
+      inset: 0;
+      transform-style: preserve-3d;
+      /* sheet 01 is on top: z falls as the index rises */
+      translate: calc(var(--i) * 1.9rem) calc(var(--i) * 3.5rem)
+        calc((4 - var(--i)) * var(--gap));
+    }
+    .stack li:nth-child(1) {
+      --i: 0;
+    }
+    .stack li:nth-child(2) {
+      --i: 1;
+    }
+    .stack li:nth-child(3) {
+      --i: 2;
+    }
+    .stack li:nth-child(4) {
+      --i: 3;
+    }
+    .stack li:nth-child(5) {
+      --i: 4;
+    }
+    .stack a {
+      position: absolute;
+      inset: 0;
+      transform-style: preserve-3d;
+    }
+    .stack .face {
+      position: absolute;
+      inset: 0;
+      grid-template-columns: auto 1fr;
+      grid-template-rows: 1fr auto;
+      align-items: end;
+      padding: 1rem 1.2rem 0.8rem;
+      box-shadow: 0 0 0 1px var(--ink);
+      pointer-events: none;
+      transition: translate 0.45s var(--ease);
+    }
+    .stack .num {
+      grid-row: 1;
+      grid-column: 1 / -1;
+      align-self: start;
+      font-size: 7rem;
+      line-height: 0.8;
+    }
+    .stack .t {
+      grid-row: 2;
+      font-size: 1.7rem;
+      white-space: nowrap;
+    }
+    .stack .d {
+      grid-row: 2;
+      text-align: right;
+      align-self: end;
+    }
+    /* Pick a sheet up to read its face. The link underneath does
+       not move, and the paper ignores the pointer while it is in
+       the air, so the sheet cannot slip out from under the cursor
+       and cannot block the sheets below it. It rises by its own
+       depth in the pile plus a little, which puts it above the
+       top sheet whatever the gap is. */
+    .stack li:hover .face,
+    .stack li:focus-within .face {
+      translate: 2.5rem -1rem calc(var(--i) * var(--gap) + 1.8rem);
+      box-shadow:
+        0 0 0 1px var(--ink),
+        -0.6rem 0.6rem 0 var(--red);
+    }
+    .stack a:focus-visible {
+      outline: none;
+    }
+    .stack a:focus-visible .face {
+      outline: 3px solid var(--blue);
+      outline-offset: 3px;
+    }
+  }
+}
+
+/* The gap is a registered <length>, so a view timeline can
+   animate it: the pile is closed when it enters and open by the
+   time it reaches the middle of the screen. */
+@supports (animation-timeline: view()) {
+  @media (min-width: 60rem) and (prefers-reduced-motion: no-preference) {
+    .stack-stage {
+      animation: stack-open linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 45%;
+    }
+    @keyframes stack-open {
+      from {
+        --gap: 0.25rem;
+      }
+      to {
+        --gap: 3.4rem;
+      }
+    }
+  }
+}
+
+/* The self-testing table. */
+.tests {
+  grid-column: wide;
+  overflow-x: auto;
+}
+.tests table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+  line-height: 1.4;
+  min-width: 44rem;
+}
+.tests caption {
+  text-align: left;
+  font: 400 0.74rem/1.6 var(--mono);
+  color: var(--dim);
+  padding-bottom: 0.8rem;
+  caption-side: bottom;
+  padding-top: 0.9rem;
+}
+.tests th,
+.tests td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.6rem 0.8rem 0.6rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.tests thead th {
+  font: 500 0.68rem/1.3 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 2px solid var(--ink);
+  white-space: nowrap;
+}
+.tests tbody th {
+  font-weight: 500;
+}
+.tests td.v {
+  font: 400 0.72rem/1.6 var(--mono);
+  white-space: nowrap;
+}
+.tests td.pg a {
+  font: 500 0.72rem/1.6 var(--mono);
+}
+
+/* A verdict cell holds the word "untested" in the HTML. With CSS,
+   the word is replaced by "no", and each @supports block below
+   upgrades its own cell to "yes". No row knows about any other,
+   and nothing here was decided on a server or by a script. */
+.verdict {
+  font: 600 0.72rem/1.6 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+.verdict i {
+  font-style: normal;
+  font-size: 0;
+}
+.verdict i::after {
+  content: "no";
+  font-size: 0.72rem;
+  color: var(--dim);
+  border: 1px solid var(--rule);
+  padding: 0.15em 0.6em;
+}
+.verdict .cannot {
+  font-size: inherit;
+  color: var(--dim);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  white-space: normal;
+}
+.verdict .cannot::after {
+  content: none;
+}
+@supports (animation-timeline: view()) {
+  .verdict .t-sda::after {
+    content: "yes";
+    color: var(--sheet);
+    background: var(--red);
+    border-color: var(--red);
+  }
+}
+@supports (container-type: scroll-state) {
+  .verdict .t-state::after {
+    content: "yes";
+    color: var(--sheet);
+    background: var(--red);
+    border-color: var(--red);
+  }
+}
+@supports selector(::scroll-marker) {
+  .verdict .t-marker::after {
+    content: "yes";
+    color: var(--sheet);
+    background: var(--red);
+    border-color: var(--red);
+  }
+}
+@supports selector(:has(a)) {
+  .verdict .t-has::after {
+    content: "yes";
+    color: var(--sheet);
+    background: var(--red);
+    border-color: var(--red);
+  }
+}
+@supports selector(::details-content) {
+  .verdict .t-details::after {
+    content: "yes";
+    color: var(--sheet);
+    background: var(--red);
+    border-color: var(--red);
+  }
+}
+@supports (interpolate-size: allow-keywords) {
+  .verdict .t-size::after {
+    content: "yes";
+    color: var(--sheet);
+    background: var(--red);
+    border-color: var(--red);
+  }
+}
+@supports selector(:popover-open) {
+  .verdict .t-popover::after {
+    content: "yes";
+    color: var(--sheet);
+    background: var(--red);
+    border-color: var(--red);
+  }
+}
+@supports (anchor-name: --a) {
+  .verdict .t-anchor::after {
+    content: "yes";
+    color: var(--sheet);
+    background: var(--red);
+    border-color: var(--red);
+  }
+}
+@supports (transition-behavior: allow-discrete) {
+  .verdict .t-start::after {
+    content: "yes";
+    color: var(--sheet);
+    background: var(--red);
+    border-color: var(--red);
+  }
+}
+@supports (order: sibling-index()) {
+  .verdict .t-sibling::after {
+    content: "yes";
+    color: var(--sheet);
+    background: var(--red);
+    border-color: var(--red);
+  }
+}
+@supports (order: random(1, 2)) {
+  .verdict .t-random::after {
+    content: "yes";
+    color: var(--sheet);
+    background: var(--red);
+    border-color: var(--red);
+  }
+}
+@supports (opacity: calc(1px / 1px)) {
+  .verdict .t-typed::after {
+    content: "yes";
+    color: var(--sheet);
+    background: var(--red);
+    border-color: var(--red);
+  }
+}
+
+.limits {
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.7rem;
+}
+.limits li::marker {
+  color: var(--red);
+}
+
+/* ---------- 5. page 01: scroll ---------- */
+
+/* Reading progress. One animation, timed by the root scroller
+   instead of by a clock, drives both the bar and the number. */
+.progress {
+  display: none;
+}
+@supports (animation-timeline: scroll()) {
+  .progress {
+    display: flex;
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 5;
+    height: 0.4rem;
+    pointer-events: none;
+    animation: read linear both;
+    animation-timeline: scroll(root block);
+    counter-reset: pct var(--pct);
+  }
+  .progress::before {
+    content: "";
+    width: calc(var(--pct) * 1%);
+    background: var(--red);
+  }
+  .progress::after {
+    content: counter(pct) "%";
+    font: 600 0.68rem/1 var(--mono);
+    color: var(--sheet);
+    background: var(--red);
+    padding: 0.35rem 0.45rem;
+    height: max-content;
+    translate: -100% 0;
+    min-width: max-content;
+  }
+  @keyframes read {
+    from {
+      --pct: 0;
+    }
+    to {
+      --pct: 100;
+    }
+  }
+}
+
+/* The drum. Plain version: a numbered listing of twelve lines. */
+.drum {
+  list-style: none;
+  padding: 0;
+  font: 400 0.74rem/1.9 var(--mono);
+}
+.pin .drum {
+  background: var(--sheet);
+  border: 1px solid var(--ink);
+  padding: 0.9rem;
+  overflow-x: auto;
+}
+.pin .drum > li {
+  white-space: nowrap;
+}
+.drum .in1 {
+  padding-left: 2ch;
+}
+.drum .in2 {
+  padding-left: 4ch;
+}
+.drum .was {
+  color: var(--dim);
+  text-decoration: line-through var(--red);
+}
+.drum .now {
+  color: var(--blue);
+  font-weight: 500;
+}
+.pin-meta {
+  display: none;
+}
+
+/* Facet indices, the 2015 way. Page 04 replaces these lines. */
+.drum > :nth-child(1) {
+  --i: 0;
+}
+.drum > :nth-child(2) {
+  --i: 1;
+}
+.drum > :nth-child(3) {
+  --i: 2;
+}
+.drum > :nth-child(4) {
+  --i: 3;
+}
+.drum > :nth-child(5) {
+  --i: 4;
+}
+.drum > :nth-child(6) {
+  --i: 5;
+}
+.drum > :nth-child(7) {
+  --i: 6;
+}
+.drum > :nth-child(8) {
+  --i: 7;
+}
+.drum > :nth-child(9) {
+  --i: 8;
+}
+.drum > :nth-child(10) {
+  --i: 9;
+}
+.drum > :nth-child(11) {
+  --i: 10;
+}
+.drum > :nth-child(12) {
+  --i: 11;
+}
+
+@supports (animation-timeline: view()) and (transform-style: preserve-3d) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* A tall section with a view timeline. Its child sticks to
+       the screen for the whole pass, so "how far through this
+       section am I" becomes the only input. */
+    main > .pin {
+      grid-column: full;
+      height: 340vh;
+      view-timeline: --pin block;
+    }
+    .pin-stick {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      height: 100svh;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 2.2rem;
+      padding-inline: var(--gutter);
+    }
+    .pin-stage {
+      width: min(100%, 42rem);
+      perspective: 1200px;
+      padding-block: 7.5rem;
+    }
+    /* A drum of n facets, each h tall, has a radius of
+       h / 2 / tan(180deg / n). The browser does the trigonometry. */
+    .pin .drum {
+      --r: calc(var(--h) / 2 / tan(180deg / var(--n)));
+      position: relative;
+      height: var(--h);
+      transform-style: preserve-3d;
+      transform: translateZ(calc(var(--r) * -1)) rotateX(var(--turn));
+    }
+    .pin .drum > * {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      transform: rotateX(calc(var(--i) * -360deg / var(--n)))
+        translateZ(var(--r));
+    }
+    .pin .drum {
+      --n: 12;
+      --h: clamp(2.6rem, 6vw, 3.6rem);
+      background: none;
+      border: 0;
+      padding: 0;
+      overflow: visible;
+      animation: drum-turn linear both;
+      animation-timeline: --pin;
+      animation-range: contain 0% contain 100%;
+    }
+    .pin .drum > li {
+      display: flex;
+      align-items: center;
+      padding-inline: 1.2rem;
+      background: var(--sheet);
+      border: 1px solid var(--ink);
+      font-size: clamp(0.6rem, 2.3vw, 0.95rem);
+      text-decoration: none;
+    }
+    .pin .drum > li.in1 {
+      padding-left: calc(1.2rem + 2ch);
+    }
+    .pin .drum > li.in2 {
+      padding-left: calc(1.2rem + 4ch);
+    }
+    .pin .drum > li.was {
+      background: oklch(96% 0.03 27);
+      color: var(--ink);
+      text-decoration: line-through var(--red);
+    }
+    .pin-meta {
+      display: block;
+      text-align: center;
+      animation: drum-count linear both;
+      animation-timeline: --pin;
+      animation-range: contain 0% contain 100%;
+      counter-reset: pct var(--pct) deg calc(var(--pct) * 33 / 10);
+    }
+    .pin-meta .p::after {
+      content: counter(pct) "%";
+    }
+    .pin-meta .a::after {
+      content: counter(deg) "deg";
+    }
+    @keyframes drum-turn {
+      from {
+        --turn: 0deg;
+      }
+      to {
+        --turn: 330deg;
+      }
+    }
+    @keyframes drum-count {
+      from {
+        --pct: 0;
+      }
+      to {
+        --pct: 100;
+      }
+    }
+    .p-scroll .if-sda.if-no {
+      display: none;
+    }
+    .p-scroll .if-sda.if-yes {
+      display: revert;
+    }
+  }
+}
+
+/* Stuck flag. The bar is sticky everywhere. Only a browser with
+   scroll-state queries can tell you that it is currently stuck. */
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  container-type: normal;
+  margin-top: 3rem;
+}
+.bar-in {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  background: var(--paper);
+  border-block: 2px solid var(--ink);
+  padding: 0.6rem 0;
+  font: 500 0.72rem/1.3 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition:
+    background 0.25s,
+    color 0.25s,
+    padding 0.25s;
+}
+.flag::after {
+  content: "stuck: your browser cannot say";
+  color: var(--dim);
+}
+@supports (container-type: scroll-state) {
+  .bar {
+    container-type: scroll-state;
+  }
+  .flag::after {
+    content: "stuck: no";
+  }
+  @container scroll-state(stuck: top) {
+    .bar-in {
+      background: var(--ink);
+      color: var(--sheet);
+      padding-inline: 0.9rem;
+    }
+    .flag::after {
+      content: "stuck: yes";
+      color: var(--sheet);
+      background: var(--red);
+      padding: 0.2em 0.6em;
+    }
+  }
+  .if-state.if-no {
+    display: none;
+  }
+  .if-state.if-yes {
+    display: revert;
+  }
+}
+
+/* The reel: a scroll-snap list. Its dots and arrows do not exist
+   in the HTML. Where supported, the browser generates them. */
+.reel {
+  list-style: none;
+  padding: 0 0 1rem;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(84%, 21rem);
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink) transparent;
+}
+.reel > li {
+  scroll-snap-align: start;
+  background: var(--sheet);
+  border: 1px solid var(--ink);
+  padding: 1.1rem 1.2rem 1.3rem;
+  display: grid;
+  gap: 0.6rem;
+  align-content: start;
+}
+.reel h3 {
+  text-transform: uppercase;
+}
+.reel p {
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+.reel code {
+  font-size: 0.72rem;
+}
+.reel .tag {
+  font: 500 0.66rem/1 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+
+@supports selector(::scroll-marker) {
+  .reel-wrap {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    column-gap: 0.75rem;
+  }
+  .reel {
+    grid-column: 1 / -1;
+    scroll-marker-group: after;
+    scrollbar-width: none;
+  }
+  .reel::scroll-button(inline-start),
+  .reel::scroll-button(inline-end) {
+    font: 600 1rem/1 var(--mono);
+    width: 2.6rem;
+    height: 2.6rem;
+    border: 2px solid var(--ink);
+    background: var(--sheet);
+    color: var(--ink);
+    cursor: pointer;
+    grid-row: 2;
+  }
+  .reel::scroll-button(inline-start) {
+    content: "\2190" / "Previous card";
+    grid-column: 1;
+  }
+  .reel::scroll-button(inline-end) {
+    content: "\2192" / "Next card";
+    grid-column: 3;
+  }
+  .reel::scroll-button(*):disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+  .reel::scroll-button(*):focus-visible {
+    outline: 3px solid var(--blue);
+    outline-offset: 3px;
+  }
+  .reel::scroll-marker-group {
+    grid-row: 2;
+    grid-column: 2;
+    display: flex;
+    justify-content: center;
+    gap: 0.7rem;
+  }
+  .reel > li::scroll-marker {
+    content: "";
+    width: 0.85rem;
+    height: 0.85rem;
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+  }
+  .reel > li::scroll-marker:target-current {
+    background: var(--red);
+    border-color: var(--red);
+  }
+  .reel > li::scroll-marker:focus-visible {
+    outline: 3px solid var(--blue);
+    outline-offset: 3px;
+  }
+  .if-marker.if-no {
+    display: none;
+  }
+  .if-marker.if-yes {
+    display: revert;
+  }
+}
+
+/* ---------- 6. page 02: state ---------- */
+
+/* Plain version of the lock: three fieldsets of radio buttons. */
+.lock {
+  background: var(--sheet);
+  border: 2px solid var(--ink);
+  padding: clamp(1rem, 3vw, 1.8rem);
+  display: grid;
+  gap: 1.4rem;
+  counter-reset: a b c ok;
+}
+.dials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.dial {
+  border: 1px solid var(--rule);
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  min-width: 0;
+}
+.dial legend {
+  font: 500 0.68rem/1 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding-inline: 0.3rem;
+}
+.dial .drum {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.1rem 0.7rem;
+  font-size: 0.85rem;
+}
+.dial label {
+  cursor: pointer;
+}
+.vault-door {
+  display: none;
+}
+.vault-note {
+  border-left: 0.5rem solid var(--red);
+  padding: 0.3rem 0 0.3rem 1rem;
+}
+
+@supports selector(:has(a)) and (transform-style: preserve-3d) {
+  .lock {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    align-items: center;
+  }
+  .dials {
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 0.5rem;
+    padding-block: 5.2rem;
+  }
+  .dial {
+    border: 0;
+    padding: 0;
+    width: 4.6rem;
+    perspective: 700px;
+    border-radius: 0.3rem;
+  }
+  /* The radio that has focus is invisible, so its dial takes
+     the focus ring on its behalf. */
+  .dial:has(:focus-visible) {
+    outline: 3px solid var(--blue);
+    outline-offset: 0.3rem;
+  }
+  .dial legend {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  /* A drum of n facets, each h tall, has a radius of
+     h / 2 / tan(180deg / n). The browser does the trigonometry. */
+  .dial .drum {
+    --r: calc(var(--h) / 2 / tan(180deg / var(--n)));
+    position: relative;
+    height: var(--h);
+    transform-style: preserve-3d;
+    transform: translateZ(calc(var(--r) * -1)) rotateX(var(--turn));
+  }
+  .dial .drum > * {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    transform: rotateX(calc(var(--i) * -360deg / var(--n))) translateZ(var(--r));
+  }
+  .dial .drum {
+    display: block;
+    --n: 10;
+    --h: 3.4rem;
+    transition: transform 0.6s var(--ease);
+  }
+  .dial .drum > label {
+    display: grid;
+    place-items: center;
+    font: 600 2.2rem/1 var(--display);
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    color: var(--dim);
+  }
+  .dial .drum > label:has(:checked) {
+    background: var(--ink);
+    color: var(--sheet);
+  }
+  .dial input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  /* The whole mechanism: whichever facet holds the checked
+     radio decides how far its drum has turned. */
+  .drum:has(> :nth-child(1) > :checked) {
+    --turn: 0deg;
+  }
+  .drum:has(> :nth-child(2) > :checked) {
+    --turn: 36deg;
+  }
+  .drum:has(> :nth-child(3) > :checked) {
+    --turn: 72deg;
+  }
+  .drum:has(> :nth-child(4) > :checked) {
+    --turn: 108deg;
+  }
+  .drum:has(> :nth-child(5) > :checked) {
+    --turn: 144deg;
+  }
+  .drum:has(> :nth-child(6) > :checked) {
+    --turn: 180deg;
+  }
+  .drum:has(> :nth-child(7) > :checked) {
+    --turn: 216deg;
+  }
+  .drum:has(> :nth-child(8) > :checked) {
+    --turn: 252deg;
+  }
+  .drum:has(> :nth-child(9) > :checked) {
+    --turn: 288deg;
+  }
+  .drum:has(> :nth-child(10) > :checked) {
+    --turn: 324deg;
+  }
+
+  /* Derived state. Each checked radio adds its own digit to a
+     counter, so the page can print the code that is dialled.
+     The three right answers also add one to "ok". */
+  .dial-a :checked {
+    counter-increment: a var(--i);
+  }
+  .dial-b :checked {
+    counter-increment: b var(--i);
+  }
+  .dial-c :checked {
+    counter-increment: c var(--i);
+  }
+  #a2:checked {
+    counter-increment: a 2 ok;
+  }
+  #b0:checked {
+    counter-increment: b 0 ok;
+  }
+  #c0:checked {
+    counter-increment: c 0 ok;
+  }
+
+  .response {
+    display: grid;
+    gap: 1rem;
+  }
+  .status {
+    font: 600 1.5rem/1.15 var(--display);
+    text-transform: uppercase;
+  }
+  .status::before {
+    content: counter(a) counter(b) counter(c) " ";
+    color: var(--red);
+  }
+  .status::after {
+    content: "Not a status I know";
+  }
+  .lock:has(#a4:checked):has(#b0:checked):has(#c4:checked) .status::after {
+    content: "Not Found";
+  }
+  .lock:has(#a2:checked):has(#b0:checked):has(#c0:checked) .status::after {
+    content: "OK";
+  }
+  .lock:has(#a2:checked):has(#b0:checked):has(#c4:checked) .status::after {
+    content: "No Content";
+  }
+  .lock:has(#a3:checked):has(#b0:checked):has(#c1:checked) .status::after {
+    content: "Moved Permanently";
+  }
+  .lock:has(#a3:checked):has(#b0:checked):has(#c4:checked) .status::after {
+    content: "Not Modified";
+  }
+  .lock:has(#a4:checked):has(#b0:checked):has(#c3:checked) .status::after {
+    content: "Forbidden";
+  }
+  .lock:has(#a4:checked):has(#b1:checked):has(#c0:checked) .status::after {
+    content: "Gone";
+  }
+  .lock:has(#a4:checked):has(#b1:checked):has(#c8:checked) .status::after {
+    content: "I'm a teapot";
+  }
+  .lock:has(#a4:checked):has(#b5:checked):has(#c1:checked) .status::after {
+    content: "Unavailable For Legal Reasons";
+  }
+  .lock:has(#a5:checked):has(#b0:checked):has(#c0:checked) .status::after {
+    content: "Internal Server Error";
+  }
+  .lock:has(#a5:checked):has(#b0:checked):has(#c3:checked) .status::after {
+    content: "Service Unavailable";
+  }
+  .tally::after {
+    content: counter(ok) " of 3";
+    color: var(--red);
+    font-weight: 600;
+  }
+
+  /* The vault: a note behind a door on a real hinge. */
+  .vault {
+    position: relative;
+    perspective: 900px;
+    min-height: 8.5rem;
+  }
+  .vault-note {
+    border: 1px dashed var(--ink);
+    padding: 0.9rem 1rem;
+    height: 100%;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  .vault-door {
+    display: grid;
+    place-items: center;
+    position: absolute;
+    inset: -1px;
+    background: var(--ink);
+    color: var(--sheet);
+    font: 500 0.72rem/1.5 var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-align: center;
+    transform-origin: 100% 50%;
+    transform-style: preserve-3d;
+    transition: transform 0.9s var(--ease);
+    border-right: 0.5rem solid var(--red);
+  }
+  /* A door has two sides. Each label is hidden when it faces
+     away, so neither is ever read backwards through the door. */
+  .vault-door span,
+  .vault-door::after {
+    backface-visibility: hidden;
+  }
+  .vault-door::after {
+    content: "Open";
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: var(--red);
+    transform: rotateY(180deg);
+  }
+  .lock:has(#a2:checked):has(#b0:checked):has(#c0:checked) .vault-door {
+    transform: rotateY(-100deg);
+  }
+  .if-has.if-no {
+    display: none;
+  }
+  .if-has.if-yes {
+    display: revert;
+  }
+}
+
+/* Accordion: details elements that share a name close each
+   other. Height animation is a progressive extra. */
+.fold {
+  border-top: 2px solid var(--ink);
+}
+.fold details {
+  border-bottom: 1px solid var(--ink);
+}
+.fold summary {
+  cursor: pointer;
+  padding: 0.85rem 0;
+  font: 600 1.15rem/1.2 var(--display);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  list-style: none;
+}
+.fold summary::-webkit-details-marker {
+  display: none;
+}
+.fold summary code {
+  margin-right: auto;
+  font-weight: 400;
+  font-size: 0.72rem;
+  color: var(--blue);
+}
+.fold summary::after {
+  content: "+";
+  font: 400 1.3rem/1 var(--mono);
+  color: var(--red);
+  transition: rotate 0.3s var(--ease);
+}
+.fold details[open] summary::after {
+  rotate: 45deg;
+}
+.fold details > p {
+  padding: 0 0 1.1rem;
+  max-width: var(--measure);
+}
+@supports (interpolate-size: allow-keywords) and selector(::details-content) {
+  @media (prefers-reduced-motion: no-preference) {
+    .fold {
+      interpolate-size: allow-keywords;
+    }
+    .fold details::details-content {
+      block-size: 0;
+      overflow-y: clip;
+      transition:
+        block-size 0.4s var(--ease),
+        content-visibility 0.4s allow-discrete;
+    }
+    .fold details[open]::details-content {
+      block-size: auto;
+    }
+  }
+  .if-size.if-no {
+    display: none;
+  }
+  .if-size.if-yes {
+    display: revert;
+  }
+}
+
+/* ---------- 7. page 03: layer ---------- */
+
+/* The trap: a small box that clips its children, as cards,
+   tables and scrolling panels always have. */
+.trap {
+  position: relative;
+  background: var(--sheet);
+  border: 2px solid var(--ink);
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-start;
+}
+.trap::after {
+  content: "overflow: visible";
+  position: absolute;
+  right: 0.6rem;
+  bottom: 0.4rem;
+  font: 500 0.66rem/1 var(--mono);
+  color: var(--red);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.btn,
+.old > summary {
+  font: 500 0.78rem/1.2 var(--mono);
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  padding: 0.6rem 0.9rem;
+  cursor: pointer;
+  border-radius: 0;
+  list-style: none;
+}
+.old > summary::-webkit-details-marker {
+  display: none;
+}
+.btn:hover,
+.old > summary:hover {
+  background: var(--ink);
+  color: var(--sheet);
+}
+.old {
+  position: relative;
+}
+.menu {
+  width: 15rem;
+  background: var(--sheet);
+  border: 2px solid var(--ink);
+  box-shadow: 0.4rem 0.4rem 0 var(--red);
+  padding: 0.8rem 1rem;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.menu ol {
+  padding-left: 1.2rem;
+  margin-top: 0.4rem;
+}
+.old .menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  z-index: 9999;
+}
+
+/* Popovers. Without the popover attribute these are ordinary
+   boxes in the flow, which is the right fallback: the content
+   is simply there. */
+.note {
+  font-size: 0.86em;
+  color: var(--dim);
+}
+.fn {
+  font: 600 0.66rem/1 var(--mono);
+  vertical-align: super;
+  color: var(--sheet);
+  background: var(--red);
+  border: 0;
+  border-radius: 1em;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0 0.3rem;
+  cursor: pointer;
+  margin-inline: 0.15em;
+}
+.fn:hover {
+  background: var(--ink);
+}
+
+@supports selector(:popover-open) {
+  .note,
+  .menu[popover] {
+    border: 2px solid var(--ink);
+    background: var(--sheet);
+    color: var(--ink);
+    padding: 0.8rem 1rem;
+    box-shadow: 0.4rem 0.4rem 0 var(--red);
+    font: 400 0.86rem/1.5 var(--body);
+  }
+  .note {
+    width: min(19rem, 100vw - 2rem);
+  }
+  .trap {
+    overflow: hidden;
+    height: 9.5rem;
+  }
+  .trap::after {
+    content: "overflow: hidden";
+  }
+  .note[popover]:not(:popover-open),
+  .menu[popover]:not(:popover-open) {
+    display: none;
+  }
+  .if-popover.if-no {
+    display: none;
+  }
+  .if-popover.if-yes {
+    display: revert;
+  }
+}
+
+/* Entry and exit. @starting-style gives the first frame of an
+   element that did not exist a moment ago; allow-discrete lets
+   display and overlay wait for the exit to finish. */
+@supports (transition-behavior: allow-discrete) and selector(:popover-open) {
+  @media (prefers-reduced-motion: no-preference) {
+    .note,
+    .menu[popover] {
+      opacity: 0;
+      translate: 0 0.5rem;
+      transition:
+        opacity 0.22s,
+        translate 0.22s var(--ease),
+        display 0.22s allow-discrete,
+        overlay 0.22s allow-discrete;
+    }
+    .note:popover-open,
+    .menu[popover]:popover-open {
+      opacity: 1;
+      translate: 0 0;
+    }
+    @starting-style {
+      .note:popover-open,
+      .menu[popover]:popover-open {
+        opacity: 0;
+        translate: 0 0.5rem;
+      }
+    }
+  }
+}
+
+/* Anchoring. Each popover names the button it belongs to and
+   asks to sit above it. If there is no room above, the browser
+   flips it below. Nobody measured anything. */
+@supports (anchor-name: --a) and (position-area: top) and
+  selector(:popover-open) {
+  .fn-1 {
+    anchor-name: --fn-1;
+  }
+  .fn-2 {
+    anchor-name: --fn-2;
+  }
+  .fn-3 {
+    anchor-name: --fn-3;
+  }
+  .btn-free {
+    anchor-name: --free;
+  }
+  .note-1 {
+    position-anchor: --fn-1;
+  }
+  .note-2 {
+    position-anchor: --fn-2;
+  }
+  .note-3 {
+    position-anchor: --fn-3;
+  }
+  .note[popover] {
+    inset: auto;
+    margin: 0 0 0.6rem;
+    position-area: top;
+    position-try-fallbacks: flip-block;
+  }
+  .menu[popover] {
+    inset: auto;
+    margin: 0.5rem 0 0;
+    position-anchor: --free;
+    position-area: bottom span-right;
+    position-try-fallbacks: flip-block;
+  }
+  .if-anchor.if-no {
+    display: none;
+  }
+  .if-anchor.if-yes {
+    display: revert;
+  }
+}
+
+/* Two ways to open the same dialog. The link works everywhere:
+   it points at #modal, and the dialog shows itself while it is
+   the :target. The button sends a real show-modal command, but
+   CSS cannot ask whether the browser understands an HTML
+   attribute. So a stand-in decides which one you are offered:
+   every engine shipped sibling-index() after, or together with,
+   invoker commands (Chrome 138 after 135, Safari 26.2 with 26.2,
+   Firefox 154 after 144). If that test passes, the command is
+   safe to rely on. */
+.modal-cmd {
+  display: none;
+}
+a.btn {
+  display: inline-block;
+  text-decoration: none;
+}
+@supports (order: sibling-index()) {
+  .modal-cmd {
+    display: inline-block;
+  }
+  a.modal-link {
+    display: none;
+  }
+}
+.modal-open {
+  scroll-margin-top: 45vh;
+}
+.modal .when-target {
+  display: none;
+}
+dialog.modal:target:not([open]) {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  margin: auto;
+  height: fit-content;
+  max-height: calc(100vh - 2rem);
+  overflow: auto;
+  opacity: 1;
+  scale: 1;
+  box-shadow:
+    0.6rem 0.6rem 0 var(--red),
+    0 0 0 100vmax oklch(25% 0.055 266 / 0.55);
+}
+dialog.modal:target:not([open]) .when-modal {
+  display: none;
+}
+dialog.modal:target:not([open]) .when-target {
+  display: revert;
+}
+dialog.modal:target:not([open]) a.when-target {
+  display: inline-block;
+  margin-top: 1.2rem;
+}
+
+dialog.modal {
+  border: 2px solid var(--ink);
+  background: var(--sheet);
+  color: var(--ink);
+  padding: 1.5rem;
+  width: min(30rem, 100vw - 2rem);
+  box-shadow: 0.6rem 0.6rem 0 var(--red);
+}
+dialog.modal h3 {
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+dialog.modal p + p {
+  margin-top: 0.7rem;
+}
+dialog.modal form {
+  margin-top: 1.2rem;
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+dialog.modal::backdrop {
+  background: oklch(25% 0.055 266 / 0.55);
+}
+@supports (transition-behavior: allow-discrete) {
+  @media (prefers-reduced-motion: no-preference) {
+    dialog.modal {
+      opacity: 0;
+      scale: 0.96;
+      transition:
+        opacity 0.25s,
+        scale 0.25s var(--ease),
+        display 0.25s allow-discrete,
+        overlay 0.25s allow-discrete;
+    }
+    dialog.modal[open] {
+      opacity: 1;
+      scale: 1;
+    }
+    @starting-style {
+      dialog.modal[open] {
+        opacity: 0;
+        scale: 0.96;
+      }
+    }
+  }
+}
+
+/* ---------- 8. page 04: count ---------- */
+
+/* Plain version of a ring: a row of numbered tiles. */
+.rings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 1.5rem 1rem;
+}
+.ring-box {
+  text-align: center;
+}
+.ring-box p {
+  font: 500 0.72rem/1.5 var(--mono);
+  margin-top: 0.6rem;
+}
+.ring {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.3rem;
+  counter-reset: tile;
+}
+.ring > li {
+  counter-increment: tile;
+  width: 2.6rem;
+  height: 3.4rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--ink);
+  background: var(--sheet);
+  font: 600 1.1rem/1 var(--display);
+}
+.ring > li::before {
+  content: counter(tile);
+}
+
+/* One rule, three rings. Each tile asks the browser two things:
+   which child am I, and how many of us are there. From those it
+   works out its angle and how far from the axis it must stand
+   for the tiles to meet edge to edge. */
+@supports (order: sibling-index()) and (transform-style: preserve-3d) {
+  .ring-stage {
+    perspective: 1100px;
+    height: 15rem;
+    display: grid;
+    place-items: center;
+  }
+  .ring {
+    display: block;
+    position: relative;
+    width: 3rem;
+    height: 4rem;
+    transform-style: preserve-3d;
+    transform: rotateX(-14deg) rotateY(var(--turn));
+  }
+  .ring > li {
+    --i: sibling-index();
+    --n: sibling-count();
+    --step: calc(360deg / var(--n));
+    --r: calc(1.65rem / tan(180deg / var(--n)));
+    position: absolute;
+    inset: 0;
+    width: auto;
+    height: auto;
+    transform: rotateY(calc(var(--step) * (var(--i) - 1))) translateZ(var(--r));
+    background: oklch(
+      88% 0.09 calc(27 + 237 * (var(--i) - 1) / (var(--n) - 1))
+    );
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .ring {
+      animation: ring-spin 30s linear infinite;
+    }
+    .ring-box:hover .ring,
+    .ring-box:focus-within .ring {
+      animation-play-state: paused;
+    }
+  }
+  @keyframes ring-spin {
+    to {
+      --turn: 360deg;
+    }
+  }
+  .if-sibling.if-no {
+    display: none;
+  }
+  .if-sibling.if-yes {
+    display: revert;
+  }
+}
+
+/* The ruler. Dividing a length by a length gives a plain number,
+   and a plain number can go into a counter and be printed. */
+.ruler {
+  background: var(--sheet);
+  border: 2px solid var(--ink);
+  padding: 1.2rem 1.3rem;
+  container-type: inline-size;
+}
+.ruler .line {
+  font: 400 0.9rem/1.6 var(--mono);
+  white-space: nowrap;
+  overflow: hidden;
+  color: var(--dim);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 0.7rem;
+  margin-bottom: 0.8rem;
+}
+.ruler .v::after {
+  content: "unknown";
+  color: var(--dim);
+}
+@supports (opacity: calc(1px / 1px)) {
+  .ruler-read {
+    --px: round(down, 100vw / 1px);
+    --chars: round(down, 100cqi / 1ch);
+    counter-reset: px var(--px) chars var(--chars);
+    font-family: var(--mono);
+    font-size: 0.9rem;
+  }
+  .ruler .v-px::after {
+    content: counter(px);
+    color: var(--red);
+    font-weight: 600;
+  }
+  .ruler .v-ch::after {
+    content: counter(chars);
+    color: var(--red);
+    font-weight: 600;
+  }
+  .if-typed.if-no {
+    display: none;
+  }
+  .if-typed.if-yes {
+    display: revert;
+  }
+}
+
+/* Misregistration. A riso print lays each ink down in a separate
+   pass and the passes never line up twice. Here the red pass is
+   a copy of the word, moved by random(). */
+.misreg {
+  position: relative;
+  background: var(--sheet);
+  border: 2px solid var(--ink);
+  padding: clamp(1.5rem, 6vw, 3.5rem) 1rem;
+  text-align: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+.misreg .word {
+  position: relative;
+  display: inline-block;
+  font: 600 clamp(2.6rem, 13vw, 8rem) / 0.9 var(--display);
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.misreg .word::after {
+  content: attr(data-word);
+  position: absolute;
+  inset: 0;
+  color: var(--red);
+  mix-blend-mode: multiply;
+}
+.specks {
+  display: none;
+}
+@supports (order: random(1, 2)) {
+  .misreg .word::after {
+    translate: random(-0.09em, 0.09em) random(-0.07em, 0.07em);
+    rotate: random(-1.6deg, 1.6deg);
+  }
+  .specks {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .specks i {
+    position: absolute;
+    left: random(0%, 100%);
+    top: random(0%, 100%);
+    width: random(0.2rem, 1.1rem);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--red);
+    opacity: random(0.15, 0.7);
+    mix-blend-mode: multiply;
+  }
+  .specks i:nth-child(3n) {
+    background: var(--blue);
+  }
+  .if-random.if-no {
+    display: none;
+  }
+  .if-random.if-yes {
+    display: revert;
+  }
+}
+
+/* ---------- 9. page 05: route ---------- */
+
+/* The layer diagram. Plain version: a list of the four
+   snapshots in the order the browser paints them. */
+.layers {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+  counter-reset: layer;
+}
+.ly {
+  counter-increment: layer;
+  display: grid;
+  gap: 0.1rem;
+  background: var(--sheet);
+  border: 1px solid var(--ink);
+  padding: 0.6rem 0.8rem;
+}
+.ly code {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--blue);
+}
+.ly span {
+  font: 400 0.7rem/1.4 var(--mono);
+  color: var(--dim);
+}
+.ly span::before {
+  content: "painted " counter(layer) " of 4: ";
+  color: var(--red);
+}
+
+/* 3D version: the same four list items as four planes over a
+   tilted table. Three registered properties describe the whole
+   transition: how far apart the layers are held (--gap), how far
+   the old page has turned (--turn), and how far the plate has
+   travelled (--move, from 0 to 1). Frozen, they show the middle
+   of a page turn. */
+@supports (transform-style: preserve-3d) and (translate: 1px 1px 1px) {
+  @media (min-width: 52rem) {
+    .layers-stage {
+      perspective: 2400px;
+      perspective-origin: 50% 20%;
+      height: 40rem;
+      display: grid;
+      place-items: center;
+      --gap: 3.4rem;
+      --turn: -30deg;
+      --move: 0.5;
+    }
+    .layers {
+      display: block;
+      position: relative;
+      width: 34rem;
+      height: 21rem;
+      transform-style: preserve-3d;
+      transform: translate(-1rem, 6rem) rotateX(57deg) rotateZ(-34deg);
+    }
+    .ly {
+      position: absolute;
+      align-content: end;
+      padding: 0.8rem 1rem;
+    }
+    .ly code {
+      font-size: 0.95rem;
+      white-space: nowrap;
+      background: none;
+      padding: 0;
+    }
+    .ly span {
+      font-size: 0.8rem;
+    }
+    .ly span::before {
+      content: none;
+    }
+    .ly-new {
+      inset: 0;
+      justify-items: end;
+      padding-bottom: 4rem;
+    }
+    .ly-old {
+      inset: 0;
+      translate: 0 0 var(--gap);
+      transform-origin: 0 50%;
+      transform: rotateY(var(--turn));
+      background: oklch(98.2% 0.008 88 / 0.8);
+      border-left: 0.35rem solid var(--ink);
+    }
+    .ly-plate {
+      left: 8%;
+      right: 8%;
+      top: 9%;
+      height: 34%;
+      border-width: 2px;
+      box-shadow: 0.3rem 0.3rem 0 var(--ink);
+      translate: calc((1 - var(--move)) * 5rem) calc((1 - var(--move)) * 8rem)
+        calc(var(--gap) * 2);
+      rotate: calc((1 - var(--move)) * -14deg);
+      scale: calc(0.8 + 0.2 * var(--move));
+    }
+    .ly-mark {
+      left: 3%;
+      top: -22%;
+      width: 19rem;
+      translate: 0 0 calc(var(--gap) * 3);
+      border-color: var(--red);
+    }
+    .ly-mark code {
+      color: var(--red);
+    }
+  }
+}
+
+/* Scrubbed by the scroll position: first the layers lift apart,
+   then the transition plays. The real one takes half a second;
+   this one takes as long as you like and runs backwards too. */
+@supports (animation-timeline: view()) {
+  @media (min-width: 52rem) and (prefers-reduced-motion: no-preference) {
+    .layers-stage {
+      animation: layers-scrub linear both;
+      animation-timeline: view();
+      animation-range: cover 18% cover 78%;
+    }
+    @keyframes layers-scrub {
+      0% {
+        --gap: 0rem;
+        --turn: 0deg;
+        --move: 0;
+      }
+      35% {
+        --gap: 3.4rem;
+        --turn: 0deg;
+        --move: 0;
+      }
+      100% {
+        --gap: 3.4rem;
+        --turn: -62deg;
+        --move: 1;
+      }
+    }
+    .p-route .if-sda.if-no {
+      display: none;
+    }
+    .p-route .if-sda.if-yes {
+      display: revert;
+    }
+  }
+}
+
+.tree {
+  margin: 0;
+  background: var(--sheet);
+  border: 1px solid var(--ink);
+  padding: 1rem 1.1rem;
+  font: 400 0.76rem/1.9 var(--mono);
+  overflow-x: auto;
+  white-space: pre;
+}
+.tree b {
+  color: var(--red);
+  font-weight: 600;
+}
+.tree i {
+  color: var(--dim);
+  font-style: normal;
+}
+
+/* This is the router. A browser that does not know the rule
+   skips it and loads the next document the ordinary way. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  /* Shared elements. A name must be unique within a document:
+     the cover gives one to each sheet in the stack, and a
+     chapter gives the same name to its plate, so the browser
+     pairs them up and moves one into the other. */
+  .mark {
+    view-transition-name: mark;
+  }
+  .stack .face,
+  .plate {
+    view-transition-class: plate;
+  }
+  .stack li:nth-child(1) .face,
+  .p-scroll .plate {
+    view-transition-name: plate-1;
+  }
+  .stack li:nth-child(2) .face,
+  .p-state .plate {
+    view-transition-name: plate-2;
+  }
+  .stack li:nth-child(3) .face,
+  .p-layer .plate {
+    view-transition-name: plate-3;
+  }
+  .stack li:nth-child(4) .face,
+  .p-count .plate {
+    view-transition-name: plate-4;
+  }
+  .stack li:nth-child(5) .face,
+  .p-route .plate {
+    view-transition-name: plate-5;
+  }
+
+  /* The old page turns away on its left edge, like paper, and
+     the new one is already lying underneath. */
+  ::view-transition-old(root) {
+    z-index: 1;
+    transform-origin: 0 50%;
+    animation: 0.5s cubic-bezier(0.5, 0, 0.75, 0.4) both page-turn;
+    mix-blend-mode: normal;
+  }
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+  ::view-transition-group(*) {
+    animation-duration: 0.5s;
+    animation-timing-function: var(--ease);
+  }
+  ::view-transition-group(mark) {
+    z-index: 3;
+  }
+  /* A sheet or plate with no partner on the other page (the four
+     sheets you did not choose, or the plate of the chapter you
+     are leaving) has nowhere to travel. It steps aside. */
+  ::view-transition-group(.plate) {
+    z-index: 2;
+  }
+  ::view-transition-old(.plate):only-child {
+    animation: 0.22s ease-in both plate-out;
+  }
+  ::view-transition-new(.plate):only-child {
+    animation: 0.4s 0.15s var(--ease) both plate-in;
+  }
+  @keyframes plate-out {
+    to {
+      opacity: 0;
+      translate: -3rem 0;
+    }
+  }
+  @keyframes plate-in {
+    from {
+      opacity: 0;
+      translate: 3rem 0;
+    }
+  }
+  @keyframes page-turn {
+    to {
+      transform: perspective(2200px) rotateY(-92deg);
+      filter: brightness(0.82);
+    }
+  }
+}
+
+/* ---------- 10. print and reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .if-motion {
+    display: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Print: one column of plain paper. The 3D figures print as
+   they stand; only the things that depend on a scroll position
+   or a pointer are taken off the page or laid flat. */
+@media print {
+  .progress,
+  .turn,
+  .skip,
+  .mast nav,
+  .pin-meta,
+  .vault-door,
+  .modal-open,
+  .fn {
+    display: none !important;
+  }
+  body {
+    background: none;
+    font-size: 11pt;
+  }
+  /* Grid containers fragment badly across sheets of paper. */
+  main,
+  .stuck {
+    display: block;
+    padding-inline: 1.5rem;
+  }
+  main > *,
+  .stuck > * {
+    margin-block: 1.25rem;
+  }
+  main > .pin {
+    height: auto !important;
+  }
+  .stack-stage,
+  .layers-stage {
+    animation: none !important;
+  }
+  .pin-stick {
+    position: static !important;
+    height: auto !important;
+  }
+  /* The drum cannot turn on paper, so it is unrolled. */
+  .pin-stage {
+    padding-block: 0 !important;
+  }
+  .pin .drum {
+    height: auto !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  .pin .drum > li {
+    position: static !important;
+    transform: none !important;
+    height: 2.2rem;
+  }
+  .bar {
+    position: static;
+  }
+  .reel {
+    display: grid;
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    overflow: visible;
+  }
+  .trap {
+    height: auto;
+    overflow: visible;
+  }
+  .swap figure,
+  .specimen,
+  .plate,
+  .ly,
+  .reel > li {
+    break-inside: avoid;
+  }
+  .plate {
+    box-shadow: none;
+  }
+  h2 {
+    break-after: avoid;
+  }
+  a {
+    text-decoration: none;
+  }
+}
