@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Where the outside reviewer sits</title>
+  <desc id="desc">Two pipelines. At home, a model from another vendor challenges the plan before any code is written. At work, every step uses the same family of models and the only outside reviewer arrives last, on the pull request.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#6b6a70"/>
+    </marker>
+    <style>
+      .sans{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+      .label{font-size:25px;font-weight:750;fill:#1c1c20;text-anchor:middle}
+      .small{font-size:18px;font-weight:520;fill:#59585e;text-anchor:middle}
+      .out{fill:#c85032}
+      .caps{font-size:19px;font-weight:750;letter-spacing:2px;fill:#1e8c78}
+      .note{font-size:20px;font-weight:520;fill:#59585e}
+      .line{fill:none;stroke:#6b6a70;stroke-width:3;stroke-linecap:round;marker-end:url(#arrow)}
+    </style>
+  </defs>
+
+  <rect width="1200" height="630" fill="#faf9f7"/>
+
+  <text x="58" y="70" class="sans caps">AT HOME</text>
+  <line x1="58" y1="88" x2="1142" y2="88" stroke="#d8d6d1" stroke-width="2"/>
+  <rect x="58" y="122" width="230" height="104" rx="20" fill="#ffffff" stroke="#d8d6d1" stroke-width="2"/>
+  <text x="173" y="168" class="sans label">Plan</text>
+  <text x="173" y="198" class="sans small">default model</text>
+  <path d="M294 174 H332" class="line"/>
+  <rect x="342" y="122" width="230" height="104" rx="20" fill="#ffffff" stroke="#c85032" stroke-width="4"/>
+  <text x="457" y="168" class="sans label">Challenge</text>
+  <text x="457" y="198" class="sans small out">another vendor</text>
+  <path d="M578 174 H616" class="line"/>
+  <rect x="626" y="122" width="230" height="104" rx="20" fill="#ffffff" stroke="#d8d6d1" stroke-width="2"/>
+  <text x="741" y="168" class="sans label">Implement</text>
+  <text x="741" y="198" class="sans small">cheap or free models</text>
+  <path d="M862 174 H900" class="line"/>
+  <rect x="910" y="122" width="230" height="104" rx="20" fill="#ffffff" stroke="#d8d6d1" stroke-width="2"/>
+  <text x="1025" y="168" class="sans label">Evaluate</text>
+  <text x="1025" y="198" class="sans small">model chosen for QA</text>
+
+  <text x="58" y="330" class="sans caps">AT WORK</text>
+  <line x1="58" y1="348" x2="1142" y2="348" stroke="#d8d6d1" stroke-width="2"/>
+  <rect x="58" y="382" width="180" height="104" rx="20" fill="#ffffff" stroke="#d8d6d1" stroke-width="2"/>
+  <text x="148" y="428" class="sans label">Plan</text>
+  <text x="148" y="458" class="sans small">one family</text>
+  <path d="M244 434 H274" class="line"/>
+  <rect x="284" y="382" width="180" height="104" rx="20" fill="#ffffff" stroke="#d8d6d1" stroke-width="2"/>
+  <text x="374" y="428" class="sans label">Plan review</text>
+  <text x="374" y="458" class="sans small">same family</text>
+  <path d="M470 434 H500" class="line"/>
+  <rect x="510" y="382" width="180" height="104" rx="20" fill="#ffffff" stroke="#d8d6d1" stroke-width="2"/>
+  <text x="600" y="428" class="sans label">Implement</text>
+  <text x="600" y="458" class="sans small">same family</text>
+  <path d="M696 434 H726" class="line"/>
+  <rect x="736" y="382" width="180" height="104" rx="20" fill="#ffffff" stroke="#d8d6d1" stroke-width="2"/>
+  <text x="826" y="428" class="sans label">Review</text>
+  <text x="826" y="458" class="sans small">same family</text>
+  <path d="M922 434 H952" class="line"/>
+  <rect x="962" y="382" width="180" height="104" rx="20" fill="#ffffff" stroke="#c85032" stroke-width="4"/>
+  <text x="1052" y="428" class="sans label">Pull request</text>
+  <text x="1052" y="458" class="sans small out">outside reviewer</text>
+
+  <text x="58" y="578" class="sans note">The outlined step is the only one where somebody else reads the work.</text>
+</svg>
