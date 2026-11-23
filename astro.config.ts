@@ -3,6 +3,7 @@ import react from "@astrojs/react";
 import remarkToc from "remark-toc";
 import remarkCollapse from "remark-collapse";
 import sitemap from "@astrojs/sitemap";
+import { unified } from "@astrojs/markdown-remark";
 import { SITE } from "./src/config";
 
 // https://astro.build/config
@@ -14,7 +15,9 @@ export default defineConfig({
       filter: page => SITE.showArchives || !page.endsWith("/archives"),
     }),
   ],
+  // Astro 7 defaults to the Sätteri processor; remark plugins need unified.
   markdown: {
+    processor: unified(),
     remarkPlugins: [
       remarkToc,
       [
@@ -36,4 +39,6 @@ export default defineConfig({
     },
   },
   scopedStyleStrategy: "where",
+  // Keep the v6 whitespace behaviour (Astro 7 defaults to "jsx").
+  compressHTML: true,
 });
