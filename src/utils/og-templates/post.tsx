@@ -2,7 +2,7 @@ import satori from "satori";
 import type { CollectionEntry } from "astro:content";
 import loadGoogleFonts, { type FontOptions } from "../loadGoogleFont";
 
-export default async (post: CollectionEntry<"blog">) => {
+export default async (post: CollectionEntry<"blog" | "projects">) => {
   const pubDate = new Date(post.data.pubDatetime).toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
